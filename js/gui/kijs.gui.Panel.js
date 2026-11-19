@@ -417,7 +417,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         
         // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
-        if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
+        if (kijs.isNumber(this._collapseHeight) && val > this._collapseHeight) {
             this._expandedSize.height = val;
         }
         
@@ -572,7 +572,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         
         // Breite merken, damit beim Aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
-        if (kijs.isNumber(this._collapseWidth) && val > kijs.isNumber(this._collapseWidth)) {
+        if (kijs.isNumber(this._collapseWidth) && val > this._collapseWidth) {
             this._expandedSize.width = val;
         }
         
@@ -798,21 +798,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
             return nde;
         }
-
-        // Darf der Node den Fokus erhalten?
-        if (alsoSetIfNoTabIndex) {
-            this._dom.node.focus();
-
-        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
-        } else {
-            const nde = kijs.Dom.getFirstFocusableNode(this._node);
-            if (nde) {
-                nde.focus();
-                return nde;
-            }
-        }
-        
-        return false;
     }
 
     /**

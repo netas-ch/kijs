@@ -93,6 +93,9 @@ Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.
 - ```kijs.gui.Element.load()``` ohne ```rpcLoadFn``` gab ein Promise zurück, das nie 
   erfüllt wurde. Jetzt wird es sofort mit ```response.errorType = 'error'``` erfüllt 
   und in der Konsole erscheint eine Warnung.  
+- ```kijs.gui.Panel```: Mit ```collapseHeight``` bzw. ```collapseWidth``` wurde beim 
+  automatischen Zuklappen auch die zu kleine Grösse als aufgeklappte Grösse gemerkt. 
+  Beim Aufklappen kommt jetzt wieder die vorherige Grösse.  
 
 
 ## PHP
