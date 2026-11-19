@@ -111,7 +111,6 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             sortable: true
         });
 
-        this.down('fields').on('ddOver', this.#onDdOver, this);
         this.down('fields').on('change', this.#onCheckChange, this);
 
         // anzeigen
@@ -142,16 +141,6 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             }
 
         }, this);
-    }
-    
-    #onDdOver(e) {
-        const vF = e.sourceElement ? e.sourceElement.dataRow.valueField : null;
-
-        // columnConfig Suchen und prüfen ob sortierbar
-        let columnConfig = this.grid.getColumnConfigByValueField(vF);
-        let allowDd = columnConfig ? columnConfig.sortable : false;
-
-        return allowDd;
     }
     
     #onOkClick() {
