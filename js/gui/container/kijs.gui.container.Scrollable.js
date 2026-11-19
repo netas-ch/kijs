@@ -5,7 +5,8 @@
 // --------------------------------------------------------------
 /**
  * Wie kijs.gui.Container, aber mit Scroll-Buttons statt Scrollbars. Gescrollt wird mit den
- * Buttons (gedrückt halten scrollt weiter), mit dem Mausrad und durch Wischen.
+ * Buttons (gedrückt halten scrollt weiter), mit dem Mausrad und durch Wischen. Ist nur die
+ * X-Achse scrollbar, scrollt das Mausrad horizontal; sind beide Achsen scrollbar, mit Shift.
  * Wird z.B. für den Kopf- und Fussbereich von kijs.gui.Panel verwendet.
  */
 kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs.gui.Container {
@@ -776,8 +777,14 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         
         // Scrollbar auf Y + X Achse
         if (hasScrollbarY && hasScrollbarX) {
-            this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
-            this._innerDom.node.scrollLeft += e.nodeEvent.deltaX;
+            // Mit Shift wird das Mausrad für die X-Achse verwendet. Manche Browser/Betriebssysteme
+            // liefern dann bereits deltaX, andere weiterhin deltaY.
+            if (e.nodeEvent.shiftKey && !e.nodeEvent.deltaX) {
+                this._innerDom.node.scrollLeft += e.nodeEvent.deltaY;
+            } else {
+                this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
+                this._innerDom.node.scrollLeft += e.nodeEvent.deltaX;
+            }
             
         // Scrollbar nur auf Y Achse
         } else if (hasScrollbarY) {

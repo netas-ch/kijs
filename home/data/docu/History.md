@@ -80,6 +80,8 @@ mit **UPDATE TIPP** nötig.
   nur noch angenommen, damit alte Configs keinen Fehler auslösen.  
   **UPDATE TIPP:** Im JavaScript-Code nach ```captionHide``` suchen und die Eigenschaft 
   entfernen, sonst gibt es den Fehler «Unknown config "captionHide"».  
+- ```kijs.gui.container.Scrollable```: Sind beide Achsen scrollbar, kann mit Shift + 
+  Mausrad horizontal gescrollt werden.  
 - Die nicht mehr verwendete Datei ```js/_kijs.Data.js``` (alte Version von 
   ```kijs.Data```, wurde nicht geladen) ist gelöscht.  
 - Übersetzungen neu erzeugt (```js/translation```, ```tools/kilang/data/usages.php```). 
