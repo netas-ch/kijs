@@ -61,8 +61,8 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
     set displayField(val) { this.iconCharField = val; }
     
     /**
-     * Feld mit dem Icon-Zeichen (Codepoint oder HTML-Entity). Leer = displayField, ausser es ist ein
-     * iconMapField gesetzt.
+     * Feld mit dem Icon-Zeichen als Codepoint (z.B. 0xf015). Besser iconMapField verwenden.
+     * Leer = displayField, ausser es ist ein iconMapField gesetzt.
      * @type {String|null}
      */
     get iconCharField() {

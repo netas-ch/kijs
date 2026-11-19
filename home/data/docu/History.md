@@ -127,10 +127,11 @@ window.localStorage.setItem('kijs-myKey', JSON.stringify({ value: value }));
   ```kijs.Navigator.getGetParameter``` ersetzen.  
 - ```kijs.gui.Icon.iconChar``` als HTML-Entity, z.B. ```'&#xf015;'``` (veraltet seit 1.2.6). 
   Eine Entity wirft jetzt einen ```kijs.Error```. Gilt für alle Elemente mit Icon (Button, 
-  Panel, PanelBar ...), nicht aber für ```kijs.gui.grid.cell.Icon```.  
-  **UPDATE TIPP:** Nach ```iconChar``` mit ```'&#x``` suchen und den Codepoint als Zahl 
-  angeben: ```'&#xf015;'``` → ```0xf015```. Einfacher ist meist ```iconMap```, z.B. 
-  ```'kijs.iconMap.Fa.house'```.  
+  Panel, PanelBar ...), zu den Zellen im Grid siehe ```kijs.gui.grid.cell.Icon``` unten.  
+  **UPDATE TIPP:** Nach ```iconChar``` mit ```'&#x``` suchen und bevorzugt durch 
+  ```iconMap``` ersetzen, z.B. ```iconMap: 'kijs.iconMap.Fa.house'```: Das ist lesbar und 
+  setzt auch die richtige Schrift. Wo das nicht geht, den Codepoint als Zahl angeben: 
+  ```'&#xf015;'``` → ```0xf015```.  
 - ```kijs.gui.field.CheckboxGroup.checkedValues``` (veraltet seit 2.3.1).  
   **UPDATE TIPP:** Nach ```checkedValues``` suchen und durch ```value``` ersetzen. Achtung: 
   Der Setter von ```checkedValues``` schaltete die übergebenen Werte um, ```value``` setzt sie.  
@@ -147,6 +148,16 @@ window.localStorage.setItem('kijs-myKey', JSON.stringify({ value: value }));
 - ```kijs.gui.dataView.element.Base.dataIndex```: wurde von kijs nie gesetzt.  
   **UPDATE TIPP:** Falls ein Projekt den Wert selbst setzt und liest: den Datensatz über 
   ```dataRow``` bzw. ```primaryKey``` ansprechen.  
+- ```kijs.gui.grid.cell.Icon```: das Icon als HTML-Entity, z.B. ```'&#xf015;'``` (Configs 
+  ```iconChar```, ```iconMapField``` und ```iconCharField``` von 
+  ```kijs.gui.grid.columnConfig.Icon```). Eine Entity wirft jetzt einen ```kijs.Error```. 
+  Weil die Werte meist aus der Datenbank kommen, betrifft das vor allem die Daten.  
+  **UPDATE TIPP:** Bevorzugt ```iconMapField``` mit dem Namen einer iconMap verwenden, z.B. 
+  ```'kijs.iconMap.Fa.house'```: Das ist lesbar und setzt auch die richtige Schrift 
+  (```fa-solid```, ```fa-brands``` ...). Wo das nicht geht, den Codepoint als Zahl liefern. 
+  Die Umwandlung kann in der Datenbank oder im PHP vor dem Senden erfolgen, z.B. 
+  ```mb_ord(html_entity_decode($row->icon))``` (```'&#xf015;'``` → ```61461```). Wird der 
+  Icon-Filter (```iconsCnt```) verwendet, vergleicht der Server danach die neuen Werte.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch```: Die Config 
   ```captionHide``` war seit Version 2.1.1 ohne Wirkung und wurde nur noch angenommen, 
   damit alte Configs keinen Fehler auslösen.  
@@ -373,8 +384,16 @@ Startwert 50 verlassen hat, ```value: 50``` angeben.
 - ```kijs.gui.grid.Grid```: Datumszellen (```columnConfig.Date``` mit ```editable```) liessen sich 
   nicht bearbeiten, weil der Standard-Editor ```kijs.gui.field.Date``` nicht existiert. Neu wird 
   ```kijs.gui.field.DateTime``` verwendet.  
-- ```kijs.gui.grid.cell.Icon```: Die Config ```iconChar``` hatte keine Wirkung. Neu setzt sie das 
-  Icon (Codepoint, HTML-Entity oder Name einer iconMap).  
+- ```kijs.gui.grid.cell.Icon```:  
+  - Die Config ```iconChar``` hatte keine Wirkung. Neu setzt sie das Icon (Name einer 
+    iconMap oder Codepoint), der Getter gibt den Codepoint zurück.  
+  - Ein unbekannter iconMap-Name (z.B. ein Tippfehler in den Daten) führte zu einem Fehler 
+    («Cannot read properties of null»), und das Grid wurde nicht fertig gerendert. Jetzt 
+    bleibt das Icon leer, und in der Konsole steht eine Warnung.  
+  - Die Schriftklasse der iconMap (z.B. ```fa-brands```) wurde durch ```iconClsField``` bzw. 
+    ```iconCls``` ersetzt, das Icon erschien dann in der falschen Schrift. Beim Wechsel zu 
+    einem Codepoint blieb sie hängen. Beide Klassen werden jetzt getrennt verwaltet (neuer 
+    Getter ```iconMapCls```).  
 - ```kijs.gui.grid.HeaderCell```: Das Lesen von ```overflowTooltipDisable``` warf einen 
   ```RangeError``` (Getter rief sich selbst auf).  
 - ```kijs.gui.grid.Filter```: Beim Erstellen der Filter wurde aus einer gesetzten 

@@ -156,7 +156,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                             // Icon dem Filter hinzufügen
                             if (!contains){
                                 // Die Zelle zeigt Icons ohne Font-Awesome-Klasse solid an, die Auswahl auch
-                                let cls = cell.iconCls || '';
+                                let cls = [cell.iconMapCls, cell.iconCls].filter(Boolean).join(' ');
                                 if (!/\bfa-(solid|regular|brands)\b/.test(cls)) {
                                     cls = (cls + ' fa-solid').trim();
                                 }
