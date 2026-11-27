@@ -156,6 +156,13 @@
     .tabHome .home-start-more a:hover {
         color: var(--accentColor);
     }
+    /* Links auf lokale Testseiten: nur lokal sichtbar (Klasse home-isLocal am body) */
+    .tabHome .home-start-more a.home-start-localOnly {
+        display: none;
+    }
+    .home-isLocal .tabHome .home-start-more a.home-start-localOnly {
+        display: inline;
+    }
 
     /* Schmale Breiten: Ohne Löwenzahn, Inhalt mit normalem Rand, Kacheln untereinander */
     @container (max-width: 820px) {

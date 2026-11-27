@@ -336,7 +336,7 @@ home.App = class home_App {
         html += '   <a href="https://github.com/netas-ch/kijs" target="_blank">GitHub</a>';
         html += '   <a href="https://www.kijs.ch" target="_blank">kijs.ch</a>';
         html += '   <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="_blank">Kanboard (public, read only)</a>';
-        html += '   <a href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a>';
+        html += '   <a class="home-start-localOnly" href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a>';
         html += '  </div>';
         html += ' </div>';
         html += '</div>';
@@ -942,7 +942,7 @@ home.App = class home_App {
 
     /**
      * Zeigt den Stand der API-Datenbank im Tab API und beim Zahnrad (Werkzeuge) an.
-     * Das Zahnrad ist nur lokal sichtbar.
+     * Das Zahnrad und die Links auf die lokalen Testseiten sind nur lokal sichtbar.
      * @returns {Promise}
      */
     async _updateApiStatus() {
@@ -978,6 +978,9 @@ home.App = class home_App {
         this._btnTools.tooltip = html;
         this._btnTools.badgeText = problem ? '!' : '';
         this._btnTools.visible = !!status.isLocal;
+
+        // Links auf lokale Testseiten (Klasse home-start-localOnly) nur lokal anzeigen
+        document.body.classList.toggle('home-isLocal', !!status.isLocal);
 
         // Hinweis im Tab API, wenn die Datenbank fehlt
         if (!status.exists) {

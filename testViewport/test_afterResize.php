@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Testseite: nur lokal ausführbar
+require_once '../tools/localOnly.php';
+
 require_once '../tools/getDebugHead.php';
 
 $themeUrl = '../css/kijs.theme.default.css';
