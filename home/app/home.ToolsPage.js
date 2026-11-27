@@ -88,8 +88,9 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
         usages: {
             caption: 'Texte für die Übersetzung',
             iconMap: 'kijs.iconMap.Fa.language',
-            html: 'Sucht im Quellcode alle Texte von <code>kijs.getText()</code> und schreibt sie in die Datei, '
-                + 'die mit der Translate-App von Netas übersetzt wird. Skript: '
+            html: 'Sucht im Quellcode alle Texte von <code>kijs.getText()</code> und schreibt sie in die Dateien, '
+                + 'die mit der Translate-App von Netas übersetzt werden (<code>usages.php</code> für kijs, '
+                + '<code>home_usages.php</code> für die Home-App). Skript: '
                 + '<code>tools/kilang/generateUsages.php</code>. Siehe Leitfaden '
                 + '<a href="#" data-home-file="data/docu/Leitfäden/Mehrsprachigkeit.md">Mehrsprachigkeit</a>.',
             runCaption: 'Ausführen'
@@ -97,8 +98,8 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
         translations: {
             caption: 'Sprachdateien',
             iconMap: 'kijs.iconMap.Fa.earth-americas',
-            html: 'Wandelt die übersetzten PHP-Sprachdateien (<code>tools/kilang/data/kijs_*.php</code>) in die '
-                + 'JavaScript-Sprachdateien von kijs um. Skript: '
+            html: 'Wandelt die übersetzten PHP-Sprachdateien (<code>tools/kilang/data/kijs_*.php</code> und '
+                + '<code>home_*.php</code>) in die JavaScript-Sprachdateien von kijs und der Home-App um. Skript: '
                 + '<code>tools/kilang/convertPhpLanguageFilesToJs.php</code>.',
             runCaption: 'Ausführen'
         },

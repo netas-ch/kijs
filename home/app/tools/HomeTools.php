@@ -56,12 +56,15 @@ class HomeTools {
         switch ($id) {
             case 'usages':
                 $this->_includeScript('tools/kilang/generateUsages.php');
-                $files = $this->_getFileInfos(['tools/kilang/data/usages.php']);
+                $files = $this->_getFileInfos(['tools/kilang/data/usages.php', 'tools/kilang/data/home_usages.php']);
                 break;
 
             case 'translations':
                 $this->_includeScript('tools/kilang/convertPhpLanguageFilesToJs.php');
-                $files = $this->_getFileInfos($this->_glob('js/translation/kijs.translation.*.js'));
+                $files = $this->_getFileInfos(array_merge(
+                        $this->_glob('js/translation/kijs.translation.*.js'),
+                        $this->_glob('home/app/translation/home.translation.*.js')
+                ));
                 break;
 
             default:
@@ -217,8 +220,14 @@ class HomeTools {
      * @return stdClass
      */
     protected function _getTranslationsStatus(): stdClass {
-        $phpFiles = $this->_glob('tools/kilang/data/kijs_*.php');
-        $jsFiles = $this->_glob('js/translation/kijs.translation.*.js');
+        $phpFiles = array_merge(
+                $this->_glob('tools/kilang/data/kijs_*.php'),
+                $this->_glob('tools/kilang/data/home_??.php')
+        );
+        $jsFiles = array_merge(
+                $this->_glob('js/translation/kijs.translation.*.js'),
+                $this->_glob('home/app/translation/home.translation.*.js')
+        );
 
         $info = '';
         $jsTimes = array_map(fn(string $f): int => (int)filemtime($this->_path($f)), $jsFiles);

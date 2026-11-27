@@ -31,6 +31,8 @@ $themeUrl = '../css/kijs.theme.default.css?v=' . filemtime('../css/kijs.theme.de
     // JS Files
     echo kijs_getDebugHead(['core', 'translations', 'gui', 'grid', 'aceEditor', 'quillEditor'], 'js', '../');
 ?>
+    <script type="text/javascript" src="app/translation/home.translation.en.js?v=<?=filemtime('app/translation/home.translation.en.js')?>"></script>
+    <script type="text/javascript" src="app/translation/home.translation.fr.js?v=<?=filemtime('app/translation/home.translation.fr.js')?>"></script>
     <script type="text/javascript" src="app/marked.min.js?v=<?=filemtime('app/marked.min.js')?>"></script>
     <script type="text/javascript" src="app/home.TabContainer.js?v=<?=filemtime('app/home.TabContainer.js')?>"></script>
     <script type="text/javascript" src="app/home.ApiClassPage.js?v=<?=filemtime('app/home.ApiClassPage.js')?>"></script>
