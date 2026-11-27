@@ -74,6 +74,29 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
   Smartphones (```apple-touch-icon.png```).  
 
 
+## Sicherheit der Home-App und der Werkzeuge
+Damit die Home-App öffentlich (z.B. auf kijs.ch) betrieben werden kann:  
+- ```home/app/ajax.php``` und ```home/dataResources/php/ajax.php``` antworten als JSON 
+  (```Content-Type: application/json```, ```X-Content-Type-Options: nosniff```). Bisher 
+  konnte eine fremde Seite über ein Formular eine Antwort erzwingen, die der Browser als 
+  HTML darstellte und deren Skript er ausführte.  
+- Direktlinks: Der Dateiname aus dem Link (z.B. ```#docu/…```, ```#showcase/…```) wird in 
+  der Beschriftung des Tabs maskiert und nicht mehr als HTML ausgeführt. Links mit ```..``` 
+  im Pfad werden ignoriert.  
+- Die Werkzeuge ```tools/kilang/generateUsages.php```, 
+  ```tools/kilang/convertPhpLanguageFilesToJs.php``` und ```tools/getFontAwesomeIcons.php``` 
+  lassen sich nur noch lokal (Kommandozeile oder localhost) ausführen 
+  (```tools/localOnly.php```). Bisher konnte jeder Dateien auf dem Server überschreiben.  
+- ```tools/getDebugHead.php``` bietet die Funktion ```kijs_getDebugHead()``` zum Einbinden. 
+  ```home/index.php``` und ```testViewport``` verwenden sie, statt die Tags über HTTP mit dem 
+  Host-Header des Besuchers abzurufen. Ein direkter Aufruf gibt die URLs jetzt relativ zum 
+  Server-Stamm (z.B. ```/kijs/js/kijs.js```) und als ```text/plain``` zurück.  
+  **UPDATE TIPP:** Wer die Tags mit ```file_get_contents('http://…/getDebugHead.php?…')``` 
+  von einem anderen Host holt, erhält keine absoluten URLs mehr. Besser ist das Einbinden: 
+  ```require_once '../kijs/tools/getDebugHead.php';``` und 
+  ```echo kijs_getDebugHead(['core', 'gui'], 'js', '../kijs/');```  
+
+
 ## Dokumentation
 - Neue Seite [Erste Schritte](Erste_Schritte.md) mit Einstieg und Lesereihenfolge.  
 - Neue Leitfäden: [Config-System](Leitfäden/Config-System.md), 

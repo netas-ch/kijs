@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
 
+// Antwort immer als JSON ausliefern, damit der Browser sie nie als HTML interpretiert
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+
 // Eigene Exception
 class ki_Exception_Notice extends Exception {}
 
@@ -116,7 +120,7 @@ foreach ($requests as $request) {
     $responses[] = $response;
 }
 
-print(json_encode($responses));
+print(json_encode($responses, JSON_HEX_TAG | JSON_HEX_AMP));
 
 
 

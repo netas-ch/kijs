@@ -1,12 +1,9 @@
 <?php
 declare(strict_types=1);
 
-// Base-URL ermitteln
-$baseUrl = '';
-$baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-$baseUrl .= (string)filter_input(INPUT_SERVER, 'HTTP_HOST');
+require_once '../tools/getDebugHead.php';
 
-$themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css';
+$themeUrl = '../css/kijs.theme.default.css';
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,10 +15,10 @@ $themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css';
 ?>
     <link rel="stylesheet" type="text/css" href="<?=$themeUrl?>">
 <?php
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css');
+    echo kijs_getDebugHead(['core', 'gui'], 'css', '../');
 
     // JS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js');
+    echo kijs_getDebugHead(['core', 'gui'], 'js', '../');
 ?>   
 
         <script type="text/javascript" src="js/test_afterResize.js"></script>

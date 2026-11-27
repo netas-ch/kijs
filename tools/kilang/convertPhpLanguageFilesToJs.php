@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Nur lokal ausführbar
+require_once __DIR__ . '/../localOnly.php';
+
 // Konvertiert aus die php-Sprachdateien im Ordner data zu js-Sprachdateien im Ordner kijs/js/translation
 
 // Beispielaufruf:

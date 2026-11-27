@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Nur lokal ausführbar
+require_once __DIR__ . '/localOnly.php';
+
 /*
  * Copyright © 2025 Netas AG, Switzerland.
  * @date    2025-09-05

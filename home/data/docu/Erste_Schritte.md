@@ -214,11 +214,13 @@ Am einfachsten ist es, alle Dateien der benötigten Module aus ```files.json```
 einzubinden (```core```, ```gui``` und bei Bedarf ```grid```, ```aceEditor```, 
 ```quillEditor```, ```translations``` für andere Sprachen als Deutsch). Mit PHP 
 kann ```tools/getDebugHead.php``` die ```<script>```-Tags dafür automatisch 
-erzeugen, so wie es die Home-App in ```home/index.php``` macht:  
+erzeugen, so wie es die Home-App in ```home/index.php``` macht. Der dritte Parameter 
+ist die URL des kijs-Ordners, von der Seite aus gesehen:  
 
 ```php
 <?php
-    echo file_get_contents('http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js');
+    require_once '../kijs/tools/getDebugHead.php';
+    echo kijs_getDebugHead(['core', 'gui'], 'js', '../kijs/');
 ?>
 ```
 

@@ -170,6 +170,11 @@ home.App = class home_App {
         const filetype = dotPos > -1 ? filename.substring(dotPos + 1).toLowerCase() : '';
         const baseName = dotPos > -1 ? filename.substring(0, dotPos) : filename;
 
+        // Nur Dateien innerhalb des Bereichs (kein '..' im Pfad)
+        if (path.split('/').includes('..')) {
+            return false;
+        }
+
         if (!root || !['md', 'js'].includes(filetype) || (filetype === 'md' && root.namespace !== 'docu')) {
             return false;
         }
@@ -714,6 +719,10 @@ home.App = class home_App {
             return;
         }
 
+        // Die Beschriftung des Tabs wird als HTML dargestellt. Sie kann aus einem Direktlink
+        // stammen (z.B. #docu/<Dateiname>) und muss deshalb immer maskiert werden.
+        const tabCaption = kijs.String.htmlspecialchars(userData.displayText);
+
         // API-Dokumentation einer Klasse
         if (userData.filetype === 'api') {
             const page = new home.ApiClassPage({
@@ -721,7 +730,7 @@ home.App = class home_App {
                 name: userData.path,
                 className: userData.className,
                 expandMember: userData.memberName || null,
-                tabCaption: userData.displayText,
+                tabCaption: tabCaption,
                 tabIconMap: userData.iconMap,
                 tabClosable: true,
                 userData: userData
@@ -737,7 +746,7 @@ home.App = class home_App {
             const page = new home.ApiIssuesPage({
                 app: this,
                 name: userData.path,
-                tabCaption: userData.displayText,
+                tabCaption: tabCaption,
                 tabIconMap: userData.iconMap,
                 tabClosable: true,
                 userData: userData
@@ -753,7 +762,7 @@ home.App = class home_App {
             const page = new home.ToolsPage({
                 app: this,
                 name: userData.path,
-                tabCaption: userData.displayText,
+                tabCaption: tabCaption,
                 tabIconMap: userData.iconMap,
                 tabClosable: true,
                 userData: userData
@@ -770,7 +779,7 @@ home.App = class home_App {
                 app: this,
                 name: userData.path,
                 query: userData.query,
-                tabCaption: kijs.String.htmlspecialchars(userData.displayText),
+                tabCaption: tabCaption,
                 tabIconMap: userData.iconMap,
                 tabClosable: true,
                 userData: userData
@@ -787,7 +796,7 @@ home.App = class home_App {
                 name: userData.path,
                 file: userData.file,
                 line: userData.line,
-                tabCaption: userData.displayText,
+                tabCaption: tabCaption,
                 tabIconMap: userData.iconMap,
                 tabClosable: true,
                 userData: userData
@@ -802,7 +811,7 @@ home.App = class home_App {
         let tabCont = new home.TabContainer({
             app: this,
             name: userData.path,
-            tabCaption: userData.displayText,
+            tabCaption: tabCaption,
             tabClosable: true,
             userData: userData
         });

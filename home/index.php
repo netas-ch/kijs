@@ -1,16 +1,9 @@
 <?php
 declare(strict_types=1);
 
-// Verzeichnis
-$baseDir = '';
+require_once '../tools/getDebugHead.php';
 
-// Base-URL ermitteln
-$baseUrl = '';
-$baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-$baseUrl .= (string)filter_input(INPUT_SERVER, 'HTTP_HOST');
-$baseUrl .= $baseDir;
-
-$themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css?v=' . filemtime('../css/kijs.theme.default.css');
+$themeUrl = '../css/kijs.theme.default.css?v=' . filemtime('../css/kijs.theme.default.css');
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,7 +21,7 @@ $themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css?v=' . filemtime('../css
 ?>
     <link rel="stylesheet" type="text/css" href="<?=$themeUrl?>">
 <?php
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=css');
+    echo kijs_getDebugHead(['core', 'gui', 'grid', 'aceEditor', 'quillEditor'], 'css', '../');
 ?>
     <link rel="stylesheet" type="text/css" href="app/style.css?v=<?=filemtime('app/style.css')?>">
     <link rel="stylesheet" type="text/css" href="dataResources/css/style.css?v=<?=filemtime('dataResources/css/style.css')?>">
@@ -36,7 +29,7 @@ $themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css?v=' . filemtime('../css
     <script type="text/javascript" src="../lib/quill/quill.js"></script>
 <?php
     // JS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui,grid,aceEditor,quillEditor&fileType=js');
+    echo kijs_getDebugHead(['core', 'translations', 'gui', 'grid', 'aceEditor', 'quillEditor'], 'js', '../');
 ?>
     <script type="text/javascript" src="app/marked.min.js?v=<?=filemtime('app/marked.min.js')?>"></script>
     <script type="text/javascript" src="app/home.TabContainer.js?v=<?=filemtime('app/home.TabContainer.js')?>"></script>

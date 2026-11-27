@@ -115,7 +115,8 @@ new kijs.gui.Window({
 
    ```php
    <?php
-       echo file_get_contents('http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js');
+       require_once '../kijs/tools/getDebugHead.php';
+       echo kijs_getDebugHead(['core', 'gui'], 'js', '../kijs/');
    ?>
    ```
 
@@ -138,7 +139,13 @@ new kijs.gui.Window({
 
 See the [History](home/data/docu/History.md) for the changes of each version.
 
+## License
+
+kijs is released under the [MIT License](LICENSE). The included third-party fonts and
+libraries in `fonts/`, `home/app/fonts/` and `lib/` have their own licenses (see the
+license files in their folders).
+
 ## About
 
-kijs is developed by [netas.ch](https://www.netas.ch).
+kijs is developed by [Netas AG](https://www.netas.ch).
 Issues and pull requests are welcome.

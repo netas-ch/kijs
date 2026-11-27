@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Nur lokal ausführbar
+require_once __DIR__ . '/../localOnly.php';
+
 // Erstellt die usages.php
 
 // Beispielaufruf mit allen Modulen:
