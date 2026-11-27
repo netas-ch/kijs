@@ -35,7 +35,7 @@ home.sc.Button = class home_sc_Button {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Buttons:'
+                    value: kijs.getText('Buttons:')
                 },
                 
                 {
@@ -51,7 +51,7 @@ home.sc.Button = class home_sc_Button {
 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: '2 Icons + disableFlex:false',
+                    caption: kijs.getText('2 Icons') + ' + disableFlex:false',
                     iconMap:'kijs.iconMap.Fa.house',
                     icon2Map:'kijs.iconMap.Fa.user',
                     disableFlex: false
@@ -59,24 +59,24 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Icon Rechts',
+                    caption: kijs.getText('Icon rechts'),
                     icon2Map:'kijs.iconMap.Fa.house'
                 },
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: '2 Icons',
+                    caption: kijs.getText('2 Icons'),
                     iconMap:'kijs.iconMap.Fa.house',
                     icon2Map:'kijs.iconMap.Fa.user'
                 },
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Test Handler Funktion',
-                    badgeText: 'Hallo',
+                    caption: kijs.getText('Handler-Funktion testen'),
+                    badgeText: kijs.getText('Hallo'),
                     on: {
                         click: function() {
-                            window.alert('Klick!');
+                            window.alert(kijs.getText('Klick!'));
                         }
                     }
                 },
@@ -85,7 +85,7 @@ home.sc.Button = class home_sc_Button {
                     xtype: 'kijs.gui.Button',
                     caption: 'isDefault',
                     isDefault: true,
-                    tooltip: 'click to toggle isDefault',
+                    tooltip: kijs.getText('Klicken, um %1 umzuschalten', '', 'isDefault'),
                     on: {
                         click: function() {
                             console.log(home.sc.Container);
@@ -97,9 +97,9 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Disabled',
+                    caption: kijs.getText('Deaktivieren'),
                     badgeText: '4',
-                    tooltip: 'click to disable',
+                    tooltip: kijs.getText('Klicken, um %1 zu setzen', '', 'disabled=true'),
                     on: {
                         click: function() {
                             this.disabled = true;
@@ -113,8 +113,8 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Hide',
-                    tooltip: 'click to set visible=false',
+                    caption: kijs.getText('Ausblenden'),
+                    tooltip: kijs.getText('Klicken, um %1 zu setzen', '', 'visible=false'),
                     on: {
                         click: function() {
                             this.visible = false;
@@ -128,13 +128,13 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Toggle Text',
+                    caption: kijs.getText('Text umschalten'),
                     on: {
                         click: function() {
-                            if (this.caption === 'Text A') {
-                                this.caption = 'Text B';
+                            if (this.caption === kijs.getText('Text A')) {
+                                this.caption = kijs.getText('Text B');
                             } else {
-                                this.caption = 'Text A';
+                                this.caption = kijs.getText('Text A');
                             }
                         }
                     }
@@ -142,7 +142,7 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Button with background-image-icon. Klick to hide',
+                    caption: kijs.getText('Button mit Hintergrundbild-Icon. Klicken zum Ausblenden'),
                     iconCls: 'icoWizard16',
                     on: {
                         click: function() {
@@ -153,7 +153,7 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Create icon after render',
+                    caption: kijs.getText('Icon nach dem Rendern erstellen'),
                     on: {
                         click: function(e) {
                             switch (this.__testState) {
@@ -180,7 +180,7 @@ home.sc.Button = class home_sc_Button {
                                     break;
 
                                 case 5:
-                                    e.element.caption = 'click to toggle icon';
+                                    e.element.caption = kijs.getText('Klicken, um das Icon zu wechseln');
                                     e.element.icon = null;
                                     break;
                             }
@@ -195,7 +195,7 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Button with font-icon. Klick to rotate',
+                    caption: kijs.getText('Button mit Font-Icon. Klicken zum Drehen'),
                     iconMap: 'kijs.iconMap.Fa.masks-theater',
                     on: {
                         click: function() {

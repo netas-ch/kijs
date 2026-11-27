@@ -4,7 +4,7 @@ $translations = [
  "" => [
   "" => [
    "Copyright" => ["2026 by Netas AG (www.netas.ch)"], 
-   "Erstelldatum" => ["2026-11-19"], 
+   "Erstelldatum" => ["2026-11-27"], 
    "Info" => ["kijs Sprachdatei"], 
    "Sprachdatei" => ["Usages"]
   ]
@@ -24,9 +24,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.Number.js" => [649]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.Number.js" => [601]
    ]
   ]
  ], 
@@ -173,9 +170,6 @@ $translations = [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1089, 1120], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [517], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [668]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.Number.js" => [620]
    ]
   ]
  ], 
@@ -187,9 +181,6 @@ $translations = [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1073, 1106], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [504], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [663]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.Number.js" => [615]
    ]
   ]
  ], 
@@ -571,9 +562,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.Iban.js" => [129]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.Iban.js" => [128]
    ]
   ]
  ], 
@@ -583,9 +571,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.SozVersNr.js" => [245]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.SozVersNr.js" => [240]
    ]
   ]
  ], 
