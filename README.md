@@ -122,6 +122,18 @@ new kijs.gui.Window({
 
 > **Note:** The documentation and the guides are currently written in German.
 
+## Branches and releases
+
+The branch `main` contains the current state of development and can change at any time.
+
+For productive systems, use only a [release](https://github.com/netas-ch/kijs/releases)
+or the branch `currentProductive`. This branch may contain bugfixes before they are
+published in a release.
+
+```bash
+git clone --branch currentProductive https://github.com/netas-ch/kijs.git
+```
+
 ## Repository structure
 
 | Folder            | Content                                                          |
