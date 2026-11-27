@@ -315,7 +315,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get queryOperator() { return this._queryOperator; }
     set queryOperator(val) {
         if (!kijs.Array.contains(['BEGIN', 'PART'], val)) {
-            throw new kijs.Error(`Ungültiger "queryOperator".`);
+            throw new kijs.Error(`Invalid "queryOperator".`);
         }
         this._queryOperator = val;
     }

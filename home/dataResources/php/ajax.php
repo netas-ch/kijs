@@ -611,7 +611,7 @@ foreach ($requests as $request) {
                 $formData = $request->requestData->data;
 
                 if (!property_exists($formData, 'Anrede')) {
-                    throw new Exception("Das Feld 'Anrede' ist nicht vorhanden.");
+                    throw new Exception("The field 'Anrede' does not exist.");
                 }
 
                 if ($formData->Vorname === 'Susanne' && $formData->Anrede !== 'w') {
@@ -911,7 +911,7 @@ foreach ($requests as $request) {
             break;
 
         default:
-            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
+            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" does not exist.';
     }
 
     $responses[] = $response;

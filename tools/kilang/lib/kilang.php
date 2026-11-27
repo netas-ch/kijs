@@ -96,7 +96,7 @@ class KiLang {
 
                 // Bei falschen Argumenten Fehler ausgeben
                 if ($error) {
-                    throw new Exception("Falscher Funktionsaufruf von getText(): $error ($usageName Zeile $lineNo)");
+                    throw new Exception("Invalid call of getText(): $error ($usageName line $lineNo)");
                 }
 
                 if (strlen($variant) >= 2) {
@@ -199,11 +199,11 @@ class KiLang {
                 case 'js': $usageGrpName = 'usagesJs'; break;
                 case 'php': $usageGrpName = 'usagesPhp'; break;
                 default:
-                    throw new Exception('Ungültiger Dateityp!');
+                    throw new Exception('Invalid file type!');
             }
 
             if (!file_exists($filename)) {
-                throw new Exception('Datei "' . $filename . '" ist nicht vorhanden!');
+                throw new Exception('File "' . $filename . '" does not exist!');
             }
 
             $usageName = $filename;

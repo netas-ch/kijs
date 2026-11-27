@@ -36,10 +36,10 @@ function kijs_getDebugHead(array $modules, string $fileType, string $baseUrl): s
 
     // Validieren
     if (!$modules) {
-        throw new Exception('Argument "modules" fehlt.');
+        throw new Exception('Argument "modules" is missing.');
     }
     if (!in_array($fileType, ['js', 'css'], true)) {
-        throw new Exception('Argument "fileType" fehlt oder ist ungültig.');
+        throw new Exception('Argument "fileType" is missing or invalid.');
     }
 
     // files.json lesen

@@ -50,7 +50,7 @@ class HomeTools {
      */
     public function run(string $id): stdClass {
         if (!ApiUpdate::isLocal()) {
-            throw new Exception(HomeLang::getText('Die Werkzeuge können nur lokal (localhost) ausgeführt werden.'));
+            throw new Exception('The tools can only be run locally (localhost).');
         }
 
         $start = time();
@@ -69,7 +69,7 @@ class HomeTools {
                 break;
 
             default:
-                throw new Exception(HomeLang::getText('Unbekanntes Werkzeug: %1', '', $id));
+                throw new Exception('Unknown tool: ' . $id);
         }
 
         // Prüfen, ob die Dateien wirklich geschrieben wurden (die Skripte melden keine Fehler)
@@ -80,8 +80,8 @@ class HomeTools {
             }
         }
         if ($notWritten) {
-            throw new Exception(HomeLang::getText('Nicht geschrieben (fehlende Schreibrechte für den Webserver?): %1', '',
-                    implode(', ', $notWritten)));
+            throw new Exception('Not written (missing write permissions for the web server?): '
+                    . implode(', ', $notWritten));
         }
 
         return (object)['id' => $id, 'files' => $files];

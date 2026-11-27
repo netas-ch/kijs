@@ -38,7 +38,7 @@ class ProjectParser {
     public function getFiles(): array {
         $json = json_decode(file_get_contents($this->_root . '/files.json'));
         if (!$json || !isset($json->js)) {
-            throw new Exception('files.json konnte nicht gelesen werden');
+            throw new Exception('files.json could not be read');
         }
         $files = [];
         foreach ($json->js as $module => $list) {
@@ -59,7 +59,7 @@ class ProjectParser {
         $path = $this->_root . '/' . $file;
         $content = file_get_contents($path);
         if ($content === false) {
-            throw new Exception('Datei konnte nicht gelesen werden: ' . $file);
+            throw new Exception('File could not be read: ' . $file);
         }
 
         $fileParser = new FileParser();

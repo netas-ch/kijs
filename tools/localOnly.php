@@ -8,5 +8,5 @@ declare(strict_types=1);
 if (PHP_SAPI !== 'cli' && !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1', '::ffff:127.0.0.1'], true)) {
     http_response_code(403);
     header('Content-Type: text/plain; charset=utf-8');
-    exit('Diese Seite kann nur lokal (localhost) aufgerufen werden.');
+    exit('This page can only be accessed locally (localhost).');
 }

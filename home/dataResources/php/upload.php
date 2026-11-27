@@ -17,7 +17,7 @@ $response = new stdClass();
 
 try {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-        throw new Exception('Nur POST ist erlaubt');
+        throw new Exception('Only POST is allowed');
     }
 
     $fileName = rawurldecode((string)($_SERVER['HTTP_X_FILENAME'] ?? ''));
@@ -25,14 +25,14 @@ try {
     $fileType = (string)($_SERVER['CONTENT_TYPE'] ?? '');
 
     if ($fileName === '') {
-        throw new Exception('Der Header X-Filename fehlt');
+        throw new Exception('The header X-Filename is missing');
     }
 
     // Body lesen, ohne ihn zu speichern
     $size = 0;
     $input = fopen('php://input', 'rb');
     if ($input === false) {
-        throw new Exception('Die Daten konnten nicht gelesen werden');
+        throw new Exception('The data could not be read');
     }
     while (!feof($input)) {
         $chunk = fread($input, 65536);
@@ -46,7 +46,7 @@ try {
     }
 
     if (stripos($fileName, 'fehler') !== false) {
-        throw new Exception('Testfehler: Der Dateiname enthält «fehler»');
+        throw new Exception('Test error: the file name contains «fehler»');
     }
 
     $response->upload = [

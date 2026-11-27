@@ -196,7 +196,7 @@ kijs.Object = class kijs_Object {
                         } else {
                             fnContext = kijs.getObjectFromString(cfg.value.context);
                             if (!kijs.isObject(fnContext)) {
-                                throw new kijs.Error('Context of listener ist not valid.');
+                                throw new kijs.Error('Context of listener is not valid.');
                             }
                         }
                         
@@ -205,7 +205,7 @@ kijs.Object = class kijs_Object {
                             if (k !== 'context') {
                                 let fn = kijs.getFunctionFromString(cfg.value[k]);
                                 if (!kijs.isFunction(fn)) {
-                                    throw new kijs.Error('Listener "' + k + '" ist not valid.');
+                                    throw new kijs.Error('Listener "' + k + '" is not valid.');
                                 }
                                 cfg.context.on(k, fn, fnContext);
                             }

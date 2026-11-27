@@ -95,7 +95,7 @@ class FileParser {
     public function parseFile(string $file): array {
         $content = file_get_contents($file);
         if ($content === false) {
-            throw new Exception('Datei konnte nicht gelesen werden: ' . $file);
+            throw new Exception('File could not be read: ' . $file);
         }
         return $this->parseContent($content, $file);
     }

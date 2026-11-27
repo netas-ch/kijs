@@ -180,7 +180,7 @@ kijs.Data = class kijs_Data {
 
         kijs.Array.each(primaryKeyFields, function(field){
             if (!field in row) {
-                throw new kijs.Error(`primaryKey-field dosent exist in row.`);
+                throw new kijs.Error(`primaryKey-field does not exist in row.`);
             }
 
             if (!kijs.isEmpty(key)) {

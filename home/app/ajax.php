@@ -117,7 +117,7 @@ foreach ($requests as $request) {
             break;
 
         default:
-            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
+            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" does not exist.';
     }
 
     $responses[] = $response;

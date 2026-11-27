@@ -41,7 +41,7 @@ class ClassParser {
 
         $root = $elements[0] ?? null;
         if (!$root || $root->type !== 'root') {
-            throw new Exception('Ungültiger root (' . $file . ')');
+            throw new Exception('Invalid root (' . $file . ')');
         }
 
         $classes = [];

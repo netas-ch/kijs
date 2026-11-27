@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/ApiUpdate.php';
+require_once __DIR__ . '/../HomeLang.php';
+
 /**
  * Liest die API-Dokumentation aus der SQLite-Datenbank für die Home-App
  * (Klassenbaum und Klassenseite).
@@ -37,7 +40,7 @@ class ApiReader {
 
         $cls = $this->_query('SELECT * FROM class WHERE name = ?', [$name])[0] ?? null;
         if (!$cls) {
-            throw new Exception('Die Klasse ' . $name . ' gibt es nicht in der API.');
+            throw new Exception(HomeLang::getText('Die Klasse %1 gibt es nicht in der API.', '', $name));
         }
         $cls->examples = json_decode($cls->examples ?? '[]');
         $cls->see = json_decode($cls->see ?? '[]');
@@ -205,7 +208,9 @@ class ApiReader {
      */
     protected function _checkDb(): void {
         if (!$this->_pdo) {
-            throw new Exception('Die API-Datenbank fehlt. Bitte im Tab API «API aktualisieren» klicken.');
+            throw new Exception(HomeLang::getText('Die API-Datenbank fehlt noch.') . ' ' . (ApiUpdate::isLocal()
+                    ? HomeLang::getText('Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden.')
+                    : HomeLang::getText('Sie kann nur lokal (localhost) erstellt werden.')));
         }
     }
 

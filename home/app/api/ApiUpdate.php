@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/ProjectParser.php';
 require_once __DIR__ . '/ApiDatabase.php';
+require_once __DIR__ . '/../HomeLang.php';
 
 /**
  * Update der API-Dokumentation in Schritten, damit die Home-App einen
@@ -108,7 +109,7 @@ class ApiUpdate {
 
         // Neue DB aktivieren
         if (!rename($this->_tmpPath(), $this->_dbPath())) {
-            throw new Exception('Die Datenbank konnte nicht umbenannt werden.');
+            throw new Exception('The database could not be renamed.');
         }
         $this->_unlock();
 
@@ -147,7 +148,7 @@ class ApiUpdate {
     public function start(): stdClass {
         $this->_checkLocal();
         if ($this->_isLocked()) {
-            throw new Exception('Es läuft bereits ein Update. Bitte warten oder später nochmals versuchen.');
+            throw new Exception(HomeLang::getText('Es läuft bereits ein Update. Bitte warten oder später nochmals versuchen.'));
         }
         file_put_contents($this->_lockPath(), (string)time());
 
@@ -180,7 +181,7 @@ class ApiUpdate {
         $pp = new ProjectParser($this->_kijsDir);
         $files = $pp->getFiles();
         if (!isset($files[$idx])) {
-            throw new Exception('Ungültiger Datei-Index: ' . $idx);
+            throw new Exception('Invalid file index: ' . $idx);
         }
         $f = $files[$idx];
 
@@ -211,7 +212,7 @@ class ApiUpdate {
      */
     protected function _checkLocal(): void {
         if (!self::isLocal()) {
-            throw new Exception('Das Update der API ist nur lokal (localhost) möglich.');
+            throw new Exception('The API update is only possible locally (localhost).');
         }
     }
 
@@ -220,7 +221,7 @@ class ApiUpdate {
      */
     protected function _checkLock(): void {
         if (!$this->_isLocked() || !is_file($this->_tmpPath())) {
-            throw new Exception('Es läuft kein Update. Bitte neu starten.');
+            throw new Exception('No update is running. Please start again.');
         }
     }
 

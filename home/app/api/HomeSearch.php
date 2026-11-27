@@ -33,7 +33,7 @@ class HomeSearch {
     public function search(string $query): stdClass {
         $query = trim($query);
         if (mb_strlen($query) < 2) {
-            throw new Exception('Bitte mindestens 2 Zeichen eingeben.');
+            throw new Exception('The query must contain at least 2 characters.');
         }
 
         return (object)[

@@ -20,7 +20,6 @@ $translations = [
 
  "%1 Drag&Drop mit %2-Layout" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/DataView_DD/DataView_DD_Col.js" => [20], 
     "../../home/data/test/DataView_DD/DataView_DD_Col_Reverse.js" => [20], 
@@ -40,12 +39,8 @@ $translations = [
 
  "%1 Klassen" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [970]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [971]
    ]
   ]
  ], 
@@ -422,7 +417,6 @@ $translations = [
 
  "2x %1 lokal mit Drag&Drop von links nach rechts" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/TreeDD.js" => [108]
    ]
@@ -464,24 +458,16 @@ $translations = [
 
  "API-Dokumentation fehlt noch." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [978]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [979]
    ]
   ]
  ], 
 
  "API-Dokumentation vom %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [967]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [968]
    ]
   ]
  ], 
@@ -558,12 +544,8 @@ $translations = [
 
  "Akzentfarben" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [1113]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1114]
    ]
   ]
  ], 
@@ -853,7 +835,6 @@ $translations = [
 
  "CSS-Klasse für Panel:" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ElementAlignment.js" => [235], 
     "../../home/data/test/Layout.js" => [88]
@@ -967,7 +948,6 @@ $translations = [
 
  "Daten wurden verschickt!" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/FormWizard.js" => [194]
    ]
@@ -1089,12 +1069,8 @@ $translations = [
 
  "Design" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [427, 1069]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [428, 1070]
    ]
   ]
  ], 
@@ -1109,12 +1085,11 @@ $translations = [
 
  "Die API-Datenbank fehlt noch." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [993]
    ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [994]
+   "usagesPhp" => [
+    "../../home/app/api/ApiReader.php" => [211]
    ]
   ]
  ], 
@@ -1151,6 +1126,14 @@ $translations = [
   ]
  ], 
 
+ "Die Klasse %1 gibt es nicht in der API." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/api/ApiReader.php" => [43]
+   ]
+  ]
+ ], 
+
  "Die Registerkarten können per Drag&Drop verschoben werden." => [
   "" => [
    "usagesJs" => [
@@ -1163,9 +1146,6 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/app/home.ToolsPage.js" => [163]
-   ], 
-   "usagesPhp" => [
-    "../../home/app/tools/HomeTools.php" => [53]
    ]
   ]
  ], 
@@ -1217,24 +1197,16 @@ $translations = [
 
  "Dokumentation" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [321, 505]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [506]
    ]
   ]
  ], 
 
  "Dunkler Modus" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [1098]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1099]
    ]
   ]
  ], 
@@ -1441,14 +1413,18 @@ $translations = [
   ]
  ], 
 
+ "Es läuft bereits ein Update. Bitte warten oder später nochmals versuchen." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/api/ApiUpdate.php" => [151]
+   ]
+  ]
+ ], 
+
  "Es läuft gerade ein Update." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [982]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [983]
    ]
   ]
  ], 
@@ -1471,7 +1447,6 @@ $translations = [
 
  "Es wurden noch nicht alle Felder richtig ausgefüllt!" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/FormWizard.js" => [217]
    ]
@@ -1522,12 +1497,8 @@ $translations = [
 
  "Farbe %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [1120, 1132, 1144]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1121, 1133, 1145]
    ]
   ]
  ], 
@@ -1888,7 +1859,6 @@ $translations = [
 
  "Ich bin ein Mehr-\nzeiliger Text" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ElementAlignment.js" => [146]
    ]
@@ -2150,7 +2120,6 @@ $translations = [
 
  "Leerraum" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ScrollIntoView.js" => [288]
    ]
@@ -2574,14 +2543,6 @@ $translations = [
   ]
  ], 
 
- "Nicht geschrieben (fehlende Schreibrechte für den Webserver?): %1" => [
-  "" => [
-   "usagesPhp" => [
-    "../../home/app/tools/HomeTools.php" => [83]
-   ]
-  ]
- ], 
-
  "Nächste Stufe" => [
   "" => [
    "usagesJs" => [
@@ -2813,24 +2774,22 @@ $translations = [
 
  "Sie kann nur lokal (localhost) erstellt werden." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [995]
    ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [996]
+   "usagesPhp" => [
+    "../../home/app/api/ApiReader.php" => [213]
    ]
   ]
  ], 
 
  "Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [994]
    ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [995]
+   "usagesPhp" => [
+    "../../home/app/api/ApiReader.php" => [212]
    ]
   ]
  ], 
@@ -2930,12 +2889,8 @@ $translations = [
 
  "Sprache" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [418, 1028]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [419, 1029]
    ]
   ]
  ], 
@@ -2950,12 +2905,8 @@ $translations = [
 
  "Standard" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [1075]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1076]
    ]
   ]
  ], 
@@ -3004,12 +2955,8 @@ $translations = [
 
  "Suchen (Enter)" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [403]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [404]
    ]
   ]
  ], 
@@ -3056,7 +3003,6 @@ $translations = [
 
  "Test für %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ScrollIntoView.js" => [23]
    ]
@@ -3065,7 +3011,6 @@ $translations = [
 
  "Test für die verschiedenen Layouts" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/Layout.js" => [23]
    ]
@@ -3074,7 +3019,6 @@ $translations = [
 
  "Test zur Ausrichtung von Elementen" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ElementAlignment.js" => [23]
    ]
@@ -3083,7 +3027,6 @@ $translations = [
 
  "Test-Panel" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/Layout.js" => [37]
    ]
@@ -3100,20 +3043,15 @@ $translations = [
 
  "Tests" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [473], 
     "../../home/app/home.SearchPage.js" => [163]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [474]
    ]
   ]
  ], 
 
  "Testseite für die Methoden" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ScrollIntoView.js" => [36]
    ]
@@ -3160,7 +3098,6 @@ $translations = [
 
  "Titel" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/FormWizard.js" => [194, 217]
    ]
@@ -3191,22 +3128,10 @@ $translations = [
   ]
  ], 
 
- "Unbekanntes Werkzeug: %1" => [
-  "" => [
-   "usagesPhp" => [
-    "../../home/app/tools/HomeTools.php" => [72]
-   ]
-  ]
- ], 
-
  "Ungültiger Link: %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [151, 933]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [934]
    ]
   ]
  ], 
@@ -3245,24 +3170,16 @@ $translations = [
 
  "Version stimmt nicht mit kijs %1 überein." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [973]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [974]
    ]
   ]
  ], 
 
  "Version und Datum der API-Dokumentation" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [1003]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1004]
    ]
   ]
  ], 
@@ -3363,13 +3280,9 @@ $translations = [
 
  "Werkzeuge" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/app/home.App.js" => [250, 384, 965], 
     "../../home/app/home.ToolsPage.js" => [40]
-   ], 
-   "usagesJsOld" => [
-    "../../home/app/home.App.js" => [385, 966]
    ]
   ]
  ], 
@@ -3456,7 +3369,6 @@ $translations = [
 
  "Zu Element scrollen:" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/ScrollIntoView.js" => [323]
    ]
@@ -3489,7 +3401,6 @@ $translations = [
 
  "abschliessen" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/FormWizard.js" => [247]
    ]
@@ -3676,7 +3587,6 @@ $translations = [
 
  "mein Feld %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/test/FormWizard.js" => [49, 64, 79]
    ]
