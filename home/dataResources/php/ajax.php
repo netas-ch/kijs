@@ -23,12 +23,12 @@ foreach ($requests as $request) {
             try {
                 $rows = [];
 
-                $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $rows[] = array('Bez' => 'blau', 'color' => '#00f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('rot'), 'color' => '#f00', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('grün'), 'color' => '#0f0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('blau'), 'color' => '#00f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('gelb'), 'color' => '#ff0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('violett'), 'color' => '#f0f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => _getText('hellblau'), 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 
                 $response->config = new stdClass();
                 //$response->config->value = ['#0f0'];
@@ -118,12 +118,12 @@ foreach ($requests as $request) {
             try {
                 $rows = [];
 
-                $rows[] = array('displayText'=>'rot',     'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'grün',    'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'blau',    'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'gelb',    'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'hellblau','color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('rot'),     'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('grün'),    'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('blau'),    'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('gelb'),    'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('violett'), 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('hellblau'),'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
 
                 $response->config = new stdClass();
                 $response->config->value = '#0f0';
@@ -139,7 +139,7 @@ foreach ($requests as $request) {
         case 'combo.land.load':
             try {
                 $response->config = new stdClass();
-                $response->config->data = _loadJsonFile('../testData/land.json');
+                $response->config->data = _translateCountries(_loadJsonFile('../testData/land.json'));
                 //sleep(1);
 
             } catch (Exception $ex) {
@@ -166,7 +166,7 @@ foreach ($requests as $request) {
                             {
                                 "xtype": "kijs.gui.Button",
                                 "height": 40,
-                                "caption": "Button vom Server",
+                                "caption": ' . json_encode(_getText('Button vom Server')) . ',
                                 "on": {
                                     "click": "home.sc.Container.onRpcButtonClick"
                                 }
@@ -194,11 +194,11 @@ foreach ($requests as $request) {
                             "innerStyle": { "padding":"10px" }
                         },
                         "elements": [
-                            { "name":"s1", "html":"Seite 1", "style":{"backgroundColor":"#f99"} },
-                            { "name":"s2", "html":"Seite 2", "style":{"backgroundColor":"#9f9"} },
-                            { "name":"s3", "html":"Seite 3", "style":{"backgroundColor":"#99f"} },
-                            { "name":"s4", "html":"Seite 4", "style":{"backgroundColor":"#ff9"} },
-                            { "name":"s5", "html":"Seite 5", "style":{"backgroundColor":"#9ff"} }
+                            { "name":"s1", "html":' . json_encode(_getText('Seite %1', '', 1)) . ', "style":{"backgroundColor":"#f99"} },
+                            { "name":"s2", "html":' . json_encode(_getText('Seite %1', '', 2)) . ', "style":{"backgroundColor":"#9f9"} },
+                            { "name":"s3", "html":' . json_encode(_getText('Seite %1', '', 3)) . ', "style":{"backgroundColor":"#99f"} },
+                            { "name":"s4", "html":' . json_encode(_getText('Seite %1', '', 4)) . ', "style":{"backgroundColor":"#ff9"} },
+                            { "name":"s5", "html":' . json_encode(_getText('Seite %1', '', 5)) . ', "style":{"backgroundColor":"#9ff"} }
                         ]
                     }
                 ');
@@ -235,7 +235,7 @@ foreach ($requests as $request) {
         case 'containerTab.save':
             try {
                 // config
-                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
+                $response->cornerTipMsg = _getText('Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)');
                 
                 //sleep(1);
                 
@@ -257,11 +257,11 @@ foreach ($requests as $request) {
                                         "xtype":"kijs.gui.dashboard.Panel",
                                         "caption": "Info",
                                         "iconMap":"kijs.iconMap.Fa.circle-info",
-                                        "html":"Dies ist ein <b>Info</b>-Text.",
+                                        "html":' . json_encode(_getText('Dies ist ein <b>Info</b>-Text.')) . ',
                                         "innerStyle": { "padding": "10px" }
                                     },{
                                         "xtype":"home.sc.DashboardItemPanel",
-                                        "caption": "Items 1",
+                                        "caption": ' . json_encode(_getText('Elemente %1', '', 1)) . ',
                                         "elements": [
                                             {
                                                 "xtype": "kijs.gui.Element",
@@ -272,7 +272,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": false,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 1 (move)",
+                                                "html": ' . json_encode(_getText('Element %1 (verschieben)', '', 1)) . ',
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "1px solid var(--panel-borderColor)",
@@ -288,7 +288,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": false,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 2 (move)",
+                                                "html": ' . json_encode(_getText('Element %1 (verschieben)', '', 2)) . ',
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "1px solid var(--panel-borderColor)",
@@ -304,7 +304,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": false,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 3 (move)",
+                                                "html": ' . json_encode(_getText('Element %1 (verschieben)', '', 3)) . ',
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "1px solid var(--panel-borderColor)",
@@ -320,7 +320,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": false,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 4 (move)",
+                                                "html": ' . json_encode(_getText('Element %1 (verschieben)', '', 4)) . ',
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "1px solid var(--panel-borderColor)",
@@ -331,7 +331,7 @@ foreach ($requests as $request) {
                                         ]
                                     },{
                                         "xtype":"home.sc.DashboardItemPanel",
-                                        "caption": "Items 2",
+                                        "caption": ' . json_encode(_getText('Elemente %1', '', 2)) . ',
                                         "elements": [
                                             {
                                                 "xtype": "kijs.gui.Element",
@@ -342,7 +342,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": true,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item (copy)",
+                                                "html": ' . json_encode(_getText('Element (kopieren)')) . ',
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "var(--panel-borderColor)",
@@ -358,7 +358,7 @@ foreach ($requests as $request) {
                                 "elements": [
                                     {
                                         "xtype":"home.sc.DashboardFormPanel",
-                                        "caption": "Form",
+                                        "caption": ' . json_encode(_getText('Formular')) . ',
                                         "rpcLoadFn":"dashboardFormPanel.load",
                                         "rpcSaveFn":"dashboardFormPanel.save",
                                         "autoLoad":true
@@ -369,7 +369,7 @@ foreach ($requests as $request) {
                                 "elements": [
                                     {
                                         "xtype":"home.sc.DashboardFormPanel",
-                                        "caption": "Form",
+                                        "caption": ' . json_encode(_getText('Formular')) . ',
                                         "rpcLoadFn":"dashboardFormPanel.load",
                                         "rpcSaveFn":"dashboardFormPanel.save",
                                         "autoLoad":true
@@ -390,7 +390,7 @@ foreach ($requests as $request) {
         case 'dashboard.save':
             try {
                 // config
-                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
+                $response->cornerTipMsg = _getText('Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)');
                 
                 //sleep(1);
                 
@@ -404,7 +404,7 @@ foreach ($requests as $request) {
                 $response->config = new stdClass();
                 $response->config->data = json_decode('
                     {
-                        "memo":"Ich bin eine Bemerkung!"
+                        "memo":' . json_encode(_getText('Ich bin eine Bemerkung!')) . '
                     }
                 ');
                 
@@ -418,7 +418,7 @@ foreach ($requests as $request) {
         case 'dashboardFormPanel.save':
             try {
                 // config
-                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
+                $response->cornerTipMsg = _getText('Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)');
                 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -511,7 +511,7 @@ foreach ($requests as $request) {
         case 'dataview.save':
             try {
                 // config
-                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
+                $response->cornerTipMsg = _getText('Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)');
                 
                 //sleep(1);
                 
@@ -525,8 +525,8 @@ foreach ($requests as $request) {
                 // config
                 $response->config = json_decode('
                     {
-                        "html": "Ich wurde geladen :)",
-                        "tooltip": "Ich bin ein Tooltip vom Server"
+                        "html": ' . json_encode(_getText('Ich wurde geladen :)')) . ',
+                        "tooltip": ' . json_encode(_getText('Ich bin ein Tooltip vom Server')) . '
                     }
                 ');
                 
@@ -547,22 +547,22 @@ foreach ($requests as $request) {
                         {
                             "xtype": "kijs.gui.field.Combo",
                             "name": "Anrede",
-                            "label": "Anrede",
+                            "label": ' . json_encode(_getText('Anrede')) . ',
                             "rpcLoadFn": "form.loadCombo",
                             "autoLoad": true,
                             "disableFlex":true
                         },{
                             "xtype": "kijs.gui.field.Text",
                             "name": "Name",
-                            "label": "Name"
+                            "label": ' . json_encode(_getText('Name')) . '
                         },{
                             "xtype": "kijs.gui.field.Text",
                             "name": "Vorname",
-                            "label": "Vorname"
+                            "label": ' . json_encode(_getText('Vorname')) . '
                         },{
                             "xtype": "kijs.gui.field.Combo",
                             "name": "BerufId",
-                            "label": "Beruf",
+                            "label": ' . json_encode(_getText('Beruf')) . ',
                             "rpcLoadFn": "combo.beruf.load",
                             "valueField": "BerufId",
                             "displayTextField": "Beruf",
@@ -594,8 +594,8 @@ foreach ($requests as $request) {
             try {
                 $response->config = new stdClass();
                 $response->config->data = [
-                    ['displayText' => 'Herr', 'value' => 'm'],
-                    ['displayText' => 'Frau', 'value' => 'w']
+                    ['displayText' => _getText('Herr'), 'value' => 'm'],
+                    ['displayText' => _getText('Frau'), 'value' => 'w']
                 ];
 
             } catch (Exception $ex) {
@@ -615,12 +615,12 @@ foreach ($requests as $request) {
                 }
 
                 if ($formData->Vorname === 'Susanne' && $formData->Anrede !== 'w') {
-                    $fieldErrors->Anrede = 'Falsche Anrede.';
+                    $fieldErrors->Anrede = _getText('Falsche Anrede.');
                 }
 
                 if (count(get_object_vars($fieldErrors))) {
                     $response->fieldErrors = $fieldErrors;
-                    $response->errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt';
+                    $response->errorMsg = _getText('Es wurden noch nicht alle Felder richtig ausgefüllt');
                     $response->errorType = 'errorNotice';
                 }
             } catch (Exception $ex) {
@@ -642,7 +642,7 @@ foreach ($requests as $request) {
                     $response->columnConfigs = array();
 
                     $col = new stdClass();
-                    $col->caption = 'Vorname';
+                    $col->caption = _getText('Vorname');
                     $col->valueField = 'vorname';
                     $col->editable = true;
                     $response->columnConfigs[] = $col;
@@ -650,7 +650,7 @@ foreach ($requests as $request) {
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Number';
-                    $col->caption = 'Zahl';
+                    $col->caption = _getText('Zahl');
                     $col->valueField = 'number';
 
                     // nummern stylen
@@ -702,7 +702,7 @@ foreach ($requests as $request) {
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Date';
-                    $col->caption = 'Date';
+                    $col->caption = _getText('Datum');
                     $col->valueField = 'date';
                     $response->columnConfigs[] = $col;
                     unset ($col);
@@ -712,22 +712,22 @@ foreach ($requests as $request) {
                     $col->caption = 'Combo';
                     $col->valueField = 'value';
                     $col->displayField = 'displayText';
-                    $col->tooltip = 'Franz fährt im komplett verwahrlosten Taxi quer durch Bayern';
+                    $col->tooltip = _getText('Franz fährt im komplett verwahrlosten Taxi quer durch Bayern');
                     $col->editable = true;
                     $col->clicksToEdit = 1;
                     $col->editorXtype = 'kijs.gui.field.Combo';
                     $col->editorConfig = new stdClass();
                     $col->editorConfig->data = [
-                        ['value' => 1, 'displayText' => 'Datensatz 1'],
-                        ['value' => 2, 'displayText' => 'Datensatz 2'],
-                        ['value' => 3, 'displayText' => 'Datensatz 3']
+                        ['value' => 1, 'displayText' => _getText('Datensatz %1', '', 1)],
+                        ['value' => 2, 'displayText' => _getText('Datensatz %1', '', 2)],
+                        ['value' => 3, 'displayText' => _getText('Datensatz %1', '', 3)]
                     ];
                     $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Number';
-                    $col->caption = 'Zahl 1 NS';
+                    $col->caption = _getText('Zahl %1', '', 1) . ' NS';
                     $col->valueField = 'number1';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
@@ -737,7 +737,7 @@ foreach ($requests as $request) {
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Number';
-                    $col->caption = 'Zahl 2';
+                    $col->caption = _getText('Zahl %1', '', 2);
                     $col->valueField = 'number2';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
@@ -755,7 +755,7 @@ foreach ($requests as $request) {
 
                     for ($y=0; $y<26; $y++) {
                         $col = new stdClass();
-                        $col->caption = 'Spalte ' . substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1);
+                        $col->caption = _getText('Spalte %1', '', substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1));
                         $col->valueField = 'field_' . strtolower(substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1));
                         $col->visible = $y === 5 ? false : true; // F
                         $col->hideable = $y === 6 ? false : true; // G
@@ -802,7 +802,7 @@ foreach ($requests as $request) {
         case 'land.load':
             try {
                 $response->config = new stdClass();
-                $response->config->data = _loadJsonFile('../testData/land.json');
+                $response->config->data = _translateCountries(_loadJsonFile('../testData/land.json'));
                 //sleep(1);
 
             } catch (Exception $ex) {
@@ -814,12 +814,12 @@ foreach ($requests as $request) {
             try {
                 $rows = array();
 
-                $rows[] = array('displayText'=>'rot', 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'grün', 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'blau', 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('displayText'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('rot'), 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('grün'), 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('blau'), 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('gelb'), 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('violett'), 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>_getText('hellblau'), 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $response->config = new stdClass();
                 $response->config->data = $rows;
 
@@ -831,7 +831,7 @@ foreach ($requests as $request) {
             break;
         
         case 'rpc.simple':
-            $response->infoMsg = 'Ich bin eine Nachricht vom Server';
+            $response->infoMsg = _getText('Ich bin eine Nachricht vom Server');
             $response->data = $request->requestData;
             break;
         
@@ -841,13 +841,13 @@ foreach ($requests as $request) {
             break;
         
         case 'rpc.infoMsg':
-            $response->infoMsg = 'Ich bin eine infoMsg';
+            $response->infoMsg = _getText('Ich bin eine %1', '', 'infoMsg');
             //$response->infoTitle = 'Eigener Titel';
             $response->data = $request->requestData;
             break;
         
         case 'rpc.cornerTipMsg':
-            $response->cornerTipMsg = 'Ich bin eine cornerTipMsg';
+            $response->cornerTipMsg = _getText('Ich bin eine %1', '', 'cornerTipMsg');
             //$response->cornerTipTitle = 'Eigener Titel';
             $response->data = $request->requestData;
             break;
@@ -857,13 +857,13 @@ foreach ($requests as $request) {
             if ($ignoreWarnings) {
                 $response->data = $request->requestData;
             } else {
-                $response->warningMsg = 'Sind Sie sicher?';
+                $response->warningMsg = _getText('Sind Sie sicher?');
                // $response->warningTitle = 'Eigener Titel';
             }
             break;
         
         case 'rpc.errorMsg':
-            $response->errorMsg = 'Ich bin eine errorMsg';
+            $response->errorMsg = _getText('Ich bin eine %1', '', 'errorMsg');
             //$response->errorTitle = 'Eigener Titel';
             $response->data = $request->requestData;
             break;
@@ -871,7 +871,7 @@ foreach ($requests as $request) {
         case 'rpc.errorNotice':
             try {
                 $response->data = $request->requestData;
-                throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
+                throw new ki_Exception_Notice(_getText('Fehler, aber nicht tragisch.'));
                 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -882,7 +882,7 @@ foreach ($requests as $request) {
         case 'rpc.error':
             try {
                 $response->data = $request->requestData;
-                throw new Exception('Fehler! Schrecklich!!!');
+                throw new Exception(_getText('Fehler! Schrecklich!!!'));
                 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -927,15 +927,65 @@ print(json_encode($responses, JSON_HEX_TAG | JSON_HEX_AMP));
 // Hilfsfunktionen
 // ------------------------------------
 /**
+ * Gibt die Sprache des Aufrufs ohne Region zurück (GET-Parameter lang, z.B. 'fr-CH' -> 'fr')
+ * @return string  zweistelliges Sprachkürzel, Standard 'de'
+ */
+function _getLanguage(): string {
+    $lang = strtolower(explode('-', (string)filter_input(INPUT_GET, 'lang'))[0]);
+    return preg_match('/^[a-z]{2}$/', $lang) ? $lang : 'de';
+}
+
+/**
+ * Übersetzt einen Text in die Sprache des Aufrufs, analog zu kijs.getText().
+ * Die Übersetzungen kommen aus tools/kilang/data/home_xx.php (gleiche Dateien wie im Showcase).
+ * @param string $key       deutscher Text
+ * @param string $variant   Variante (optional)
+ * @param mixed $args       Argument oder Array mit Argumenten für %1, %2 ... (optional)
+ * @return string
+ */
+function _getText(string $key, string $variant='', mixed $args=null): string {
+    static $texts = null;
+
+    // Sprachdatei einmal laden
+    if ($texts === null) {
+        $texts = [];
+        $lang = _getLanguage();
+        $file = __DIR__ . '/../../../tools/kilang/data/home_' . $lang . '.php';
+        if ($lang !== 'de' && is_file($file)) {
+            $translations = [];
+            include $file;
+            $texts = $translations[$lang] ?? [];
+        }
+    }
+
+    $text = $texts[$key] ?? $key;
+
+    // Evtl. sind Varianten vorhanden
+    if (is_array($text)) {
+        $text = $text[$variant] ?? $text[''] ?? $key;
+    }
+
+    // Argumente in umgekehrter Reihenfolge ersetzen, damit %11 nicht von %1 ersetzt wird
+    if ($args !== null) {
+        $args = is_array($args) ? $args : [$args];
+        for ($i = count($args); $i > 0; $i--) {
+            $text = str_replace('%' . $i, (string)$args[$i - 1], $text);
+        }
+    }
+
+    return (string)$text;
+}
+
+/**
  * Erzeugt eine Zeile für das Showcase-Grid (grid.load)
  */
 function _gridGetRow(int $rwId, array $vornamen): stdClass {
     $states = [
-        ['kijs.iconMap.Fa.circle-check', '#2e7d32', 'Erledigt'],
-        ['kijs.iconMap.Fa.spinner', '#ef6c00', 'In Arbeit'],
-        ['kijs.iconMap.Fa.circle-pause', '#757575', 'Pausiert'],
-        ['kijs.iconMap.Fa.circle-xmark', '#c62828', 'Fehler'],
-        ['kijs.iconMap.Fa.star', '#f9a825', 'Wichtig']
+        ['kijs.iconMap.Fa.circle-check', '#2e7d32', _getText('Erledigt')],
+        ['kijs.iconMap.Fa.spinner', '#ef6c00', _getText('In Arbeit')],
+        ['kijs.iconMap.Fa.circle-pause', '#757575', _getText('Pausiert')],
+        ['kijs.iconMap.Fa.circle-xmark', '#c62828', _getText('Fehler')],
+        ['kijs.iconMap.Fa.star', '#f9a825', _getText('Wichtig')]
     ];
 
     $row = new stdClass();
@@ -953,14 +1003,14 @@ function _gridGetRow(int $rwId, array $vornamen): stdClass {
     $row->date = mktime(0, 0, 0, 1, 1, 2026) + (3600 * 24 * $rwId);
     // Spalte Icon: 8 verschiedene Icons (Codepoint) mit Farbe und Tooltip
     $icons = [
-        [0xf015, '#1565c0', 'Haus'],
-        [0xf007, '#6a1b9a', 'Person'],
-        [0xf0e0, '#00838f', 'Brief'],
-        [0xf095, '#2e7d32', 'Telefon'],
-        [0xf1b9, '#455a64', 'Auto'],
-        [0xf004, '#c62828', 'Herz'],
-        [0xf0f3, '#ef6c00', 'Glocke'],
-        [0xf013, '#5d4037', 'Zahnrad']
+        [0xf015, '#1565c0', _getText('Haus')],
+        [0xf007, '#6a1b9a', _getText('Person')],
+        [0xf0e0, '#00838f', _getText('Brief')],
+        [0xf095, '#2e7d32', _getText('Telefon')],
+        [0xf1b9, '#455a64', _getText('Auto')],
+        [0xf004, '#c62828', _getText('Herz')],
+        [0xf0f3, '#ef6c00', _getText('Glocke')],
+        [0xf013, '#5d4037', _getText('Zahnrad')]
     ];
     $icon = $icons[$rwId % count($icons)];
     $row->icon = $icon[0];
@@ -973,7 +1023,7 @@ function _gridGetRow(int $rwId, array $vornamen): stdClass {
 
     // Spalte Combo (Werte wie in editorConfig->data)
     $row->value = ($rwId % 3) + 1;
-    $row->displayText = 'Datensatz ' . $row->value;
+    $row->displayText = _getText('Datensatz %1', '', $row->value);
 
     return $row;
 }
@@ -1180,6 +1230,32 @@ function _recordsetGenerateRec(int $rowsCount, int $childrenCount=0,
         }
         $rows[] = $row;
     }
+
+    return $rows;
+}
+
+/**
+ * Übersetzt die Ländernamen (Feld 'Land') anhand des ISO-Codes in die Sprache des Aufrufs
+ * und sortiert neu. Die Namen liefert die PHP-Erweiterung intl; ohne intl bleibt die Liste deutsch.
+ * @param array $rows  Datensätze mit den Feldern 'ISO' und 'Land'
+ * @return array
+ */
+function _translateCountries(array $rows): array {
+    $lang = _getLanguage();
+    if ($lang === 'de' || !class_exists('Locale')) {
+        return $rows;
+    }
+
+    foreach ($rows as &$row) {
+        $name = Locale::getDisplayRegion('-' . $row['ISO'], $lang);
+        if ($name && $name !== $row['ISO']) {
+            $row['Land'] = $name;
+        }
+    }
+    unset($row);
+
+    $collator = new Collator($lang);
+    usort($rows, fn(array $a, array $b): int => (int)$collator->compare($a['Land'], $b['Land']));
 
     return $rows;
 }

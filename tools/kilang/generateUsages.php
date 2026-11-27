@@ -83,6 +83,9 @@ foreach ($homeDirs as $homeDir) {
 }
 unset($homeDirs, $homeDir, $homeFiles, $iterator, $file);
 
+// Texte der Showcase-Serverdaten (übersetzt mit _getText())
+KiLang::browseFiles($dir . 'home/dataResources/php/ajax.php', '_getText', $homeUsages);
+
 // home_usages.php-Datei erstellen
 KiLang::writeUsagesFile('data/home_usages.php', 'translations', $homeUsages);
 

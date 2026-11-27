@@ -41,7 +41,10 @@ home.App = class home_App {
         kijs.setRpc('app', new kijs.gui.Rpc(appRpcConfig));
 
         // RPC-Instanz für den Inhalt (data)
-        let dataRpcConfig = {};
+        // Die Sprache geht als GET-Parameter mit, damit der Server seine Texte übersetzen kann
+        let dataRpcConfig = {
+            parameters: { lang: kijs.language }
+        };
         if (config.dataAjaxUrl) {
             dataRpcConfig.url = config.dataAjaxUrl;
         }

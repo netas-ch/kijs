@@ -438,6 +438,9 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [54], 
     "../../home/data/showcase/container/container_Form.js" => [74, 441]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [550]
    ]
   ]
  ], 
@@ -465,6 +468,15 @@ $translations = [
     "../../home/data/showcase/Panel.js" => [62, 204], 
     "../../home/data/showcase/PanelBar.js" => [51, 64, 97, 159], 
     "../../home/data/showcase/Window.js" => [227, 414]
+   ]
+  ]
+ ], 
+
+ "Auto" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1011]
    ]
   ]
  ], 
@@ -518,6 +530,15 @@ $translations = [
   ]
  ], 
 
+ "Beruf" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [565]
+   ]
+  ]
+ ], 
+
  "Berufe" => [
   "" => [
    "usagesJs" => [
@@ -555,6 +576,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Mask.js" => [203]
+   ]
+  ]
+ ], 
+
+ "Brief" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1009]
    ]
   ]
  ], 
@@ -613,6 +643,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Menu.js" => [89]
+   ]
+  ]
+ ], 
+
+ "Button vom Server" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [169]
    ]
   ]
  ], 
@@ -697,10 +736,22 @@ $translations = [
   ]
  ], 
 
+ "Datensatz %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [721, 722, 723, 1026]
+   ]
+  ]
+ ], 
+
  "Datum" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_DateTime.js" => [49]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [705]
    ]
   ]
  ], 
@@ -823,6 +874,15 @@ $translations = [
   ]
  ], 
 
+ "Dies ist ein <b>Info</b>-Text." => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [260]
+   ]
+  ]
+ ], 
+
  "Dies ist ein Hilfetext" => [
   "" => [
    "usagesJs" => [
@@ -901,10 +961,28 @@ $translations = [
   ]
  ], 
 
+ "Element %1 (verschieben)" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [275, 291, 307, 323]
+   ]
+  ]
+ ], 
+
  "Element (kann nicht ins Dashboard verschoben werden)" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Dashboard.js" => [344]
+   ]
+  ]
+ ], 
+
+ "Element (kopieren)" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [345]
    ]
   ]
  ], 
@@ -941,6 +1019,15 @@ $translations = [
   ]
  ], 
 
+ "Elemente %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [264, 334]
+   ]
+  ]
+ ], 
+
  "Er passt seine Ausrichtung (horizontal/vertical) automatisch der aktuellen flex-direction an." => [
   "" => [
    "usagesJs" => [
@@ -953,6 +1040,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/grid/grid_Grid.js" => [87]
+   ]
+  ]
+ ], 
+
+ "Erledigt" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [985]
    ]
   ]
  ], 
@@ -974,6 +1070,15 @@ $translations = [
   ]
  ], 
 
+ "Es wurden noch nicht alle Felder richtig ausgefüllt" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [623]
+   ]
+  ]
+ ], 
+
  "Exklusiver RPC, der nicht mit anderen zusammengefasst wird:" => [
   "" => [
    "usagesJs" => [
@@ -986,6 +1091,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_Range.js" => [48]
+   ]
+  ]
+ ], 
+
+ "Falsche Anrede." => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [618]
    ]
   ]
  ], 
@@ -1003,6 +1117,33 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_Combo.js" => [417]
+   ]
+  ]
+ ], 
+
+ "Fehler" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [988]
+   ]
+  ]
+ ], 
+
+ "Fehler! Schrecklich!!!" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [885]
+   ]
+  ]
+ ], 
+
+ "Fehler, aber nicht tragisch." => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [874]
    ]
   ]
  ], 
@@ -1067,6 +1208,9 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Form.js" => [36]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [361, 372]
    ]
   ]
  ], 
@@ -1087,11 +1231,23 @@ $translations = [
   ]
  ], 
 
+ "Franz fährt im komplett verwahrlosten Taxi quer durch Bayern" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [715]
+   ]
+  ]
+ ], 
+
  "Frau" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [59], 
     "../../home/data/showcase/container/container_Form.js" => [80, 447]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [598]
    ]
   ]
  ], 
@@ -1116,6 +1272,24 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_AceEditor.js" => [84]
+   ]
+  ]
+ ], 
+
+ "Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [238, 393, 421, 514]
+   ]
+  ]
+ ], 
+
+ "Glocke" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1013]
    ]
   ]
  ], 
@@ -1179,6 +1353,15 @@ $translations = [
   ]
  ], 
 
+ "Haus" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1007]
+   ]
+  ]
+ ], 
+
  "Haustiere" => [
   "" => [
    "usagesJs" => [
@@ -1192,6 +1375,18 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [58], 
     "../../home/data/showcase/container/container_Form.js" => [79, 446]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [597]
+   ]
+  ]
+ ], 
+
+ "Herz" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1012]
    ]
   ]
  ], 
@@ -1254,6 +1449,42 @@ $translations = [
   ]
  ], 
 
+ "Ich bin ein Tooltip vom Server" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [529]
+   ]
+  ]
+ ], 
+
+ "Ich bin eine %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [844, 850, 866]
+   ]
+  ]
+ ], 
+
+ "Ich bin eine Bemerkung!" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [407]
+   ]
+  ]
+ ], 
+
+ "Ich bin eine Nachricht vom Server" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [834]
+   ]
+  ]
+ ], 
+
  "Ich bin eine SpinBox mit etwas HTML-Inhalt<br>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla." => [
   "" => [
    "usagesJs" => [
@@ -1266,6 +1497,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Container.js" => [21]
+   ]
+  ]
+ ], 
+
+ "Ich wurde geladen :)" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [528]
    ]
   ]
  ], 
@@ -1306,6 +1546,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Icon.js" => [36]
+   ]
+  ]
+ ], 
+
+ "In Arbeit" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [986]
    ]
   ]
  ], 
@@ -1778,6 +2027,9 @@ $translations = [
     "../../home/data/showcase/Window.js" => [131], 
     "../../home/data/showcase/container/container_Fieldset.js" => [47, 69], 
     "../../home/data/showcase/container/container_Form.js" => [96, 463]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [557]
    ]
   ]
  ], 
@@ -1897,6 +2149,24 @@ $translations = [
   ]
  ], 
 
+ "Pausiert" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [987]
+   ]
+  ]
+ ], 
+
+ "Person" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1008]
+   ]
+  ]
+ ], 
+
  "RPC mit Callback-Funktion" => [
   "" => [
    "usagesJs" => [
@@ -1981,6 +2251,9 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Stack.js" => [54, 55, 56, 57, 58]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [197, 198, 199, 200, 201]
    ]
   ]
  ], 
@@ -2029,6 +2302,15 @@ $translations = [
   ]
  ], 
 
+ "Sind Sie sicher?" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [860]
+   ]
+  ]
+ ], 
+
  "Sollen folgende Register wirklich geschlossen werden?" => [
   "" => [
    "usagesJs" => [
@@ -2050,6 +2332,15 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/DataView.js" => [106, 271], 
     "../../home/data/showcase/ListView.js" => [105]
+   ]
+  ]
+ ], 
+
+ "Spalte %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [758]
    ]
   ]
  ], 
@@ -2107,6 +2398,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Tab.js" => [101]
+   ]
+  ]
+ ], 
+
+ "Telefon" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1010]
    ]
   ]
  ], 
@@ -2220,6 +2520,9 @@ $translations = [
     "../../home/data/showcase/DataView.js" => [277], 
     "../../home/data/showcase/container/container_Fieldset.js" => [65], 
     "../../home/data/showcase/container/container_Form.js" => [91, 458]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [561, 645]
    ]
   ]
  ], 
@@ -2304,6 +2607,15 @@ $translations = [
   ]
  ], 
 
+ "Wichtig" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [989]
+   ]
+  ]
+ ], 
+
  "Wizard mit RPC" => [
   "" => [
    "usagesJs" => [
@@ -2316,6 +2628,33 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_DateTime.js" => [134]
+   ]
+  ]
+ ], 
+
+ "Zahl" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [653]
+   ]
+  ]
+ ], 
+
+ "Zahl %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [730, 740]
+   ]
+  ]
+ ], 
+
+ "Zahnrad" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [1014]
    ]
   ]
  ], 
@@ -2379,7 +2718,22 @@ $translations = [
  "blau" => [
   "" => [
    "usagesJs" => [
-    "../../home/data/showcase/Mask.js" => [78, 108]
+    "../../home/data/showcase/ListView.js" => [269], 
+    "../../home/data/showcase/Mask.js" => [78, 108], 
+    "../../home/data/showcase/field/field_ListView.js" => [141]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [28, 123, 819]
+   ]
+  ]
+ ], 
+
+ "dunkelgrau" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [275], 
+    "../../home/data/showcase/field/field_ListView.js" => [147]
    ]
   ]
  ], 
@@ -2392,10 +2746,53 @@ $translations = [
   ]
  ], 
 
+ "gelb" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [29, 124, 820]
+   ]
+  ]
+ ], 
+
+ "grau" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [276], 
+    "../../home/data/showcase/field/field_ListView.js" => [148]
+   ]
+  ]
+ ], 
+
  "grün" => [
   "" => [
    "usagesJs" => [
-    "../../home/data/showcase/Mask.js" => [66, 107]
+    "../../home/data/showcase/ListView.js" => [270], 
+    "../../home/data/showcase/Mask.js" => [66, 107], 
+    "../../home/data/showcase/field/field_ListView.js" => [142]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [27, 122, 818]
+   ]
+  ]
+ ], 
+
+ "hellblau" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [31, 126, 822]
+   ]
+  ]
+ ], 
+
+ "hellgrau" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [277], 
+    "../../home/data/showcase/field/field_ListView.js" => [149]
    ]
   ]
  ], 
@@ -2648,6 +3045,26 @@ $translations = [
   ]
  ], 
 
+ "orange" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [273], 
+    "../../home/data/showcase/field/field_ListView.js" => [145]
+   ]
+  ]
+ ], 
+
+ "pink" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [271], 
+    "../../home/data/showcase/field/field_ListView.js" => [143]
+   ]
+  ]
+ ], 
+
  "rechtsbündig" => [
   "" => [
    "usagesJs" => [
@@ -2660,6 +3077,29 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Mask.js" => [55, 106]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [26, 121, 817]
+   ]
+  ]
+ ], 
+
+ "schwarz" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [279], 
+    "../../home/data/showcase/field/field_ListView.js" => [151]
+   ]
+  ]
+ ], 
+
+ "türkis" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [272], 
+    "../../home/data/showcase/field/field_ListView.js" => [144]
    ]
   ]
  ], 
@@ -2672,10 +3112,33 @@ $translations = [
   ]
  ], 
 
+ "violett" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [274], 
+    "../../home/data/showcase/field/field_ListView.js" => [146]
+   ], 
+   "usagesPhp" => [
+    "../../home/dataResources/php/ajax.php" => [30, 125, 821]
+   ]
+  ]
+ ], 
+
  "von/bis" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_DateTime.js" => [147]
+   ]
+  ]
+ ], 
+
+ "weiss" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/showcase/ListView.js" => [278], 
+    "../../home/data/showcase/field/field_ListView.js" => [150]
    ]
   ]
  ], 

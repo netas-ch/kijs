@@ -138,17 +138,17 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     inputWidth: 180,
                     sortable: true,
                     data: [
-                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' },
-                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' },
-                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff0088' },
-                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' },
-                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' },
-                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.droplet', Color:'#8800ff', disabled: true },
-                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' },
-                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' },
-                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' },
-                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' },
-                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.droplet', Color:'#000000' }
+                        {id:1, Bezeichnung:kijs.getText('blau'), Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' },
+                        {id:2, Bezeichnung:kijs.getText('grün'), Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' },
+                        {id:3, Bezeichnung:kijs.getText('pink'), Icon:'kijs.iconMap.Fa.droplet', Color:'#ff0088' },
+                        {id:4, Bezeichnung:kijs.getText('türkis'), Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' },
+                        {id:5, Bezeichnung:kijs.getText('orange'), Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' },
+                        {id:6, Bezeichnung:kijs.getText('violett'), Icon:'kijs.iconMap.Fa.droplet', Color:'#8800ff', disabled: true },
+                        {id:7, Bezeichnung:kijs.getText('dunkelgrau'), Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' },
+                        {id:8, Bezeichnung:kijs.getText('grau'), Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' },
+                        {id:9, Bezeichnung:kijs.getText('hellgrau'), Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' },
+                        {id:10, Bezeichnung:kijs.getText('weiss'), Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' },
+                        {id:11, Bezeichnung:kijs.getText('schwarz'), Icon:'kijs.iconMap.Fa.droplet', Color:'#000000' }
                     ],
                     value: [2,3],
                     on: {
