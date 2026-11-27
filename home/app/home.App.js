@@ -253,6 +253,10 @@ home.App = class home_App {
         this._viewport.render();
 
         this._updateApiStatus();
+
+        // Direktlink in der Adresse (#api/kijs.gui.Button, #showcase/Button ...) öffnen
+        this._openLink(this._getLocationLink());
+        window.addEventListener('hashchange', () => this.#onHashChange());
     }
 
     /**
@@ -581,6 +585,48 @@ home.App = class home_App {
         });
     }
 
+    /**
+     * Gibt den Direktlink aus der Adresse zurück (Teil nach #, dekodiert)
+     * @returns {String}  z.B. 'api/kijs.gui.Button' oder '' ohne Link
+     */
+    _getLocationLink() {
+        try {
+            return decodeURIComponent(window.location.hash.replace(/^#/, ''));
+        } catch (ex) {
+            return '';
+        }
+    }
+
+    /**
+     * Gibt den Direktlink eines Tabs zurück (Teil nach # in der Adresse)
+     *   API:          'api/kijs.gui.Button' bzw. 'api/kijs.gui.Button/caption'
+     *   Lückenbericht 'api-issues'
+     *   Showcase:     'showcase/field/field_Text'     (data/showcase/field/field_Text.js)
+     *   Tests:        'test/test_Grid'                (data/test/test_Grid.js)
+     *   Doku:         'docu/Leitfäden/Config-System'  (data/docu/Leitfäden/Config-System.md)
+     *   Suche:        'search/Combo'
+     *   Quellcode:    'src/js/gui/kijs.gui.Button.js'
+     *   Werkzeuge:    'tools'
+     * @param {kijs.gui.Element} tabEl
+     * @returns {String}  '' für die Startseite bzw. ein Tab ohne Link
+     */
+    _getTabLink(tabEl) {
+        const d = tabEl ? tabEl.userData : null;
+        if (kijs.isEmpty(d)) {
+            return '';
+        }
+        switch (d.filetype) {
+            case 'api':       return 'api/' + d.className + (d.memberName ? '/' + d.memberName : '');
+            case 'apiissues': return 'api-issues';
+            case 'search':    return 'search/' + d.query;
+            case 'source':    return 'src/' + d.file;
+            case 'tools':     return 'tools';
+        }
+        const path = (d.nodeId || d.path || '').split('?')[0];
+        const m = /^data\/(showcase|test|docu)\/(.+)\.(js|md)$/.exec(path);
+        return m ? m[1] + '/' + m[2] : '';
+    }
+
     _getTreeByName(name) {
         let el = null;
 
@@ -763,6 +809,74 @@ home.App = class home_App {
     }
 
     /**
+     * Öffnet die Seite zu einem Direktlink (Format siehe _getTabLink()). Ein leerer Link
+     * zeigt die Startseite.
+     * @param {String} link
+     * @returns {Boolean}  false, wenn der Link ungültig ist
+     */
+    _openLink(link) {
+        link = (link || '').trim();
+        if (!link) {
+            this._content.currentEl = this._content.elements[0];
+            return true;
+        }
+
+        const pos = link.indexOf('/');
+        const type = pos > -1 ? link.substring(0, pos) : link;
+        const rest = pos > -1 ? link.substring(pos + 1) : '';
+
+        switch (type) {
+            case 'api': {
+                const parts = rest.split('/');
+                if (!/^[\w$.]+$/.test(parts[0])) {
+                    break;
+                }
+                this._showNavigationTab(this._tabApi);
+                this.openApiClass(parts[0], parts[1] || null);
+                return true;
+            }
+
+            case 'api-issues':
+                this._showNavigationTab(this._tabApi);
+                this.openApiIssues();
+                return true;
+
+            case 'showcase':
+            case 'test':
+            case 'docu': {
+                const ext = type === 'docu' ? '.md' : '.js';
+                const tabs = { showcase: this._tabShowcase, test: this._tabTest, docu: this._tabDocu };
+                if (rest && !rest.includes('..') && this.openLinkedFile('data/' + type + '/' + rest + ext)) {
+                    this._showNavigationTab(tabs[type]);
+                    return true;
+                }
+                break;
+            }
+
+            case 'search':
+                if (rest) {
+                    this.openSearch(rest);
+                    return true;
+                }
+                break;
+
+            case 'src':
+                if (/^js\/[\w\/.-]+\.js$/.test(rest) && !rest.includes('..')) {
+                    this.openSource(rest);
+                    return true;
+                }
+                break;
+
+            case 'tools':
+                this.openTools();
+                return true;
+        }
+
+        kijs.gui.CornerTipContainer.show('Link', 'Ungültiger Link: ' + kijs.String.htmlspecialchars(link), 'alert');
+        return false;
+    }
+
+    /**
      * Zeigt einen Bereich der Navigation an (Showcase, Tests, Doku oder API)
      * @param {kijs.gui.container.tab.Container} tabEl  z.B. this._tabShowcase
      */
@@ -863,7 +977,8 @@ home.App = class home_App {
                     on: {
                         change: function(e) {
                             var loc = window.location;
-                            window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value;
+                            // Direktlink (#...) behalten, damit die Seite offen bleibt
+                            window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value + loc.hash;
                         },
                         context: this
                     }
@@ -989,6 +1104,14 @@ home.App = class home_App {
         let oldTreeEl = null;
         let newTreeEl = null;
 
+        // Direktlink in der Adresse nachführen (neuer Eintrag in der History des Browsers,
+        // damit Zurück und Vor funktionieren)
+        const link = this._getTabLink(e.currentEl);
+        if (link !== this._getLocationLink()) {
+            const url = window.location.pathname + window.location.search + (link ? '#' + encodeURI(link) : '');
+            window.history.pushState(null, '', url);
+        }
+
         // betroffene Trees ermitteln
         if (!kijs.isEmpty(e.oldEl.userData) && e.oldEl.userData.treeName) {
             oldTreeEl = this._getTreeByName(e.oldEl.userData.treeName);
@@ -1016,6 +1139,23 @@ home.App = class home_App {
                 newTreeEl.reassignCurrent();
                 newTreeEl.scrollToFocus();
             }
+        }
+    }
+
+    // Zurück/Vor im Browser bzw. geänderter Link in der Adresse
+    #onHashChange() {
+        // Klick auf einen internen Link href="#" ohne preventDefault(): ignorieren und den
+        // Link des aktuellen Tabs wiederherstellen
+        if (window.location.href.endsWith('#')) {
+            const current = this._getTabLink(this._content.currentEl);
+            window.history.replaceState(null, '', window.location.pathname + window.location.search
+                    + (current ? '#' + encodeURI(current) : ''));
+            return;
+        }
+
+        const link = this._getLocationLink();
+        if (link !== this._getTabLink(this._content.currentEl)) {
+            this._openLink(link);
         }
     }
 

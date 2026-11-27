@@ -40,6 +40,11 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
 
 ## Home-App: Weitere Neuerungen
 - Globale Suche in der Kopfzeile über API, Leitfäden, Showcase und Tests.  
+- Direktlinks: Die Adresszeile zeigt den Link der aktuellen Seite (z.B. 
+  ```…/home/#api/kijs.gui.Button/caption```, ```#showcase/field/field_Text```, 
+  ```#docu/Leitfäden/Config-System```). Ein solcher Link öffnet die Seite direkt, Zurück und 
+  Vor im Browser funktionieren, und beim Wechsel der Sprache bleibt die Seite offen. Übersicht 
+  in [Erste Schritte](Erste_Schritte.md).  
 - Links zwischen den Seiten: relative Links auf Leitfäden, Showcase- und 
   Test-Seiten sowie Links auf die API (```api:kijs.gui.Button#caption```). Die 
   Leitfäden sind mit der API verlinkt.  
