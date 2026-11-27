@@ -82,11 +82,11 @@ kit.App = class kit_App {
                             elements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Fenster mit Target öffnen',
+                                    caption: 'Open window with target',
                                     on: {
                                         click: function() {
                                             new kijs.gui.Window({
-                                                caption: 'Fenster',
+                                                caption: 'Window',
                                                 target: this.upX('kijs.gui.Panel'),
                                                 modal: true,
                                                 collapsible: 'top',
@@ -108,11 +108,11 @@ kit.App = class kit_App {
                                     }
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Fenster öffnen',
+                                    caption: 'Open window',
                                     on: {
                                         click: function() {
                                             new kijs.gui.Window({
-                                                caption: 'Fenster',
+                                                caption: 'Window',
                                                 collapsible: 'top',
                                                 height: 100,
                                                 width: 200,
