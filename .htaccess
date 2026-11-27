@@ -1,0 +1,3 @@
+# Interne Ordner sperren: Git-Repository und NetBeans-Projektdateien
+# (Antwort 404, damit nicht erkennbar ist, ob der Ordner existiert)
+RedirectMatch 404 /(\.git|nbproject)(/|$)

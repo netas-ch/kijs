@@ -89,6 +89,8 @@ Damit die Home-App öffentlich (z.B. auf kijs.ch) betrieben werden kann:
   (```tools/localOnly.php```). Bisher konnte jeder Dateien auf dem Server überschreiben.  
 - Die Testseite ```testViewport/test_afterResize.php``` ist ebenfalls nur lokal aufrufbar, 
   und der Link darauf auf der Startseite der Home-App ist nur lokal sichtbar.  
+- Neue ```.htaccess``` im Hauptordner: Die Ordner ```.git``` und ```nbproject``` sind über 
+  den Webserver nicht abrufbar (Antwort 404).  
 - ```tools/getDebugHead.php``` bietet die Funktion ```kijs_getDebugHead()``` zum Einbinden. 
   ```home/index.php``` und ```testViewport``` verwenden sie, statt die Tags über HTTP mit dem 
   Host-Header des Besuchers abzurufen. Ein direkter Aufruf gibt die URLs jetzt relativ zum 
