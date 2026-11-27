@@ -10,9 +10,9 @@ $themeUrl = '../css/kijs.theme.default.css?v=' . filemtime('../css/kijs.theme.de
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
-    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
-    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+    <link rel="icon" href="../favicon.svg?v=<?=filemtime('../favicon.svg')?>" type="image/svg+xml">
+    <link rel="icon" href="../favicon.ico?v=<?=filemtime('../favicon.ico')?>" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=<?=filemtime('../apple-touch-icon.png')?>">
     <style>
         @layer kijs, kijs-theme, app;
     </style>

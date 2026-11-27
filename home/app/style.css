@@ -189,7 +189,7 @@
 
     /* Icons */
     .icoKijs16 {
-        background-image: url('../../favicon.svg');
+        background-image: url('../../favicon.svg?v=3');   /* v bei Änderungen am Favicon erhöhen (Browser-Cache) */
         background-size: 20px;
         height: 20px;
         width: 20px;

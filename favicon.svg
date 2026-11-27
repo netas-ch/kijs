@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
     <rect width="32" height="32" rx="7" fill="#ff9900"/>
-    <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Geometrie wie im Logo {kijs} (logo.svg), verkleinert, Klammern auf 85 % der Höhe -->
+    <g transform="translate(3.25,4.60) scale(0.3)" fill="none" stroke="#ffffff" stroke-width="8.67" stroke-linecap="round" stroke-linejoin="round">
         <!-- { -->
-        <path d="M10,6.5 C7.6,6.5 7.4,8 7.4,10 L7.4,13.6 C7.4,15.2 6.6,16 5.2,16 C6.6,16 7.4,16.8 7.4,18.4 L7.4,22 C7.4,24 7.6,25.5 10,25.5"/>
-        <!-- k -->
-        <path d="M13.2,7.5 V24.5 M19.6,13 L13.2,19.8 M15.4,17.5 L20,24.5"/>
+        <path d="M16,4 C9,4 8,8.25 8,14.2 L8,30.35 C8,35.45 5,38 0,38 C5,38 8,40.55 8,45.65 L8,61.8 C8,67.75 9,72 16,72"/>
+        <!-- k (2.5 nach rechts und 8 nach unten verschoben, damit es optisch in der Mitte der Klammern steht) -->
+        <path d="M32.5,8 V68 M55.5,28 L32.5,52 M40.5,44 L57.5,68"/>
         <!-- } -->
-        <path d="M22,6.5 C24.4,6.5 24.6,8 24.6,10 L24.6,13.6 C24.6,15.2 25.4,16 26.8,16 C25.4,16 24.6,16.8 24.6,18.4 L24.6,22 C24.6,24 24.4,25.5 22,25.5"/>
+        <path d="M69,4 C76,4 77,8.25 77,14.2 L77,30.35 C77,35.45 80,38 85,38 C80,38 77,40.55 77,45.65 L77,61.8 C77,67.75 76,72 69,72"/>
     </g>
 </svg>
