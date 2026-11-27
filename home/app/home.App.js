@@ -29,9 +29,8 @@ home.App = class home_App {
 
         this._spinBox = null; // aktuell geöffnete spinBox (Sprache oder Design)
 
-        // Sprache
-        // Sprache mit Region, damit Zahlen und Datum im Schweizer Format angezeigt werden
-        kijs.language = config.language ? config.language : 'de-CH';
+        // Sprache (aus der URL, zuletzt gewählt oder vom Browser, siehe getLanguage())
+        kijs.language = home_App.getLanguage(config.language);
 
         // Sprache der Seite (für die Übersetzungsfunktion der Browser und Screenreader).
         // Doku und API sind zusätzlich mit lang="de" gekennzeichnet.
@@ -56,6 +55,59 @@ home.App = class home_App {
             dataRpcConfig.url = config.dataAjaxUrl;
         }
         kijs.setRpc('default', new kijs.gui.Rpc(dataRpcConfig));
+    }
+
+
+
+    // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
+    // Sprachen der Home-App (wie im Sprachmenü). Deutsch und Französisch mit Region,
+    // damit Zahlen und Datum im Schweizer Format angezeigt werden.
+    static languages = [
+        { id: 'de-CH', caption: 'Deutsch' },
+        { id: 'en',    caption: 'English' },
+        { id: 'fr-CH', caption: 'Français' }
+    ];
+
+    // Schlüssel im localStorage für die zuletzt im Sprachmenü gewählte Sprache
+    static languageStorageKey = 'kijs-home-language';
+
+    /**
+     * Ermittelt die Sprache der Home-App. Reihenfolge:
+     * 1. GET-Parameter lang (Direktlink oder Sprachmenü)
+     * 2. zuletzt im Sprachmenü gewählte Sprache (localStorage)
+     * 3. erste Sprache des Browsers, die die Home-App anbietet (navigator.languages)
+     * 4. 'de-CH'
+     * @param {String|null} [paramLanguage=null]  Wert des GET-Parameters lang
+     * @returns {String}
+     */
+    static getLanguage(paramLanguage=null) {
+        if (paramLanguage) {
+            return paramLanguage;
+        }
+
+        // zuletzt gewählt (localStorage kann im Browser gesperrt sein)
+        let stored = null;
+        try {
+            stored = window.localStorage.getItem(home_App.languageStorageKey);
+        } catch (ex) {
+            stored = null;
+        }
+        if (stored && home_App.languages.some(l => l.id === stored)) {
+            return stored;
+        }
+
+        // Sprache des Browsers
+        for (const navLang of (navigator.languages || [navigator.language])) {
+            const base = String(navLang).split('-')[0].toLowerCase();
+            const lang = home_App.languages.find(l => l.id.split('-')[0] === base);
+            if (lang) {
+                return lang.id;
+            }
+        }
+
+        return 'de-CH';
     }
 
 
@@ -1033,14 +1085,18 @@ home.App = class home_App {
                     valueField: 'id',
                     displayTextField: 'Bezeichnung',
                     required: true,
-                    data: [
-                        { id:'de-CH', Bezeichnung:'Deutsch' },
-                        { id:'en', Bezeichnung:'English' },
-                        { id:'fr-CH', Bezeichnung:'Français' }
-                    ],
-                    value: kijs.language,
+                    data: home_App.languages.map(l => ({ id: l.id, Bezeichnung: l.caption })),
+                    // auch bei ?lang=fr oder ?lang=en-US die passende Sprache anwählen
+                    value: (home_App.languages.find(l => l.id.split('-')[0] === kijs.language.split('-')[0]) || {}).id,
                     on: {
                         change: function(e) {
+                            // Wahl merken, damit sie auch ohne ?lang= in der URL gilt
+                            try {
+                                window.localStorage.setItem(home_App.languageStorageKey, e.value);
+                            } catch (ex) {
+                                // localStorage gesperrt: die Sprache gilt dann nur über die URL
+                            }
+
                             var loc = window.location;
                             // Direktlink (#...) behalten, damit die Seite offen bleibt
                             window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value + loc.hash;

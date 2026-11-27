@@ -36,11 +36,20 @@ Texte und Formate werden beim Erstellen der Elemente eingesetzt. Ein Wechsel der
 darum nicht auf bestehende Elemente. Für einen Wechsel die Seite neu laden bzw. die 
 Oberfläche neu aufbauen. Die Home-App macht das so:  
 
-    // beim Start: Sprache aus der URL (?lang=fr-CH) oder Standard
-    kijs.language = kijs.Navigator.getGetParameter('lang') || 'de-CH';
+    // beim Start: Sprache aus der URL (?lang=fr-CH), sonst die zuletzt gewählte,
+    // sonst die erste Sprache des Browsers, die die App anbietet, sonst Standard
+    const languages = { de: 'de-CH', en: 'en', fr: 'fr-CH' };
+    const browserLanguage = navigator.languages.map(l => l.split('-')[0]).find(l => languages[l]);
+    kijs.language = kijs.Navigator.getGetParameter('lang')
+            || localStorage.getItem('kijs-home-language')
+            || languages[browserLanguage]
+            || 'de-CH';
 
-    // beim Wechsel: Seite mit der neuen Sprache neu laden
+    // beim Wechsel: Wahl merken und Seite mit der neuen Sprache neu laden
+    localStorage.setItem('kijs-home-language', newLanguage);
     window.location = window.location.pathname + '?lang=' + newLanguage;
+
+Die vollständige Umsetzung steht in ```home.App.getLanguage()```.  
 
 
 Texte
