@@ -132,6 +132,7 @@ kijs.translation["fr"] = Object.assign(kijs.translation["fr"] || {}, {
     "Dies ist ein <b>Info<\/b>-Text.": "Ceci est un texte d'<b>info<\/b>.",
     "Dies ist ein Hilfetext": "Ceci est un texte d'aide",
     "Dies ist mein <b>fetter<\/b> Text.": "Ceci est mon texte en <b>gras<\/b>.",
+    "Dieser Inhalt ist nur auf Deutsch vorhanden. Die meisten Browser k\u00f6nnen ihn \u00fcbersetzen: Rechtsklick \u2192 \u00dcbersetzen.": "Ce contenu n'est disponible qu'en allemand. La plupart des navigateurs peuvent le traduire : clic droit \u2192 Traduire.",
     "Dokumentation": "Documentation",
     "Dunkler Modus": "Mode sombre",
     "Duplizieren": "Dupliquer",

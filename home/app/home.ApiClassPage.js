@@ -28,7 +28,8 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
         this._expandMember = null;  // Eintrag, der nach dem Laden aufgeklappt wird
 
         this._headerEl = new kijs.gui.Element({
-            cls: ['markdown', 'home-api-header']
+            cls: ['markdown', 'home-api-header'],
+            nodeAttribute: { lang: 'de' }
         });
 
         this._filterField = new kijs.gui.field.Text({
@@ -58,6 +59,7 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
 
         this._listEl = new kijs.gui.Element({
             cls: ['markdown', 'home-api-list'],
+            nodeAttribute: { lang: 'de' },
             on: {
                 // Filter nach erneutem Rendern wieder anwenden
                 afterRender: this.#onListAfterRender,
@@ -70,6 +72,12 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
             scrollableY: 'auto',
             style: { flex: 1 },
             elements: [
+                {
+                    // Hinweis bei en/fr: Die API-Dokumentation gibt es nur auf Deutsch
+                    xtype: 'kijs.gui.Element',
+                    html: home.TabContainer.getGermanOnlyHintHtml(),
+                    visible: home.TabContainer.getGermanOnlyHintHtml() !== ''
+                },
                 this._headerEl,
                 {
                     xtype: 'kijs.gui.Container',
@@ -610,6 +618,7 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
         } catch (ex) {
             console.warn('Syntax highlighting failed', ex);
         }
+        home.TabContainer.markGermanContent(div, false);
         return div.innerHTML;
     }
 

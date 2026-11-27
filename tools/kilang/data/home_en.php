@@ -137,6 +137,7 @@ $translations["en"] = [
     "Dies ist ein <b>Info</b>-Text." => "This is an <b>info</b> text.",
     "Dies ist ein Hilfetext" => "This is a help text",
     "Dies ist mein <b>fetter</b> Text." => "This is my <b>bold</b> text.",
+    "Dieser Inhalt ist nur auf Deutsch vorhanden. Die meisten Browser können ihn übersetzen: Rechtsklick → Übersetzen." => "This content is only available in German. Most browsers can translate it: right-click → Translate.",
     "Dokumentation" => "Documentation",
     "Dunkler Modus" => "Dark mode",
     "Duplizieren" => "Duplicate",

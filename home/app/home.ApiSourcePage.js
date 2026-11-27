@@ -109,7 +109,7 @@ home.ApiSourcePage = class home_ApiSourcePage extends kijs.gui.container.tab.Con
             const text = await response.text();
 
             const div = document.createElement('div');
-            div.innerHTML = '<pre><code class="language-javascript">' + kijs.String.htmlspecialchars(text) + '</code></pre>';
+            div.innerHTML = '<pre translate="no"><code class="language-javascript">' + kijs.String.htmlspecialchars(text) + '</code></pre>';
             await home.TabContainer.highlightCodeBlocks(div, true);
             this._codeEl.html = div.innerHTML;
 

@@ -33,6 +33,10 @@ home.App = class home_App {
         // Sprache mit Region, damit Zahlen und Datum im Schweizer Format angezeigt werden
         kijs.language = config.language ? config.language : 'de-CH';
 
+        // Sprache der Seite (für die Übersetzungsfunktion der Browser und Screenreader).
+        // Doku und API sind zusätzlich mit lang="de" gekennzeichnet.
+        document.documentElement.lang = kijs.language;
+
         // RPC-Instanz für das App
         // Die Sprache geht bei beiden RPC-Instanzen als GET-Parameter mit,
         // damit der Server seine Texte übersetzen kann

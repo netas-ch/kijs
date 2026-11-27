@@ -144,6 +144,21 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
     // STATICS
     // --------------------------------------------------------------
     /**
+     * Gibt den Hinweis zurück, dass die Doku und die API nur auf Deutsch vorhanden sind.
+     * Bei Deutsch wird kein Hinweis angezeigt.
+     * @returns {String}  HTML oder '' (Deutsch)
+     */
+    static getGermanOnlyHintHtml() {
+        if (kijs.language.split('-')[0] === 'de') {
+            return '';
+        }
+        return '<p class="home-germanOnly">'
+                + kijs.getText('Dieser Inhalt ist nur auf Deutsch vorhanden. '
+                + 'Die meisten Browser können ihn übersetzen: Rechtsklick → Übersetzen.')
+                + '</p>';
+    }
+
+    /**
      * Färbt alle Code-Blöcke (pre > code) in einem Node mit ACE ein.
      * Die Sprache kommt aus dem Code-Block (```css, ```html, ```php, ```json ...),
      * eingerückte Code-Blöcke ohne Sprache werden als JavaScript eingefärbt.
@@ -183,6 +198,22 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
             code.parentNode.classList.add('home-code-highlighted');
             code.innerHTML = result.html;
         }
+    }
+
+    /**
+     * Kennzeichnet deutschen Inhalt (Doku, API) für die Übersetzungsfunktion der Browser:
+     * Sprache Deutsch, Code (pre, code) wird nicht übersetzt.
+     * @param {HTMLElement} node
+     * @param {Boolean} [setLang=true]  lang="de" auf dem Node setzen?
+     * @returns {undefined}
+     */
+    static markGermanContent(node, setLang=true) {
+        if (setLang) {
+            node.setAttribute('lang', 'de');
+        }
+        kijs.Array.each(node.querySelectorAll('pre, code'), function(el) {
+            el.setAttribute('translate', 'no');
+        }, this);
     }
 
 
@@ -272,7 +303,9 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
             console.warn('Syntax highlighting failed', ex);
         }
 
-        this._contSandbox.html = div.outerHTML;
+        // Die Doku gibt es nur auf Deutsch: Hinweis und Kennzeichnung für die Übersetzung im Browser
+        home_TabContainer.markGermanContent(div);
+        this._contSandbox.html = home_TabContainer.getGermanOnlyHintHtml() + div.outerHTML;
     }
 
 

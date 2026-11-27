@@ -39,7 +39,11 @@ $translations = [
 
  "%1 Klassen" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [975]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [970]
    ]
   ]
@@ -449,16 +453,24 @@ $translations = [
 
  "API-Dokumentation" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [94, 323], 
+    "../../home/app/home.App.js" => [98, 327], 
     "../../home/app/home.ToolsPage.js" => [83]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [94, 323]
    ]
   ]
  ], 
 
  "API-Dokumentation fehlt noch." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [982]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [978]
    ]
   ]
@@ -466,7 +478,11 @@ $translations = [
 
  "API-Dokumentation vom %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [971]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [967]
    ]
   ]
@@ -474,7 +490,11 @@ $translations = [
 
  "API-Dokumentation von %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [93]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [89]
    ]
   ]
@@ -544,7 +564,11 @@ $translations = [
 
  "Akzentfarben" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1117]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1113]
    ]
   ]
@@ -552,7 +576,11 @@ $translations = [
 
  "Alle Klassen mit Configs, Funktionen und Events" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [327]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [323]
    ]
   ]
@@ -560,7 +588,11 @@ $translations = [
 
  "Alle Komponenten mit Beispielen zum Ausprobieren" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [323]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [319]
    ]
   ]
@@ -729,7 +761,11 @@ $translations = [
 
  "Bitte mindestens %1 Zeichen eingeben." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [220]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [216]
    ]
   ]
@@ -1069,7 +1105,11 @@ $translations = [
 
  "Design" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [431, 1073]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [427, 1069]
    ]
   ]
@@ -1085,7 +1125,11 @@ $translations = [
 
  "Die API-Datenbank fehlt noch." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [997]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [993]
    ], 
    "usagesPhp" => [
@@ -1195,9 +1239,22 @@ $translations = [
   ]
  ], 
 
+ "Dieser Inhalt ist nur auf Deutsch vorhanden. Die meisten Browser können ihn übersetzen: Rechtsklick → Übersetzen." => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/app/home.TabContainer.js" => [156]
+   ]
+  ]
+ ], 
+
  "Dokumentation" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [325, 509]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [321, 505]
    ]
   ]
@@ -1205,7 +1262,11 @@ $translations = [
 
  "Dunkler Modus" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1102]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1098]
    ]
   ]
@@ -1246,7 +1307,11 @@ $translations = [
 
  "Einstieg und Reihenfolge der Leitfäden" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [321]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [317]
    ]
   ]
@@ -1350,7 +1415,11 @@ $translations = [
 
  "Erste Schritte" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [321]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [317]
    ]
   ]
@@ -1423,7 +1492,11 @@ $translations = [
 
  "Es läuft gerade ein Update." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [987]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [982]
    ]
   ]
@@ -1497,7 +1570,11 @@ $translations = [
 
  "Farbe %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1124, 1136, 1148]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1120, 1132, 1144]
    ]
   ]
@@ -2136,7 +2213,11 @@ $translations = [
 
  "Leitfäden und Konzepte" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [325]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [321]
    ]
   ]
@@ -2186,7 +2267,11 @@ $translations = [
 
  "Lückenbericht" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [140]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [136]
    ]
   ]
@@ -2774,7 +2859,11 @@ $translations = [
 
  "Sie kann nur lokal (localhost) erstellt werden." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [999]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [995]
    ], 
    "usagesPhp" => [
@@ -2785,7 +2874,11 @@ $translations = [
 
  "Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [998]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [994]
    ], 
    "usagesPhp" => [
@@ -2889,7 +2982,11 @@ $translations = [
 
  "Sprache" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [422, 1032]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [418, 1028]
    ]
   ]
@@ -2905,7 +3002,11 @@ $translations = [
 
  "Standard" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1079]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1075]
    ]
   ]
@@ -2938,7 +3039,11 @@ $translations = [
 
  "Suche" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [220]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [216]
    ]
   ]
@@ -2946,16 +3051,24 @@ $translations = [
 
  "Suche: %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [221], 
+    "../../home/app/home.App.js" => [225], 
     "../../home/app/home.SearchPage.js" => [166]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [221]
    ]
   ]
  ], 
 
  "Suchen (Enter)" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [407]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [403]
    ]
   ]
@@ -3043,9 +3156,13 @@ $translations = [
 
  "Tests" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [473], 
+    "../../home/app/home.App.js" => [477], 
     "../../home/app/home.SearchPage.js" => [163]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [473]
    ]
   ]
  ], 
@@ -3130,7 +3247,11 @@ $translations = [
 
  "Ungültiger Link: %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [155, 937]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [151, 933]
    ]
   ]
@@ -3170,7 +3291,11 @@ $translations = [
 
  "Version stimmt nicht mit kijs %1 überein." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [977]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [973]
    ]
   ]
@@ -3178,7 +3303,11 @@ $translations = [
 
  "Version und Datum der API-Dokumentation" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1008]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1003]
    ]
   ]
@@ -3280,9 +3409,13 @@ $translations = [
 
  "Werkzeuge" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [250, 384, 965], 
+    "../../home/app/home.App.js" => [255, 388, 969], 
     "../../home/app/home.ToolsPage.js" => [40]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [250, 384, 965]
    ]
   ]
  ], 

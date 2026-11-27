@@ -47,6 +47,7 @@ home.ApiIssuesPage = class home_ApiIssuesPage extends kijs.gui.container.tab.Con
 
         this._listEl = new kijs.gui.Element({
             cls: ['markdown', 'home-api-list', 'home-api-issues'],
+            nodeAttribute: { lang: 'de' },
             on: {
                 afterRender: this.#onListAfterRender,
                 context: this
@@ -59,8 +60,15 @@ home.ApiIssuesPage = class home_ApiIssuesPage extends kijs.gui.container.tab.Con
             style: { flex: 1 },
             elements: [
                 {
+                    // Hinweis bei en/fr: Die API-Dokumentation gibt es nur auf Deutsch
+                    xtype: 'kijs.gui.Element',
+                    html: home.TabContainer.getGermanOnlyHintHtml(),
+                    visible: home.TabContainer.getGermanOnlyHintHtml() !== ''
+                },
+                {
                     xtype: 'kijs.gui.Element',
                     cls: ['markdown', 'home-api-header'],
+                    nodeAttribute: { lang: 'de' },
                     html: '<h1>Lückenbericht</h1>'
                         + '<p>Was im Code noch nicht nach dem Leitfaden '
                         + '<a href="#" data-home-file="data/docu/Leitfäden/Kommentare.md">Kommentare</a> '
@@ -158,7 +166,10 @@ home.ApiIssuesPage = class home_ApiIssuesPage extends kijs.gui.container.tab.Con
         this._typesField.data = types;
         this._typesField.value = types.map(t => t.id);
 
-        this._listEl.html = this._getListHtml();
+        const div = document.createElement('div');
+        div.innerHTML = this._getListHtml();
+        home.TabContainer.markGermanContent(div, false);
+        this._listEl.html = div.innerHTML;
         this._applyFilter();
     }
 

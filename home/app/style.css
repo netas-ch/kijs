@@ -688,6 +688,17 @@
         border-radius: 4px;
     }
 
+    /* Hinweis bei en/fr: Doku und API gibt es nur auf Deutsch */
+    .home-germanOnly {
+        margin: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+        line-height: 16px;
+        color: var(--grey09);
+        border: 1px solid var(--apiTagSetter);
+        border-radius: 4px;
+    }
+
     /* Fusszeile im Tab API (Version und Datum der API) */
     .home-api-footer {
         flex: none;

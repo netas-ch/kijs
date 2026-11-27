@@ -115,7 +115,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
                     + this._mark(title) + '</a>'
                     + ' <span class="home-search-kind">' + (kinds[h.kind] || h.kind) + '</span>';
             if (h.snippet) {
-                html += '<div class="home-search-snippet">' + this._mark(h.snippet) + '</div>';
+                html += '<div class="home-search-snippet" lang="de">' + this._mark(h.snippet) + '</div>';
             }
             html += '</li>';
         }, this);
@@ -143,7 +143,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
                 html += ' <span class="home-search-kind">' + kijs.getText('%1 Treffer', '', h.count) + '</span>';
             }
             if (h.snippet) {
-                html += '<div class="home-search-snippet">' + this._mark(h.snippet) + '</div>';
+                html += '<div class="home-search-snippet" lang="de">' + this._mark(h.snippet) + '</div>';
             }
             html += '</li>';
         }, this);
