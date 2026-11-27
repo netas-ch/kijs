@@ -33,7 +33,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.DateTime',
                     required: true
@@ -46,7 +46,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum',
+                    label: kijs.getText('Datum'),
                     mode: 'date',
                     date: new Date(),
                     minValue: kijs.Date.addDays(new Date(), -15),
@@ -87,7 +87,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Zeit & Sec',
+                    label: kijs.getText('Datum & Zeit & Sekunden'),
                     mode: 'dateTime',
                     minutesHide: false,
                     secondsHide: false,
@@ -97,14 +97,14 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     maxValue: kijs.Date.addDays(new Date(), 15)
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Zeit',
+                    label: kijs.getText('Datum & Zeit'),
                     mode: 'dateTime',
                     minutesHide: false,
                     secondsHide: true,
                     timeRequired: false
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Stunden',
+                    label: kijs.getText('Datum & Stunden'),
                     mode: 'dateTime',
                     minutesHide: true,
                     secondsHide: true,
@@ -119,7 +119,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Uhrzeit',
+                    label: kijs.getText('Uhrzeit'),
                     mode: 'time',
                     value: '13'
                 },
@@ -131,7 +131,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
-                    label: 'Woche',
+                    label: kijs.getText('Woche'),
                     mode: 'week'
                 },
 
@@ -144,7 +144,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     xtype: 'kijs.gui.field.DateTime',
                     name: 'rangeStart',
                     nameEnd: 'rangeEnd',
-                    label: 'von/bis',
+                    label: kijs.getText('von/bis'),
                     mode: 'range',
                     date: new Date(),
                     dateEnd: kijs.Date.addDays(new Date(), 3)
@@ -153,7 +153,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mode dynamisch ändern',
+                    value: kijs.getText('%1 dynamisch ändern', '', 'mode'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -164,7 +164,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Modus ändern',
+                            caption: kijs.getText('Modus ändern'),
                             on: {
                                 click: function(e) {
                                     const el = this.parent;
@@ -186,7 +186,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
                     valueDisplayType: 'html',
-                    value: '<b>Siehe auch:</b><ul>'
+                    value: '<b>' + kijs.getText('Siehe auch:') + '</b><ul>'
                          + '<li><a href="../DatePicker.js">kijs.gui.DatePicker</a></li>'
                          + '<li><a href="../MonthPicker.js">kijs.gui.MonthPicker</a></li>'
                          + '<li><a href="../TimePicker.js">kijs.gui.TimePicker</a></li>'
@@ -279,7 +279,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -287,7 +287,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -295,7 +295,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -306,7 +306,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -381,7 +381,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

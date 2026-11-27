@@ -34,7 +34,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Button mit spinBox:',
+                    value: kijs.getText('Button mit %1:', '', 'spinBox'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -49,7 +49,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                                 innerStyle: {
                                     padding: '10px'
                                 },
-                                html: 'Ich bin eine SpinBox mit etwas HTML-Inhalt<br>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.'
+                                html: kijs.getText('Ich bin eine SpinBox mit etwas HTML-Inhalt<br>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.')
                             });
                             spinBox.show();
                         },
@@ -112,7 +112,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'SpinBox-Einstellungen',
+                    value: kijs.getText('SpinBox-Einstellungen'),
                     style: { margin: '100px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
@@ -183,7 +183,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'SpinBox anzeigen',
+                    caption: kijs.getText('SpinBox anzeigen'),
                     style: { margin: '4px 0 4px 0'},
                     on: {
                         click: this._updateSpinBox,

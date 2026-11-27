@@ -18,7 +18,7 @@ home.sc.ListView = class home_sc_ListView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.ListView und kijs.gui.field.ListView',
+            caption: kijs.getText('%1 und %2', '', ['kijs.gui.ListView', 'kijs.gui.field.ListView']),
             headerBarElements: [ this._app.createApiButton(['kijs.gui.ListView', 'kijs.gui.field.ListView']) ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
@@ -32,7 +32,7 @@ home.sc.ListView = class home_sc_ListView {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'ListView lokal',
+                    caption: kijs.getText('%1 lokal', '', 'ListView'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     collapsible: 'top',
@@ -44,8 +44,8 @@ home.sc.ListView = class home_sc_ListView {
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable',
-                            tooltip: 'Disable/Enable listView',
+                            caption: kijs.getText('Deaktivieren/Aktivieren'),
+                            tooltip: kijs.getText('%1 deaktivieren/aktivieren', '', 'ListView'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('listViewLocal');
@@ -55,7 +55,7 @@ home.sc.ListView = class home_sc_ListView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable first Child',
+                            caption: kijs.getText('Erstes Kind-Element deaktivieren/aktivieren'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('listViewLocal');
@@ -65,7 +65,7 @@ home.sc.ListView = class home_sc_ListView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Reload',
+                            caption: kijs.getText('Neu laden'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('listViewLocal');
@@ -102,13 +102,13 @@ home.sc.ListView = class home_sc_ListView {
                             }
                         },{
                             xtype: 'kijs.gui.field.Combo',
-                            label: 'Sortierung:',
+                            label: kijs.getText('Sortierung:'),
                             value: 'none',
                             inputWidth: 90,
                             data: [
-                                { displayText: 'keine', value: 'none' },
-                                { displayText: 'Aufsteigend', value: 'asc' },
-                                { displayText: 'Absteigend', value: 'desc' }
+                                { displayText: kijs.getText('keine'), value: 'none' },
+                                { displayText: kijs.getText('Aufsteigend'), value: 'asc' },
+                                { displayText: kijs.getText('Absteigend'), value: 'desc' }
                             ],
                             on: {
                                 change: function(e) {
@@ -169,7 +169,7 @@ home.sc.ListView = class home_sc_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: '2x ListView lokal mit Drag&Drop untereinander:',
+                    value: kijs.getText('2x %1 lokal mit Drag&Drop untereinander:', '', 'ListView'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -227,7 +227,7 @@ home.sc.ListView = class home_sc_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ListView mit RPC und Optionen:',
+                    value: kijs.getText('%1 mit RPC und Optionen:', '', 'ListView'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',
@@ -252,7 +252,7 @@ home.sc.ListView = class home_sc_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ListView lokal mit Checkboxen:',
+                    value: kijs.getText('%1 lokal mit Checkboxen:', '', 'ListView'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',

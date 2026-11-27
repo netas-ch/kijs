@@ -33,15 +33,15 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Message Box standard:'
+                    value: kijs.getText('MessageBox Standard:')
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'alert',
                     on: {
                         click: function() {
-                            kijs.gui.MsgBox.alert('Test', 'Alert! Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans...')
+                            kijs.gui.MsgBox.alert('Test', 'Alert! ' + Array(356).fill(kijs.getText('Hans geht fischen. So fischt Hans...')).join(' '))
                                 .then((e) => {
-                                    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                    kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                                 });
                         }
                     }
@@ -51,7 +51,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function() {
                             kijs.gui.MsgBox.info('Test', 'Info!').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -61,7 +61,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function() {
                             kijs.gui.MsgBox.warning('Test', 'Warning!').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -71,7 +71,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function() {
                             kijs.gui.MsgBox.errorNotice('Test', 'ErrorNotice!').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -81,7 +81,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function() {
                             kijs.gui.MsgBox.error('Test', 'Error!').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -91,7 +91,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function(e) {
                             kijs.gui.MsgBox.confirm('Test', 'Confirm!').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -100,8 +100,8 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     caption: 'prompt',
                     on: {
                         click: function(e) {
-                            kijs.gui.MsgBox.prompt('Test', 'Confirm!', 'Eingabe', 'Wert!', function(e) {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                            kijs.gui.MsgBox.prompt('Test', 'Confirm!', kijs.getText('Eingabe'), kijs.getText('Wert!'), function(e) {
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn + ' / ' + kijs.getText('Eingabe') + ' ' + e.value);
                             });
                         }
                     }
@@ -110,7 +110,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Message Box mit Callback Function:',
+                    value: kijs.getText('MessageBox mit Callback-Funktion:'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -118,7 +118,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function(e) {
                             kijs.gui.MsgBox.alert('Test', 'Alert!', function(e) {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             }, this);
                         }
                     }
@@ -127,7 +127,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Message Box individuell:',
+                    value: kijs.getText('MessageBox individuell:'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -135,20 +135,20 @@ home.sc.MsgBox = class home_sc_MsgBox {
                     on: {
                         click: function() {
                             kijs.gui.MsgBox.show({
-                                caption: 'Testmeldung',
-                                msg: 'Hallo Welt!',
+                                caption: kijs.getText('Testmeldung'),
+                                msg: kijs.getText('Hallo Welt!'),
 
                                 closable: true, // Soll das Fenster ein X zum Schliessen haben?
 
                                 // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
                                 fieldConfig:{
                                     xtype: 'kijs.gui.field.Text',
-                                    label: 'Wert',
-                                    value: 'Mein Testwert'
+                                    label: kijs.getText('Wert'),
+                                    value: kijs.getText('Mein Testwert')
                                 },
 
                                 //fn: function(e, el) {
-                                //    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                //    kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                                 //},
                                 //context: this,
                                 iconMap: '',
@@ -164,11 +164,11 @@ home.sc.MsgBox = class home_sc_MsgBox {
                                         caption: 'OK'
                                     },{
                                         name: 'cancel',
-                                        caption: 'Abbrechen'
+                                        caption: kijs.getText('Abbrechen')
                                     }
                                 ]
                             }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                         }
                     }
@@ -177,7 +177,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Mehrere Fenster gleichzeitig öffnen (gleiche bereits geöffnete Fenster werden automatisch geschlossen):',
+                    value: kijs.getText('Mehrere Fenster gleichzeitig öffnen (gleiche bereits geöffnete Fenster werden automatisch geschlossen):'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -186,37 +186,37 @@ home.sc.MsgBox = class home_sc_MsgBox {
                         click: function() {
                             // 3 x Altert
                             kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                             kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                             kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
 
                             // 2 x Alert 2
                             kijs.gui.MsgBox.alert('Test', 'Test 2').then((e) => {
-                                    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                    kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                                 });
                             kijs.gui.MsgBox.alert('Test', 'Test 2').then((e) => {
-                                    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                    kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                                 });
 
                             // 2 x der gleiche als Info
                             kijs.gui.MsgBox.info('Test', 'Test').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
                             kijs.gui.MsgBox.info('Test', 'Test').then((e) => {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn);
                             });
 
                             // 2 x prompts
-                            kijs.gui.MsgBox.prompt('Test', 'Test', 'Eingabe', 'Wert!', function(e) {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                            kijs.gui.MsgBox.prompt('Test', 'Test', kijs.getText('Eingabe'), kijs.getText('Wert!'), function(e) {
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn + ' / ' + kijs.getText('Eingabe') + ' ' + e.value);
                             });
-                            kijs.gui.MsgBox.prompt('Test', 'Test', 'Eingabe', 'Wert!', function(e) {
-                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                            kijs.gui.MsgBox.prompt('Test', 'Test', kijs.getText('Eingabe'), kijs.getText('Wert!'), function(e) {
+                                kijs.gui.CornerTipContainer.show(kijs.getText('Es wurde geklickt auf'), e.btn + ' / ' + kijs.getText('Eingabe') + ' ' + e.value);
                             });
                         }
                     }

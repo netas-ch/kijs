@@ -33,7 +33,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
                     data: [
@@ -52,11 +52,11 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'zurücksetzbar',
+                    label: kijs.getText('zurücksetzbar'),
                     displayTextField: 'displayText',
                     valueField: 'value',
                     iconMapField: 'iconMap',
@@ -103,7 +103,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'inline und mit RPC',
+                    value: kijs.getText('inline und mit RPC'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
@@ -203,7 +203,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -211,7 +211,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -219,7 +219,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -230,7 +230,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -305,7 +305,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

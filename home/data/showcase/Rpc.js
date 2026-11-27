@@ -36,12 +36,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     value: 'RPC:'
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC mit Promise',
+                    caption: kijs.getText('RPC mit Promise'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
                                 remoteFn:'rpc.simple', 
-                                requestData: 'RPC mit Promise'
+                                requestData: kijs.getText('RPC mit Promise')
                             }).then((e) => {
                                 if (kijs.isEmpty(e.response.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
@@ -52,12 +52,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC mit Promise und async/await',
+                    caption: kijs.getText('RPC mit Promise und async/await'),
                     on: {
                         click: async function() {
                             const rpcData = await kijs.getRpc('default').do({
                                 remoteFn:'rpc.simple', 
-                                requestData: 'RPC mit Promise und async/await'
+                                requestData: kijs.getText('RPC mit Promise und async/await')
                             });
                             if (kijs.isEmpty(rpcData.response.errorType)) {
                                 kijs.gui.CornerTipContainer.show('RPC OK', rpcData.response.data);
@@ -67,12 +67,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC mit callback function',
+                    caption: kijs.getText('RPC mit Callback-Funktion'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
                                 remoteFn:'rpc.simple', 
-                                requestData: 'RPC mit callback function',
+                                requestData: kijs.getText('RPC mit Callback-Funktion'),
                                 fn: function(e) {
                                     if (kijs.isEmpty(e.response.errorType)) {
                                         kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
@@ -84,12 +84,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC verzögert mit Wartemaske',
+                    caption: kijs.getText('RPC verzögert mit Wartemaske'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                requestData: 'RPC verzögert mit Wartemaske'
+                                requestData: kijs.getText('RPC verzögert mit Wartemaske')
                             }).then((e) => {
                                 if (kijs.isEmpty(e.response.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
@@ -100,12 +100,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true',
+                    caption: kijs.getText('RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                requestData: 'RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true',
+                                requestData: kijs.getText('RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true'),
                                 waitMaskTarget: 'none',
                                 cancelRunningRpcs: true
                             }).then((e) => {
@@ -118,12 +118,12 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true',
+                    caption: kijs.getText('2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                requestData: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true 1/2',
+                                requestData: kijs.getText('2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true') + ' 1/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
                                 if (kijs.isEmpty(e.response.errorType)) {
@@ -132,7 +132,7 @@ home.sc.Rpc = class home_sc_Rpc {
                             });
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                requestData: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true 2/2',
+                                requestData: kijs.getText('2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true') + ' 2/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
                                 if (kijs.isEmpty(e.response.errorType)) {
@@ -147,11 +147,11 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPCs automatisch zusammenfassen (RPCs innerhalb von 10ms werden zusammengefasst:',
+                    value: kijs.getText('RPCs automatisch zusammenfassen (RPCs innerhalb von 10 ms werden zusammengefasst):'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Sende 3 RPCs',
+                    caption: kijs.getText('Sende 3 RPCs'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
@@ -186,11 +186,11 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Exklusiver RPC. Der nicht mit anderen zusammenfasst wird:',
+                    value: kijs.getText('Exklusiver RPC, der nicht mit anderen zusammengefasst wird:'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Sende 3 RPCs. Der zweite davon ist exklusiv',
+                    caption: kijs.getText('Sende 3 RPCs. Der zweite davon ist exklusiv'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
@@ -226,7 +226,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPC Meldungen:',
+                    value: kijs.getText('RPC-Meldungen:'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -298,7 +298,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Fehlerbehandlung (errorTypes):',
+                    value: kijs.getText('Fehlerbehandlung') + ' (errorTypes):',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -338,16 +338,16 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPC mit individueller Lademaske:',
+                    value: kijs.getText('RPC mit individueller Lademaske:'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC verzögert mit Lademaske auf einem individuellen Element',
+                    caption: kijs.getText('RPC verzögert mit Lademaske auf einem individuellen Element'),
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay',
-                                requestData: 'RPC verzögert mit Lademaske auf einem individuellen Element',
+                                requestData: kijs.getText('RPC verzögert mit Lademaske auf einem individuellen Element'),
                                 waitMaskTarget: this._content.down('waitMaskTarget'),
                                 waitMaskTargetDomProperty: 'innerDom'
                             }).then((e) => {
@@ -361,7 +361,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 },{
                     xtype: 'kijs.gui.Container',
                     name: 'waitMaskTarget',
-                    html: 'Ziel für Lademaske',
+                    html: kijs.getText('Ziel für Lademaske'),
                     width: 120,
                     style: {
                         margin: '10px 0 0 0',

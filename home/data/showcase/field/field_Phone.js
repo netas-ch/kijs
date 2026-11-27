@@ -33,7 +33,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:',
+                    value: kijs.getText('Minimalkonfiguration:'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.Phone'
@@ -42,7 +42,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.Phone',
@@ -152,7 +152,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -173,13 +173,13 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 label: 'placeholder',
                 on: {
                     change: function(e) {
-                        this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        this._updateProperty('placeholder', e.element.value ? kijs.getText('Hier Wert eingeben') : '');
                     },
                     context: this
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -187,7 +187,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -198,7 +198,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -273,7 +273,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

@@ -33,7 +33,7 @@ home.sc.container_Form = class home_sc_container_Form {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Formular',
+                    caption: kijs.getText('Formular'),
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
@@ -66,19 +66,19 @@ home.sc.container_Form = class home_sc_container_Form {
                             elements: [
                                 {
                                     xtype: 'kijs.gui.field.Display',
-                                    value: 'Adresse',
+                                    value: kijs.getText('Adresse'),
                                     cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.field.Combo',
                                     name: 'Anrede',
-                                    label: 'Anrede',
+                                    label: kijs.getText('Anrede'),
                                     valueField: 'value',
                                     displayTextField: 'displayText',
                                     disableFlex: true,
                                     data: [
-                                        {displayText: 'Herr', value: 'm' },
-                                        {displayText: 'Frau', value: 'w'},
-                                        {displayText: 'Familie', value: 'f'}
+                                        {displayText: kijs.getText('Herr'), value: 'm' },
+                                        {displayText: kijs.getText('Frau'), value: 'w'},
+                                        {displayText: kijs.getText('Familie'), value: 'f'}
                                     ]
                                 },{
                                     xtype: 'kijs.gui.Container',
@@ -88,12 +88,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                         {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Vorname',
-                                            label: 'Vorname',
+                                            label: kijs.getText('Vorname'),
                                             style: { flex: 1 }
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Name',
-                                            label: 'Name',
+                                            label: kijs.getText('Name'),
                                             labelWidth: null,
                                             style: { flex: 1 }
                                         }
@@ -101,7 +101,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                 },{
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Strasse',
-                                    label: 'Strasse'
+                                    label: kijs.getText('Strasse')
                                 },{
                                     xtype: 'kijs.gui.Container',
                                     cls: 'kijs-flexline',
@@ -116,7 +116,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Ort',
-                                            label: 'Ort',
+                                            label: kijs.getText('Ort'),
                                             labelWidth: null,
                                             style: { flex: 1 }
                                         }
@@ -124,7 +124,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                 },{
                                     xtype: 'kijs.gui.field.Combo',
                                     name: 'Land',
-                                    label: 'Land',
+                                    label: kijs.getText('Land'),
                                     //rpc: 'default',
                                     rpcLoadFn: 'land.load',
                                     autoLoad: true,
@@ -134,7 +134,7 @@ home.sc.container_Form = class home_sc_container_Form {
 
                                 {
                                     xtype: 'kijs.gui.field.Display',
-                                    value: 'Kontakt',
+                                    value: kijs.getText('Kontakt'),
                                     cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.Container',
@@ -144,11 +144,11 @@ home.sc.container_Form = class home_sc_container_Form {
                                         {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'TelefonP',
-                                            label: 'Telefon P'
+                                            label: kijs.getText('Telefon P')
                                         },{
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'TelefonG',
-                                            label: 'Telefon G',
+                                            label: kijs.getText('Telefon G'),
                                             labelWidth: 60
                                         }
                                     ]
@@ -160,23 +160,23 @@ home.sc.container_Form = class home_sc_container_Form {
                                         {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'MobileP',
-                                            label: 'Mobile P'
+                                            label: kijs.getText('Mobile P')
                                         },{
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'MobileG',
-                                            label: 'Mobile G',
+                                            label: kijs.getText('Mobile G'),
                                             labelWidth: 60
                                         }
                                     ]
                                 },{
                                     xtype: 'kijs.gui.field.Email',
                                     name: 'Email',
-                                    label: 'E-Mail'
+                                    label: kijs.getText('E-Mail')
                                 },
 
                                 {
                                     xtype: 'kijs.gui.field.Display',
-                                    value: 'Weitere Angaben',
+                                    value: kijs.getText('Weitere Angaben'),
                                     cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.Container',
@@ -186,7 +186,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                         {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Geburtsdatum',
-                                            label: 'Geburtsdatum',
+                                            label: kijs.getText('Geburtsdatum'),
                                             mode: 'date',
                                             on: {
                                                 change: function(e) {
@@ -198,7 +198,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Alter',
-                                            label: 'Alter',
+                                            label: kijs.getText('Alter'),
                                             readOnly: true,
                                             disableFlex: true,
                                             labelWidth: null,
@@ -208,12 +208,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                 },{
                                     xtype: 'kijs.gui.field.Color',
                                     name: 'Lieblingsfarbe',
-                                    label: 'Lieblingsfarbe',
+                                    label: kijs.getText('Lieblingsfarbe'),
                                     value: '#fff'
                                 },{
                                     xtype: 'kijs.gui.field.OptionGroup',
                                     name: 'LieblingsBetriebssystem',
-                                    label: 'Lieblings Betriebssystem',
+                                    label: kijs.getText('Lieblingsbetriebssystem'),
                                     displayTextField: 'displayText',
                                     valueField: 'value',
                                     iconMapField: 'iconMap',
@@ -227,13 +227,13 @@ home.sc.container_Form = class home_sc_container_Form {
 
                                 {
                                     xtype: 'kijs.gui.field.Display',
-                                    value: 'Bemerkungen',
+                                    value: kijs.getText('Bemerkungen'),
                                     cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.field.Memo',
                                     name: 'Bemerkungen',
-                                    label: 'Bemerkungen',
-                                    helpText: 'Hier können Sie die Bermerkungen eintragen',
+                                    label: kijs.getText('Bemerkungen'),
+                                    helpText: kijs.getText('Hier können Sie die Bemerkungen eintragen'),
                                     inputHeight: 50
                                 }
                             ]
@@ -244,7 +244,7 @@ home.sc.container_Form = class home_sc_container_Form {
                         '>',
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Leeren',
+                            caption: kijs.getText('Leeren'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -253,7 +253,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Validieren',
+                            caption: kijs.getText('Validieren'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -262,7 +262,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'check isDirty',
+                            caption: kijs.getText('%1 prüfen', '', 'isDirty'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -295,7 +295,7 @@ home.sc.container_Form = class home_sc_container_Form {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Formular mit definition über RPC',
+                    caption: kijs.getText('Formular mit Definition über RPC'),
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
@@ -332,7 +332,7 @@ home.sc.container_Form = class home_sc_container_Form {
                         '>',
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'RPC Load',
+                            caption: kijs.getText('%1 laden', '', 'RPC'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -341,7 +341,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'RPC Save',
+                            caption: kijs.getText('%1 speichern', '', 'RPC'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -350,7 +350,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Leeren',
+                            caption: kijs.getText('Leeren'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -359,7 +359,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Validieren',
+                            caption: kijs.getText('Validieren'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -368,7 +368,7 @@ home.sc.container_Form = class home_sc_container_Form {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'check isDirty',
+                            caption: kijs.getText('%1 prüfen', '', 'isDirty'),
                             on: {
                                 click: function() {
                                     let form = this.upX('kijs.gui.Panel').downX('kijs.gui.container.Form');
@@ -401,7 +401,7 @@ home.sc.container_Form = class home_sc_container_Form {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Formular mit flex-Containern',
+                    caption: kijs.getText('Formular mit flex-Containern'),
                     resizable: true,
                     scrollableY: 'auto',
                     width: 600,
@@ -433,19 +433,19 @@ home.sc.container_Form = class home_sc_container_Form {
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Display',
-                                            value: 'Adresse',
+                                            value: kijs.getText('Adresse'),
                                             cls: 'kijs-title'
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Anrede',
-                                            label: 'Anrede',
+                                            label: kijs.getText('Anrede'),
                                             valueField: 'value',
                                             displayTextField: 'displayText',
                                             disableFlex: true,
                                             data: [
-                                                {displayText: 'Herr', value: 'm' },
-                                                {displayText: 'Frau', value: 'w'},
-                                                {displayText: 'Familie', value: 'f'}
+                                                {displayText: kijs.getText('Herr'), value: 'm' },
+                                                {displayText: kijs.getText('Frau'), value: 'w'},
+                                                {displayText: kijs.getText('Familie'), value: 'f'}
                                             ]
                                         },{
                                             xtype: 'kijs.gui.Container',
@@ -455,12 +455,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 {
                                                     xtype: 'kijs.gui.field.Text',
                                                     name: 'Vorname',
-                                                    label: 'Vorname',
+                                                    label: kijs.getText('Vorname'),
                                                     style: { flex: 1 }
                                                 },{
                                                     xtype: 'kijs.gui.field.Text',
                                                     name: 'Name',
-                                                    label: 'Name',
+                                                    label: kijs.getText('Name'),
                                                     labelWidth: null,
                                                     style: { flex: 1 }
                                                 }
@@ -468,7 +468,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Strasse',
-                                            label: 'Strasse'
+                                            label: kijs.getText('Strasse')
                                         },{
                                             xtype: 'kijs.gui.Container',
                                             cls: 'kijs-flexline',
@@ -483,7 +483,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 },{
                                                     xtype: 'kijs.gui.field.Text',
                                                     name: 'Ort',
-                                                    label: 'Ort',
+                                                    label: kijs.getText('Ort'),
                                                     labelWidth: null,
                                                     style: { flex: 1 }
                                                 }
@@ -491,7 +491,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',
-                                            label: 'Land',
+                                            label: kijs.getText('Land'),
                                             //rpc: 'default',
                                             rpcLoadFn: 'land.load',
                                             autoLoad: true,
@@ -504,7 +504,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Display',
-                                            value: 'Kontakt',
+                                            value: kijs.getText('Kontakt'),
                                             cls: 'kijs-title'
                                         },{
                                             xtype: 'kijs.gui.Container',
@@ -514,11 +514,11 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 {
                                                     xtype: 'kijs.gui.field.Phone',
                                                     name: 'TelefonP',
-                                                    label: 'Telefon P'
+                                                    label: kijs.getText('Telefon P')
                                                 },{
                                                     xtype: 'kijs.gui.field.Phone',
                                                     name: 'TelefonG',
-                                                    label: 'Telefon G',
+                                                    label: kijs.getText('Telefon G'),
                                                     labelWidth: 60
                                                 }
                                             ]
@@ -530,18 +530,18 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 {
                                                     xtype: 'kijs.gui.field.Phone',
                                                     name: 'MobileP',
-                                                    label: 'Mobile P'
+                                                    label: kijs.getText('Mobile P')
                                                 },{
                                                     xtype: 'kijs.gui.field.Phone',
                                                     name: 'MobileG',
-                                                    label: 'Mobile G',
+                                                    label: kijs.getText('Mobile G'),
                                                     labelWidth: 60
                                                 }
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.Email',
                                             name: 'Email',
-                                            label: 'E-Mail'
+                                            label: kijs.getText('E-Mail')
                                         }
                                     ]
                                 },{
@@ -549,7 +549,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Display',
-                                            value: 'Weitere Angaben',
+                                            value: kijs.getText('Weitere Angaben'),
                                             cls: 'kijs-title'
                                         },{
                                             xtype: 'kijs.gui.Container',
@@ -559,7 +559,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 {
                                                     xtype: 'kijs.gui.field.DateTime',
                                                     name: 'Geburtsdatum',
-                                                    label: 'Geburtsdatum',
+                                                    label: kijs.getText('Geburtsdatum'),
                                                     mode: 'date',
                                                     on: {
                                                         change: function(e) {
@@ -571,7 +571,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                                 },{
                                                     xtype: 'kijs.gui.field.Text',
                                                     name: 'Alter',
-                                                    label: 'Alter',
+                                                    label: kijs.getText('Alter'),
                                                     readOnly: true,
                                                     disableFlex: true,
                                                     labelWidth: null,
@@ -581,12 +581,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                         },{
                                             xtype: 'kijs.gui.field.Color',
                                             name: 'Lieblingsfarbe',
-                                            label: 'Lieblingsfarbe',
+                                            label: kijs.getText('Lieblingsfarbe'),
                                             value: '#fff'
                                         },{
                                             xtype: 'kijs.gui.field.OptionGroup',
                                             name: 'LieblingsBetriebssystem',
-                                            label: 'Lieblings Betriebssystem',
+                                            label: kijs.getText('Lieblingsbetriebssystem'),
                                             displayTextField: 'displayText',
                                             valueField: 'value',
                                             iconMapField: 'iconMap',
@@ -602,14 +602,14 @@ home.sc.container_Form = class home_sc_container_Form {
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Display',
-                                            value: 'Bemerkungen',
+                                            value: kijs.getText('Bemerkungen'),
                                             cls: 'kijs-title'
                                         },{
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
-                                            label: 'Bemerkungen',
+                                            label: kijs.getText('Bemerkungen'),
                                             inputHeight: 50,
-                                            helpText: 'Hier können Sie die Bermerkungen eintragen'
+                                            helpText: kijs.getText('Hier können Sie die Bemerkungen eintragen')
                                         }
                                     ]
                                 }

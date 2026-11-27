@@ -33,18 +33,18 @@ home.sc.Tooltip = class home_sc_Tooltip {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: ' Die "tooltip"-Eigenschaft haben kijs.gui.Element und kijs.gui.Dom und alle davon vererbten Klassen:',
+                    value: kijs.getText('Die %1-Eigenschaft haben %2 und %3 und alle davon vererbten Klassen:', '', ['"tooltip"', 'kijs.gui.Element', 'kijs.gui.Dom']),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',
                     name: 'el',
-                    html: 'Einfacher Tooltip',
+                    html: kijs.getText('Einfacher Tooltip'),
                     style: { 
                         backgroundColor:'#ddd',
                         padding: '10px',
                         border: '1px solid #333'
                     },
-                    tooltip: 'Ich bin ein <b>Tooltip</b>'
+                    tooltip: kijs.getText('Ich bin ein <b>Tooltip</b>')
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'tooltip = \'\'',
@@ -66,7 +66,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
                         border: '1px solid #333'
                     },
                     tooltip: { 
-                        html: 'Ich bin ein <b>Tooltip</b>',
+                        html: kijs.getText('Ich bin ein <b>Tooltip</b>'),
                         htmlDisplayType: 'code', 
                         followPointer: true
                     }
@@ -83,7 +83,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Tooltip mit followPointer: false',
+                    html: kijs.getText('Tooltip mit %1', '', 'followPointer: false'),
                     style: { 
                         backgroundColor:'#ddd',
                         margin: '10px 0 0 0',
@@ -91,7 +91,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
                         border: '1px solid #333'
                     },
                     tooltip: { 
-                        html: 'Ich bin ein <b>Tooltip</b>',
+                        html: kijs.getText('Ich bin ein <b>Tooltip</b>'),
                         htmlDisplayType: 'text', 
                         followPointer: false
                     }

@@ -105,7 +105,7 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
                     }
                     html += 'copy';
                 }
-                html = 'new item (' + html + ')';
+                html = kijs.getText('Neues Element (%1)', '', html);
                 
                 
                 const cloneEl = new kijs.gui.Element({
@@ -201,7 +201,7 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
                 '>',
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Übernehmen',
+                    caption: kijs.getText('Übernehmen'),
                     on: {
                         click: this.#onBtnSaveClick,
                         context: this
@@ -325,7 +325,7 @@ home.sc.Dashboard = class home_sc_Dashboard {
                     allowCopy: true,
                     allowLink: true
                 },
-                html: 'Item (move or copy)',
+                html: kijs.getText('Element (verschieben oder kopieren)'),
                 style: {
                     padding: '4px 10px',
                     border: '1px solid var(--panel-borderColor)',
@@ -341,7 +341,7 @@ home.sc.Dashboard = class home_sc_Dashboard {
                     allowCopy: true,
                     allowLink: true
                 },
-                html: 'Item (cannot move to Dasboard)',
+                html: kijs.getText('Element (kann nicht ins Dashboard verschoben werden)'),
                 style: {
                     padding: '4px 10px',
                     border: '1px solid var(--panel-borderColor)',

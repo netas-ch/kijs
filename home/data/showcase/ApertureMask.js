@@ -59,7 +59,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                         }
                     ],
 
-                    footerBarCaption: 'Meine FooterBar',
+                    footerBarCaption: kijs.getText('Meine FooterBar'),
                     footerElements: [
                         '>',
                         {
@@ -69,7 +69,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                             isDefault: true
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Abbrechen',
+                            caption: kijs.getText('Abbrechen'),
                             iconMap: 'kijs.iconMap.Fa.xmark'
                         }
                     ]
@@ -92,7 +92,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ApertureMask für 3s anzeigen auf:',
+                    value: kijs.getText('ApertureMask für 3s anzeigen auf:'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -187,7 +187,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'testResize',
-                    caption: 'test resize panel'
+                    caption: kijs.getText('Panel-Grösse testen')
                 }
             ]
         });

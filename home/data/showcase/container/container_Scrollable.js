@@ -62,7 +62,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'scrollableX="auto" (click on buttons to make them wider/smaller)',
+                    value: 'scrollableX="auto" (' + kijs.getText('auf die Buttons klicken, um sie breiter/schmaler zu machen') + ')',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.container.Scrollable',
@@ -130,7 +130,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'scrollableX="auto" und scrollableY="auto"',
+                    value: kijs.getText('%1 und %2', '', ['scrollableX="auto"', 'scrollableY="auto"']),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Panel',

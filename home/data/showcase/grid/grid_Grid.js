@@ -48,7 +48,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     },
                     on: {
                         afterLoad: (e) => {
-                            this._log('afterLoad', e.response.rows.length + ' Zeilen geladen, Total ' + e.response.count);
+                            this._log('afterLoad', kijs.getText('%1 Zeilen geladen, Total %2', '', [e.response.rows.length, e.response.count]));
                         },
                         beforeSelectionChange: (e) => {
                             if (this.#cancelSelectionChange) {
@@ -74,7 +74,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                             this._log('rowDblClick', this._rowText(e.raiseElement));
                         },
                         selectionChange: (e) => {
-                            this._log('selectionChange', (e.unSelect ? 'abgewählt: ' : 'ausgewählt: ')
+                            this._log('selectionChange', (e.unSelect ? kijs.getText('abgewählt:') : kijs.getText('ausgewählt:')) + ' '
                                     + e.rows.map(row => this._rowText(row)).join(', '));
                         },
                         context: this
@@ -84,7 +84,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     targetPos: 'right'
                 },{
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Ereignisse',
+                    caption: kijs.getText('Ereignisse'),
                     collapsible: 'right',
                     scrollableY: 'auto',
                     width: 300,
@@ -92,7 +92,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                         {
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.trash-can',
-                            tooltip: 'Leeren',
+                            tooltip: kijs.getText('Leeren'),
                             on: {
                                 click: function() {
                                     this.#logEntries = [];
@@ -148,7 +148,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'cancel beforeSelectionChange',
+                label: kijs.getText('%1 abbrechen', '', 'beforeSelectionChange'),
                 on: {
                     change: (e) => {
                         this.#cancelSelectionChange = !!e.element.value;
@@ -174,7 +174,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                caption: 'Methoden',
+                caption: kijs.getText('Methoden'),
                 iconMap: 'kijs.iconMap.Fa.list',
                 menuElements: this._getMethodMenuElements()
             }
@@ -212,7 +212,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 caption: 'selectByIds([2, 4, 6])',
                 on: {
                     click: function() {
-                        this._log('selectByIds()', this.grid.selectByIds([2, 4, 6]) ? 'erfolgreich' : 'nicht gefunden');
+                        this._log('selectByIds()', this.grid.selectByIds([2, 4, 6]) ? kijs.getText('erfolgreich') : kijs.getText('nicht gefunden'));
                     },
                     context: this
                 }
@@ -243,7 +243,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 on: {
                     click: function() {
                         this.grid.commit();
-                        this._log('commit()', 'Änderungen übernommen');
+                        this._log('commit()', kijs.getText('Änderungen übernommen'));
                     },
                     context: this
                 }
@@ -253,7 +253,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 on: {
                     click: function() {
                         const cell = this.grid.startCellEdit(0);
-                        this._log('startCellEdit(0)', cell ? cell.columnConfig.caption : 'keine Zelle');
+                        this._log('startCellEdit(0)', cell ? cell.columnConfig.caption : kijs.getText('keine Zelle'));
                     },
                     context: this
                 }

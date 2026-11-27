@@ -47,9 +47,9 @@ home.sc.FileUpload = class home_sc_FileUpload {
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Die Dateien werden nicht gespeichert. Dateien mit «fehler» im Namen lösen eine '
+                    html: kijs.getText('Die Dateien werden nicht gespeichert. Dateien mit «fehler» im Namen lösen eine '
                         + 'Fehlermeldung vom Server aus. Dateien können auch auf die DropZone gezogen oder '
-                        + 'mit Ctrl+V eingefügt werden. Mit «Langsamer Server» lässt sich der Upload abbrechen.'
+                        + 'mit Ctrl+V eingefügt werden. Mit «Langsamer Server» lässt sich der Upload abbrechen.')
                 },{
                     xtype: 'kijs.gui.Container',
                     cls: 'kijs-flexrow',
@@ -62,7 +62,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
                     elements: [
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Dateien auswählen',
+                            caption: kijs.getText('Dateien auswählen'),
                             iconMap: 'kijs.iconMap.Fa.file-arrow-up',
                             on: {
                                 click: function() {
@@ -72,7 +72,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Ordner auswählen',
+                            caption: kijs.getText('Ordner auswählen'),
                             iconMap: 'kijs.iconMap.Fa.folder-open',
                             on: {
                                 click: function() {
@@ -85,7 +85,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
                 },{
                     xtype: 'kijs.gui.DropZone',
                     name: 'dropZone',
-                    html: 'Dateien hierher ziehen',
+                    html: kijs.getText('Dateien hierher ziehen'),
                     fileUpload: this._fileUpload,
                     style: {
                         margin: '10px 0 0 0',
@@ -175,8 +175,8 @@ home.sc.FileUpload = class home_sc_FileUpload {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Langsamer Server',
-                tooltip: 'Der Server wartet 3 Sekunden, bevor er antwortet. So lässt sich Abbrechen ausprobieren.',
+                label: kijs.getText('Langsamer Server'),
+                tooltip: kijs.getText('Der Server wartet 3 Sekunden, bevor er antwortet. So lässt sich Abbrechen ausprobieren.'),
                 on: {
                     change: function(e) {
                         this._fileUpload.parameters = e.element.value ? { slow: 1 } : {};

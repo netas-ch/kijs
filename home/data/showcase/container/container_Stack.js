@@ -51,11 +51,11 @@ home.sc.container_Stack = class home_sc_container_Stack {
                                 context: this
                             },
                             elements: [
-                                { name:'s1', html:'Seite 1', style:{backgroundColor:'#f99'} },
-                                { name:'s2', html:'Seite 2', style:{backgroundColor:'#9f9'} },
-                                { name:'s3', html:'Seite 3', style:{backgroundColor:'#99f'} },
-                                { name:'s4', html:'Seite 4', style:{backgroundColor:'#ff9'} },
-                                { name:'s5', html:'Seite 5', style:{backgroundColor:'#9ff'} }
+                                { name:'s1', html:kijs.getText('Seite %1', '', 1), style:{backgroundColor:'#f99'} },
+                                { name:'s2', html:kijs.getText('Seite %1', '', 2), style:{backgroundColor:'#9f9'} },
+                                { name:'s3', html:kijs.getText('Seite %1', '', 3), style:{backgroundColor:'#99f'} },
+                                { name:'s4', html:kijs.getText('Seite %1', '', 4), style:{backgroundColor:'#ff9'} },
+                                { name:'s5', html:kijs.getText('Seite %1', '', 5), style:{backgroundColor:'#9ff'} }
                             ]
                         }
                     ],
@@ -63,20 +63,20 @@ home.sc.container_Stack = class home_sc_container_Stack {
                         '>',
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Element hinzufügen',
+                            caption: kijs.getText('Element hinzufügen'),
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
                             on: {
                                 click: function(e) {
                                     const cStack = this.parent.parent.elements[0];
                                     cStack.add({
-                                          html: 'My new Element'
+                                          html: kijs.getText('Mein neues Element')
                                     });
                                     cStack.currentIndex = cStack.elements.length - 1;
                                 }
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'zurück',
+                            caption: kijs.getText('zurück'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
                             on: {
                                 click: function(e) {
@@ -93,7 +93,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'weiter',
+                            caption: kijs.getText('weiter'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
                             on: {
                                 click: function(e) {
@@ -222,7 +222,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                             elements: [
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Wechsel zu 2',
+                                    caption: kijs.getText('Wechsel zu 2'),
                                     iconMap: 'kijs.iconMap.Fa.caret-right',
                                     tooltip: 'test',
                                     on: {
@@ -301,7 +301,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                                     }
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Add panel',
+                                    caption: kijs.getText('Panel hinzufügen'),
                                     iconMap: 'kijs.iconMap.Fa.caret-left',
                                     tooltip: 'test',
                                     on: {
@@ -310,7 +310,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                                             el.add({
                                                 xtype: 'kijs.gui.Panel',
                                                 name: 'addedpanel',
-                                                caption: 'Neues Panel',
+                                                caption: kijs.getText('Neues Panel'),
                                                 cls: 'kijs-flexcolumn',
                                                 defaults:{
                                                     style: {
@@ -319,7 +319,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                                                 },
                                                 elements: [{
                                                     xtype: 'kijs.gui.Button',
-                                                    caption: 'Remove panel',
+                                                    caption: kijs.getText('Panel entfernen'),
                                                     iconMap: 'kijs.iconMap.Fa.caret-left',
                                                     tooltip: 'test',
                                                     on: {
@@ -341,7 +341,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Wizard mit RPC',
+                    caption: kijs.getText('Wizard mit RPC'),
                     cls: 'kijs-flexcolumn',
                     style: { marginTop: '10px' },
                     height: 200,
@@ -356,20 +356,20 @@ home.sc.container_Stack = class home_sc_container_Stack {
                         '>',
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Element hinzufügen',
+                            caption: kijs.getText('Element hinzufügen'),
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
                             on: {
                                 click: function(e) {
                                     const cStack = this.parent.parent.elements[0];
                                     cStack.add({
-                                          html: 'My new Element'
+                                          html: kijs.getText('Mein neues Element')
                                     });
                                     cStack.currentIndex = cStack.elements.length - 1;
                                 }
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'zurück',
+                            caption: kijs.getText('zurück'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
                             on: {
                                 click: function(e) {
@@ -386,7 +386,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'weiter',
+                            caption: kijs.getText('weiter'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
                             on: {
                                 click: function(e) {

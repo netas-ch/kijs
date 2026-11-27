@@ -98,14 +98,14 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Tab hinzufügen',
+                            caption: kijs.getText('Tab hinzufügen'),
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
                             on: {
                                 click: function(e) {
                                     const tab = this._content.down('tab');
                                     tab.add({
-                                        tabCaption: 'My new Tab',
-                                        html: 'My new Tab',
+                                        tabCaption: kijs.getText('Mein neues Tab'),
+                                        html: kijs.getText('Mein neues Tab'),
                                         innerStyle: { color: this._getRandomColor() }
                                     });
                                     tab.currentIndex = tab.elements.length - 1;
@@ -114,7 +114,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Aktiviere das letzte Tab',
+                            caption: kijs.getText('Aktiviere das letzte Tab'),
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
                             on: {
                                 click: function(e) {
@@ -125,7 +125,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'zurück',
+                            caption: kijs.getText('zurück'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
                             on: {
                                 click: function(e) {
@@ -141,7 +141,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'weiter',
+                            caption: kijs.getText('weiter'),
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
                             on: {
                                 click: function(e) {
@@ -161,7 +161,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                         '>',
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'Die Registerkarten können per Drag&Drop verschoben werden.'
+                            value: kijs.getText('Die Registerkarten können per Drag&Drop verschoben werden.')
                         }
                     ]
                 }
@@ -184,7 +184,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
             captions.push('<li>' + el.tabButtonEl.caption + '</li>');
         }, this);
 
-        let msg = 'Sollen folgende Register wirklich geschlossen werden?' + "\n";
+        let msg = kijs.getText('Sollen folgende Register wirklich geschlossen werden?') + "\n";
         msg += '<ul>' + captions.join("\n") + '</ul>';
 
         kijs.gui.MsgBox.warning('kijs', msg).then((e) => {

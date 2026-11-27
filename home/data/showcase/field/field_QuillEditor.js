@@ -37,7 +37,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.QuillEditor'
                 },
@@ -45,15 +45,15 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label und fixer Höhe',
+                    value: kijs.getText('mit Label und fixer Höhe'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.QuillEditor',
                     label: 'Label',
-                    placeholder: 'Bitte hier Text eingeben...',
+                    placeholder: kijs.getText('Bitte hier Text eingeben...'),
                     required: true,
                     //theme: 'snow',
-                    value: 'Dies ist mein <b>fetter</b> Text.',
+                    value: kijs.getText('Dies ist mein <b>fetter</b> Text.'),
                     inputHeight: 200,
                     clearable: true,
                     elements:[
@@ -85,13 +85,13 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 },{
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Theme bubble',
+                    value: kijs.getText('mit Theme %1', '', 'bubble'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.QuillEditor',
                     label: 'Label',
                     theme: 'bubble',
-                    value: 'Dies ist mein <b>fetter</b> Text.',
+                    value: kijs.getText('Dies ist mein <b>fetter</b> Text.'),
                     inputHeight: 100,
                     toolbarOptions:[
                         ['bold', 'italic', 'underline']
@@ -101,7 +101,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Quill Webseite: https://quilljs.com/ \nGitHub: https://github.com/quilljs/quill/releases/',
+                    value: kijs.getText('%1 Webseite:', '', 'Quill') + ' https://quilljs.com/ \nGitHub: https://github.com/quilljs/quill/releases/',
                     clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}
                 }
@@ -189,7 +189,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -197,7 +197,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -205,7 +205,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -216,7 +216,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -291,7 +291,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

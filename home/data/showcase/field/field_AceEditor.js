@@ -33,7 +33,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.AceEditor'
                 },
@@ -41,7 +41,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.AceEditor',
@@ -81,7 +81,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Geflexter ACE-Editor',
+                    caption: kijs.getText('Geflexter ACE-Editor'),
                     cls: 'kijs-flexfit',
                     maximizable: true,
                     maximized: false,
@@ -98,7 +98,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ACE Webseite: https://ace.c9.io/ \nGitHub: https://github.com/ajaxorg/ace-builds',
+                    value: kijs.getText('%1 Webseite:', '', 'ACE') + ' https://ace.c9.io/ \nGitHub: https://github.com/ajaxorg/ace-builds',
                     clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}
                 }
@@ -186,7 +186,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -194,7 +194,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -202,7 +202,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -213,7 +213,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -288,7 +288,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

@@ -18,7 +18,7 @@ home.sc.Container = class home_sc_Container {
     // --------------------------------------------------------------
     // Listener für dynamisch geladenen Button
     static onRpcButtonClick(e) {
-        e.element.caption = 'Ich wurde angeklickt';
+        e.element.caption = kijs.getText('Ich wurde angeklickt');
     }
 
 
@@ -43,12 +43,12 @@ home.sc.Container = class home_sc_Container {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Container mit HTML Inhalt:',
+                    value: kijs.getText('Container mit HTML Inhalt:'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
                     name: 'cont',
-                    html: 'Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen',
+                    html: kijs.getText('Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen'),
                     style: {
                         backgroundColor:'#ddd',
                         padding: '10px',
@@ -89,7 +89,7 @@ home.sc.Container = class home_sc_Container {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Container mit Elementen als Inhalt:',
+                    value: kijs.getText('Container mit Elementen als Inhalt:'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -187,7 +187,7 @@ home.sc.Container = class home_sc_Container {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Container mit HTML Inhalt von RPC:',
+                    value: kijs.getText('Container mit HTML Inhalt von RPC:'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -196,7 +196,7 @@ home.sc.Container = class home_sc_Container {
                     elements: [
                         {
                             xtype: 'kijs.gui.Element',
-                            html: 'HTML wird dynamisch geladen'
+                            html: kijs.getText('HTML wird dynamisch geladen')
                         }
                     ],
                     style: {

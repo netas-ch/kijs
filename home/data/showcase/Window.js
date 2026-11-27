@@ -35,7 +35,7 @@ home.sc.Window = class home_sc_Window {
             elements:[
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Öffne Beispiel Fenster',
+                    caption: kijs.getText('Beispielfenster öffnen'),
                     iconMap: 'kijs.iconMap.Fa.play',
                     on: {
                         click: this._openWindowExample,
@@ -43,7 +43,7 @@ home.sc.Window = class home_sc_Window {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Öffne Fenster mit Maske',
+                    caption: kijs.getText('Fenster mit Maske öffnen'),
                     iconMap: 'kijs.iconMap.Fa.play',
                     on: {
                         click: this._openWindowWithMask,
@@ -51,7 +51,7 @@ home.sc.Window = class home_sc_Window {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Öffne Fenster Normal/Modal',
+                    caption: kijs.getText('Fenster normal/modal öffnen'),
                     iconMap: 'kijs.iconMap.Fa.play',
                     on: {
                         click: this._openWindowNormalModal,
@@ -99,7 +99,7 @@ home.sc.Window = class home_sc_Window {
                 xtype: 'kijs.gui.Separator'
             },{
                 xtype: 'kijs.gui.Button',
-                caption: 'Top Win Caption',
+                caption: kijs.getText('Titel des obersten Fensters'),
                 on: {
                     click: function(e) {
                         const lm = new kijs.gui.LayerManager();
@@ -120,7 +120,7 @@ home.sc.Window = class home_sc_Window {
         }
 
         this._win0 = new kijs.gui.Window({
-            caption: 'Hello kijs',
+            caption: kijs.getText('Hallo %1', '', 'kijs'),
             iconMap: 'kijs.iconMap.Fa.face-grin-tongue',
             maximizable: false,
             resizable: false,
@@ -128,7 +128,7 @@ home.sc.Window = class home_sc_Window {
             elements: [
                 {
                     xtype: 'kijs.gui.field.Text',
-                    label: 'Name'
+                    label: kijs.getText('Name')
                 }
             ],
             footerElements: [
@@ -146,7 +146,7 @@ home.sc.Window = class home_sc_Window {
     _openWindowNormalModal(isModal=false) {
         let no = this._wins2.length + 1;
         let win = new kijs.gui.Window({
-            caption: 'Mein ' + no + '. Fenster',
+            caption: kijs.getText('Mein %1. Fenster', '', no),
             modal: !!isModal,
             width: 400,
             height: 300,
@@ -170,8 +170,8 @@ home.sc.Window = class home_sc_Window {
             elements:[
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Weiteres Fenster normal öffnen',
-                    tooltip: 'Weiteres Fenster normal öffnen',
+                    caption: kijs.getText('Weiteres Fenster normal öffnen'),
+                    tooltip: kijs.getText('Weiteres Fenster normal öffnen'),
                     on: {
                         click: function(e) {
                             this._openWindowNormalModal(false);
@@ -180,8 +180,8 @@ home.sc.Window = class home_sc_Window {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Weiteres Fenster modal öffnen',
-                    tooltip: 'Weiteres Fenster modal öffnen',
+                    caption: kijs.getText('Weiteres Fenster modal öffnen'),
+                    tooltip: kijs.getText('Weiteres Fenster modal öffnen'),
                     on: {
                         click: function(e) {
                             this._openWindowNormalModal(true);
@@ -206,7 +206,7 @@ home.sc.Window = class home_sc_Window {
             this._win1.destruct();
         }
         this._win1 = new kijs.gui.Window({
-            caption: 'Fenster mit Maske',
+            caption: kijs.getText('Fenster mit Maske'),
             iconCls: 'icoWizard16',
             //modal: true,
             width: 450,
@@ -224,7 +224,7 @@ home.sc.Window = class home_sc_Window {
             headerBarElements: [
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Hide',
+                    caption: kijs.getText('Ausblenden'),
                     iconCls: 'icoWizard16',
                     badgeText: '1',
                     //tooltip: { html: '<p>Test</p>', followPointer: false },
@@ -259,14 +259,14 @@ home.sc.Window = class home_sc_Window {
                 },{
                     xtype: 'kijs.gui.Button',
                     iconCls: 'icoWizard16',
-                    caption: 'Toggle Text',
+                    caption: kijs.getText('Text umschalten'),
                     badgeText: '1',
                     on: {
                         click: function() {
-                            if (this.caption === 'Text A') {
-                                this.caption = 'Text B';
+                            if (this.caption === kijs.getText('Text A')) {
+                                this.caption = kijs.getText('Text B');
                             } else {
-                                this.caption = 'Text A';
+                                this.caption = kijs.getText('Text A');
                             }
                         }
                     }
@@ -379,7 +379,7 @@ home.sc.Window = class home_sc_Window {
                 }
             ],
 
-            footerBarCaption: 'Meine FooterBar',
+            footerBarCaption: kijs.getText('Meine FooterBar'),
             footerElements: [
                 '>',
                 {
@@ -396,7 +396,7 @@ home.sc.Window = class home_sc_Window {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Abbrechen',
+                    caption: kijs.getText('Abbrechen'),
                     iconMap: 'kijs.iconMap.Fa.xmark',
                     badgeText: '2',
                     on: {
@@ -411,7 +411,7 @@ home.sc.Window = class home_sc_Window {
             footerBarElements: [
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Hide',
+                    caption: kijs.getText('Ausblenden'),
                     iconCls: 'icoWizard16',
                     tooltip: { html: '<p>Test</p>', followPointer: false },
                     on: {

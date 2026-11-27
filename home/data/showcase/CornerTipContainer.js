@@ -33,14 +33,14 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'CornerTipContainer mit Icon:',
+                    value: kijs.getText('CornerTipContainer mit Icon:'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'alert',
                     on: {
                         click: function() {
-                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'alert');
+                            kijs.gui.CornerTipContainer.show('Test', kijs.getText('Meine Nachricht!'), 'alert');
                         }
                     }
                 },{
@@ -48,7 +48,7 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
                     caption: 'info',
                     on: {
                         click: function() {
-                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'info');
+                            kijs.gui.CornerTipContainer.show('Test', kijs.getText('Meine Nachricht!'), 'info');
                         }
                     }
                 },{
@@ -56,7 +56,7 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
                     caption: 'errorNotice',
                     on: {
                         click: function() {
-                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'errorNotice');
+                            kijs.gui.CornerTipContainer.show('Test', kijs.getText('Meine Nachricht!'), 'errorNotice');
                         }
                     }
                 },{
@@ -64,26 +64,26 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
                     caption: 'error',
                     on: {
                         click: function() {
-                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'error');
+                            kijs.gui.CornerTipContainer.show('Test', kijs.getText('Meine Nachricht!'), 'error');
                         }
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Innerhalb Modal-Fenster',
+                    caption: kijs.getText('Innerhalb Modal-Fenster'),
                     on: {
                         click: () => {
                             (new kijs.gui.Window({
-                                caption: 'Modales Fenster',
+                                caption: kijs.getText('Modales Fenster'),
                                 modal: true,
                                 innerStyle: {
                                     padding: '10px'
                                 },
                                 elements:[{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'CornerTipContainer aus modalem Fenster',
+                                    caption: kijs.getText('CornerTipContainer aus modalem Fenster'),
                                     on: {
                                         click: () => {
-                                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht aus modalem Fenster!', 'info');
+                                            kijs.gui.CornerTipContainer.show('Test', kijs.getText('Meine Nachricht aus modalem Fenster!'), 'info');
                                         }
                                     }
                                 }]

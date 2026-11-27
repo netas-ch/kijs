@@ -33,7 +33,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     valueField: 'value',
@@ -59,7 +59,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -96,7 +96,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit RPC und Drg&Drop',
+                    value: kijs.getText('mit RPC und Drag&Drop'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -120,11 +120,11 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ListView local:',
+                    value: kijs.getText('%1 lokal:', '', 'ListView'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
-                    label: 'ListView local',
+                    label: kijs.getText('%1 lokal', '', 'ListView'),
                     valueField: 'id',
                     displayTextField: 'Bezeichnung',
                     iconMapField: 'Icon',
@@ -133,7 +133,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     disabledField: 'disabled',
                     showCheckBoxes: true,
                     selectType: 'simple-multi',
-                    helpText: 'Hilfe Text!',
+                    helpText: kijs.getText('Hilfetext!'),
                     required: true,
                     inputWidth: 180,
                     sortable: true,
@@ -239,7 +239,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -271,7 +271,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -279,7 +279,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -290,7 +290,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -365,7 +365,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

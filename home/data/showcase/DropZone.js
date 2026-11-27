@@ -26,7 +26,7 @@ home.sc.DropZone = class home_sc_DropZone {
                     return false;
                 },
                 fileRejected: function(e) {
-                    kijs.gui.CornerTipContainer.show('Drop (abgewiesen)', kijs.String.htmlspecialchars(e.errorMsg), 'error');
+                    kijs.gui.CornerTipContainer.show('Drop (' + kijs.getText('abgewiesen') + ')', kijs.String.htmlspecialchars(e.errorMsg), 'error');
                 },
                 context: this
             }
@@ -47,7 +47,7 @@ home.sc.DropZone = class home_sc_DropZone {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Panel mit DropZone',
+                    caption: kijs.getText('Panel mit DropZone'),
                     iconCls: 'icoWizard16',
                     closable: true,
                     collapsible: 'top',
@@ -88,7 +88,7 @@ home.sc.DropZone = class home_sc_DropZone {
                         }
                     ],
 
-                    footerBarCaption: 'Meine FooterBar'
+                    footerBarCaption: kijs.getText('Meine FooterBar')
                 },
                 
                 {

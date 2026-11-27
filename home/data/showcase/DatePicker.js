@@ -33,7 +33,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.DatePicker'
                 },
@@ -41,7 +41,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mode:  \'date\' mit minValue und maxValue:',
+                    value: kijs.getText('%1 mit %2 und %3:', '', ["mode: 'date'", 'minValue', 'maxValue']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
@@ -96,7 +96,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
                     valueDisplayType: 'html',
-                    value: '<b>Siehe auch:</b><ul>'
+                    value: '<b>' + kijs.getText('Siehe auch:') + '</b><ul>'
                          + '<li><a href="TimePicker.js">kijs.gui.TimePicker</a></li>'
                          + '<li><a href="MonthPicker.js">kijs.gui.MonthPicker</a></li>'
                          + '<li><a href="field/field_DateTime.js">kijs.gui.field.DateTime</a></li>'

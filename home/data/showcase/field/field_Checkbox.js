@@ -33,7 +33,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.Checkbox'
                 },
@@ -41,7 +41,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
@@ -67,7 +67,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'weitere Beispiele',
+                    value: kijs.getText('weitere Beispiele'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
@@ -77,7 +77,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'CheckboxIcon',
-                    label: '... mit Icon',
+                    label: kijs.getText('... mit Icon'),
                     iconCls: 'icoWizard16',
                     caption: 'Caption',
                     clearable: true,
@@ -85,14 +85,14 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'CheckboxColor',
-                    label: '... mit Farbe',
+                    label: kijs.getText('... mit Farbe'),
                     iconMap: 'kijs.iconMap.Fa.stamp',
                     iconColor: '#ff8800',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'CheckboxAndereIcons',
-                    label: 'andere Icons',
+                    label: kijs.getText('andere Icons'),
                     caption: 'Caption',
                     checkedIconMap: 'kijs.iconMap.Fa.x',
                     determinatedIconMap: 'kijs.iconMap.Fa.ellipsis',
@@ -101,7 +101,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     valueUnchecked: 'Aus',
                     threeState: true,
                     value: 'Ein',
-                    helpText: 'Info',
+                    helpText: kijs.getText('Info'),
                     elements: [
                         {
                             xtype: 'kijs.gui.Button',
@@ -203,7 +203,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -220,7 +220,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -228,7 +228,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -239,7 +239,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -314,7 +314,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

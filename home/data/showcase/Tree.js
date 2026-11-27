@@ -29,7 +29,7 @@ home.sc.Tree = class home_sc_Tree {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Tree simple',
+                    caption: kijs.getText('%1 einfach', '', 'Tree'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexfit',
                     style: {
@@ -52,7 +52,7 @@ home.sc.Tree = class home_sc_Tree {
                     ]
                 },{
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Tree local',
+                    caption: kijs.getText('%1 lokal', '', 'Tree'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexfit',
                     style: {
@@ -90,10 +90,10 @@ home.sc.Tree = class home_sc_Tree {
                                         closeOnClick: true,
                                         elements: [
                                             {
-                                                caption: 'Menüpunkt 1',
+                                                caption: kijs.getText('Menüpunkt %1', '', 1),
                                                 iconMap: 'kijs.iconMap.Fa.circle-plus'
                                             },{
-                                                caption: 'Menüpunkt 2',
+                                                caption: kijs.getText('Menüpunkt %1', '', 2),
                                                 iconMap: 'kijs.iconMap.Fa.copy'
                                             }
                                         ]
@@ -108,7 +108,7 @@ home.sc.Tree = class home_sc_Tree {
                     ]
                 },{
                     xtype: 'kijs.gui.Panel',
-                    caption: '2x Tree local mit Drag&Drop untereinander',
+                    caption: kijs.getText('2x %1 lokal mit Drag&Drop untereinander', '', 'Tree'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     collapsible: 'top',
@@ -164,7 +164,7 @@ home.sc.Tree = class home_sc_Tree {
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Reload',
+                            caption: kijs.getText('Neu laden'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('treeRemote');
@@ -174,7 +174,7 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'expand+select 1.1.2',
+                            caption: kijs.getText('%1 aufklappen und auswählen', '', '1.1.2'),
                             on: {
                                 click: function() {
                                     const el = this._content.down('treeRemote');
@@ -185,7 +185,7 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'collapse 1.1',
+                            caption: kijs.getText('%1 zuklappen', '', '1.1'),
                             on: {
                                 click: function() {
                                     const el = this._content.down('treeRemote');
@@ -195,7 +195,7 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'expand/collapse all',
+                            caption: kijs.getText('Alle auf-/zuklappen'),
                             on: {
                                 click: function() {
                                     const el = this._content.down('treeRemote');
@@ -209,7 +209,7 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'get value',
+                            caption: kijs.getText('%1 abfragen', '', 'value'),
                             on: {
                                 click: function() {
                                     const el = this._content.down('treeRemote');
@@ -219,7 +219,7 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'scroll to focus',
+                            caption: kijs.getText('Zum Fokus scrollen'),
                             on: {
                                 click: function() {
                                     const el = this._content.down('treeRemote');

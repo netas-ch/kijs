@@ -32,7 +32,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
             elements:[
                 {
                     xtype: 'kijs.gui.PanelBar',
-                    html: 'Meine PanelBar',
+                    html: kijs.getText('Meine PanelBar'),
                     style: {
                         marginBottom: '10px'
                     },
@@ -48,7 +48,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
                             badgeText: '6'
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
                             on: {
@@ -61,7 +61,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
                     elementsRight: [
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
                             on: {
@@ -85,7 +85,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
 
                 {
                     xtype: 'kijs.gui.PanelBar',
-                    html: 'Meine HeaderBar',
+                    html: kijs.getText('Meine HeaderBar'),
                     cls: 'kijs-headerbar',
                     style: {
                         marginBottom: '10px'
@@ -94,7 +94,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
                     elementsRight: [
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
                             on: {
@@ -118,7 +118,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
 
                 {
                     xtype: 'kijs.gui.PanelBar',
-                    html: 'Meine PanelBar (freistehend)',
+                    html: kijs.getText('Meine PanelBar (freistehend)'),
                     cls: 'kijs-headerbar-center',
                     style: {
                         marginBottom: '10px'
@@ -139,7 +139,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
 
                 {
                     xtype: 'kijs.gui.PanelBar',
-                    html: 'Meine FooterBar',
+                    html: kijs.getText('Meine FooterBar'),
                     cls: 'kijs-footerbar',
                     style: {
                         marginBottom: '10px'
@@ -156,7 +156,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
                             badgeText: '6'
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
                             on: {

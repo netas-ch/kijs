@@ -33,7 +33,7 @@ home.sc.DataView = class home_sc_DataView {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'DataView local',
+                    caption: kijs.getText('%1 lokal', '', 'DataView'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     collapsible: 'top',
@@ -45,8 +45,8 @@ home.sc.DataView = class home_sc_DataView {
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable',
-                            tooltip: 'Disable/Enable dataview',
+                            caption: kijs.getText('Deaktivieren/Aktivieren'),
+                            tooltip: kijs.getText('%1 deaktivieren/aktivieren', '', 'DataView'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewLocal');
@@ -56,7 +56,7 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable first Child',
+                            caption: kijs.getText('Erstes Kind-Element deaktivieren/aktivieren'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewLocal');
@@ -66,7 +66,7 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Reload',
+                            caption: kijs.getText('Neu laden'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewLocal');
@@ -103,11 +103,11 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.field.Combo',
-                            label: 'Sortierung:',
+                            label: kijs.getText('Sortierung:'),
                             value: 'none',
                             inputWidth: 90,
                             data: [
-                                { displayText: 'keine', value: 'none' },
+                                { displayText: kijs.getText('keine'), value: 'none' },
                                 { displayText: 'A', value: 'A' },
                                 { displayText: 'B', value: 'B' }
                             ],
@@ -155,7 +155,7 @@ home.sc.DataView = class home_sc_DataView {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: '2x DataView local mit Drag&Drop untereinander',
+                    caption: kijs.getText('2x %1 lokal mit Drag&Drop untereinander', '', 'DataView'),
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     collapsible: 'top',
@@ -210,8 +210,8 @@ home.sc.DataView = class home_sc_DataView {
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable',
-                            tooltip: 'Disable/Enable dataview',
+                            caption: kijs.getText('Deaktivieren/Aktivieren'),
+                            tooltip: kijs.getText('%1 deaktivieren/aktivieren', '', 'DataView'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewRpc');
@@ -221,7 +221,7 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable first Child',
+                            caption: kijs.getText('Erstes Kind-Element deaktivieren/aktivieren'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewRpc');
@@ -231,7 +231,7 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Reload',
+                            caption: kijs.getText('Neu laden'),
                             on: {
                                 click: function() {
                                     const dv = this._content.down('dataViewRpc');
@@ -268,13 +268,13 @@ home.sc.DataView = class home_sc_DataView {
                             }
                         },{
                             xtype: 'kijs.gui.field.Combo',
-                            label: 'Sortierung:',
+                            label: kijs.getText('Sortierung:'),
                             value: 'none',
                             inputWidth: 90,
                             data: [
-                                { displayText: 'keine', value: 'none' },
-                                { displayText: 'Name', value: 'Name' },
-                                { displayText: 'Vorname', value: 'Vorname' }
+                                { displayText: kijs.getText('keine'), value: 'none' },
+                                { displayText: kijs.getText('Name'), value: 'Name' },
+                                { displayText: kijs.getText('Vorname'), value: 'Vorname' }
                             ],
                             on: {
                                 change: function(e) {

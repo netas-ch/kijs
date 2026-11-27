@@ -268,6 +268,13 @@ home.sc.field_Combo = class home_sc_field_Combo {
             {"ISO":"CY", "Land":"Zypern"}
         ];
 
+        // Ländernamen in anderen Sprachen liefert der Browser
+        if (kijs.language.split('-')[0] !== 'de') {
+            const regionNames = new Intl.DisplayNames([kijs.language], { type: 'region' });
+            Laender = Laender.map(row => ({ ISO: row.ISO, Land: regionNames.of(row.ISO) || row.Land }));
+            Laender.sort((a, b) => a.Land.localeCompare(b.Land, kijs.language));
+        }
+
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Combo',
             headerBarElements: [ this._app.createApiButton('kijs.gui.field.Combo') ],
@@ -284,7 +291,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     data: [
@@ -297,11 +304,11 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ohne RPC',
+                    value: kijs.getText('ohne RPC'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Mit Wert (Unix) den es nicht mehr gibt und allowNewValues: true',
+                    value: kijs.getText('Mit Wert (%1), den es nicht mehr gibt, und %2', '', ['Unix', 'allowNewValues: true']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -359,11 +366,11 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     }
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Viele Datensätze',
+                    value: kijs.getText('Viele Datensätze'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'mit value',
+                    label: kijs.getText('mit %1', '', 'value'),
                     valueField: 'ISO',
                     displayTextField: 'Land',
                     value: 'FR',
@@ -371,13 +378,13 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     clearable: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'ohne value',
+                    label: kijs.getText('ohne %1', '', 'value'),
                     valueField: 'ISO',
                     displayTextField: 'Land',
                     data: Laender
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Disabled Values und queryOperator:"PART"',
+                    value: kijs.getText('Deaktivierte Werte und %1', '', 'queryOperator:"PART"'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -402,11 +409,11 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPC mit enableRemoteFiltering:false',
+                    value: kijs.getText('%1 mit %2', '', ['RPC', 'enableRemoteFiltering:false']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Farben',
+                    label: kijs.getText('Farben'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.farbe.load',
                     valueField: 'color',
@@ -418,7 +425,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     value: '#0f0'
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Stadt',
+                    label: kijs.getText('Stadt'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.stadt.load',
                     valueField: 'Stadt',
@@ -427,7 +434,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     autoLoad: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Land',
+                    label: kijs.getText('Land'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.land.load',
                     valueField: 'ISO',
@@ -436,7 +443,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     autoLoad: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Berufe',
+                    label: kijs.getText('Berufe'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.beruf.load',
                     valueField: 'BerufId',
@@ -444,17 +451,17 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     value: 99999,
                     autoLoad: true,
                     displayLimit: 30,
-                    helpText: 'Beispiel mit value den es im Recordset nicht gibt.'
+                    helpText: kijs.getText('Beispiel mit einem %1, den es im Recordset nicht gibt.', '', 'value')
                 },
 
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPC mit enableRemoteFiltering:true und autoLoad:true',
+                    value: kijs.getText('%1 mit %2 und %3', '', ['RPC', 'enableRemoteFiltering:true', 'autoLoad:true']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Berufe',
+                    label: kijs.getText('Berufe'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.beruf.load',
                     valueField: 'BerufId',
@@ -465,11 +472,11 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },{
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'RPC mit enableRemoteFiltering:true und autoLoad:false',
+                    value: kijs.getText('%1 mit %2 und %3', '', ['RPC', 'enableRemoteFiltering:true', 'autoLoad:false']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
-                    label: 'Berufe',
+                    label: kijs.getText('Berufe'),
                     //rpc: 'default'
                     rpcLoadFn: 'combo.beruf.load',
                     valueField: 'BerufId',
@@ -563,7 +570,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -581,7 +588,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -589,7 +596,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -600,7 +607,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -675,7 +682,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

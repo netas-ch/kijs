@@ -44,51 +44,51 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
             elements:[
                 {
                     xtype: 'kijs.gui.container.Fieldset',
-                    caption: 'Name',
+                    caption: kijs.getText('Name'),
                     //iconMap: 'kijs.iconMap.Fa.user',
                     collapsible: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.field.Combo',
                             name: 'Anrede',
-                            label: 'Anrede',
+                            label: kijs.getText('Anrede'),
                             valueField: 'value',
                             displayTextField: 'displayText',
                             data: [
-                                {displayText: 'Herr', value: 'm' },
-                                {displayText: 'Frau', value: 'w'},
-                                {displayText: 'Familie', value: 'f'}
+                                {displayText: kijs.getText('Herr'), value: 'm' },
+                                {displayText: kijs.getText('Frau'), value: 'w'},
+                                {displayText: kijs.getText('Familie'), value: 'f'}
                             ]
                         },{
                             xtype: 'kijs.gui.field.Text',
                             name: 'Vorname',
-                            label: 'Vorname'
+                            label: kijs.getText('Vorname')
                         },{
                             xtype: 'kijs.gui.field.Text',
                             name: 'Name',
-                            label: 'Name'
+                            label: kijs.getText('Name')
                         }
                     ]
                 },
 
                 {
                     xtype: 'kijs.gui.container.Fieldset',
-                    caption: 'Adresse',
+                    caption: kijs.getText('Adresse'),
                     //iconMap: 'kijs.iconMap.Fa.user',
                     collapsible: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.field.Text',
                             name: 'Strasse',
-                            label: 'Strasse'
+                            label: kijs.getText('Strasse')
                         },{
                             xtype: 'kijs.gui.field.Text',
                             name: 'Ort',
-                            label: 'Ort'
+                            label: kijs.getText('Ort')
                         },{
                             xtype: 'kijs.gui.field.Combo',
                             name: 'Land',
-                            label: 'Land',
+                            label: kijs.getText('Land'),
                             rpcLoadFn: 'land.load',
                             autoLoad: true,
                             valueField: 'ISO',
@@ -99,13 +99,13 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
 
                 {
                     xtype: 'kijs.gui.container.Fieldset',
-                    caption: 'Bemerkungen',
+                    caption: kijs.getText('Bemerkungen'),
                     collapsible: true,
                     elements: [
                         {
                             xtype: 'kijs.gui.field.Memo',
                             name: 'Bemerkungen',
-                            label: 'Bemerkungen',
+                            label: kijs.getText('Bemerkungen'),
                             inputHeight: 50
                         }
                     ]
@@ -113,32 +113,32 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
 
                 {
                     xtype: 'kijs.gui.container.Fieldset',
-                    caption: 'Weiteres',
+                    caption: kijs.getText('Weiteres'),
                     iconMap: 'kijs.iconMap.Fa.comment-dots',
                     collapsible: true,
                     collapsed: true,
                     elements: [
                         {
                             xtype: 'kijs.gui.container.Fieldset',
-                            caption: 'Haustiere',
+                            caption: kijs.getText('Haustiere'),
                             //iconMap: 'kijs.iconMap.Fa.dog',
                             elements: [
                                 {
                                     xtype: 'kijs.gui.field.Memo',
                                     name: 'Haustiere',
-                                    label: 'Haustiere',
+                                    label: kijs.getText('Haustiere'),
                                     inputHeight: 50
                                 }
                             ]
                         },{
                             xtype: 'kijs.gui.container.Fieldset',
-                            caption: 'Hobbys',
+                            caption: kijs.getText('Hobbys'),
                             //iconMap: 'kijs.iconMap.Fa.volleyball',
                             elements: [
                                 {
                                     xtype: 'kijs.gui.field.Memo',
                                     name: 'Hobbys',
-                                    label: 'Hobbys',
+                                    label: kijs.getText('Hobbys'),
                                     inputHeight: 50
                                 }
                             ]

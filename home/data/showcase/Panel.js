@@ -33,7 +33,7 @@ home.sc.Panel = class home_sc_Panel {
                 {
                     xtype: 'kijs.gui.Panel',
                     name: 'myPanel',
-                    caption: 'Mein Panel',
+                    caption: kijs.getText('Mein Panel'),
                     iconCls: 'icoWizard16',
                     cls: 'kijs-shadow',
                     closable: true,
@@ -59,7 +59,7 @@ home.sc.Panel = class home_sc_Panel {
                     headerBarElements: [
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             badgeText: '1',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
@@ -82,14 +82,14 @@ home.sc.Panel = class home_sc_Panel {
                         {
                             xtype: 'kijs.gui.Button',
                             iconCls: 'icoWizard16',
-                            caption: 'Toggle Text',
+                            caption: kijs.getText('Text umschalten'),
                             badgeText: '1',
                             on: {
                                 click: function() {
-                                    if (this.caption === 'Text A') {
-                                        this.caption = 'Text B';
+                                    if (this.caption === kijs.getText('Text A')) {
+                                        this.caption = kijs.getText('Text B');
                                     } else {
-                                        this.caption = 'Text A';
+                                        this.caption = kijs.getText('Text A');
                                     }
                                 }
                             }
@@ -169,7 +169,7 @@ home.sc.Panel = class home_sc_Panel {
                         }
                     ],
 
-                    footerBarCaption: 'Meine FooterBar',
+                    footerBarCaption: kijs.getText('Meine FooterBar'),
                     footerElements: [
                         '>',
                         {
@@ -186,7 +186,7 @@ home.sc.Panel = class home_sc_Panel {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Abbrechen',
+                            caption: kijs.getText('Abbrechen'),
                             iconMap: 'kijs.iconMap.Fa.xmark',
                             badgeText: '2',
                             on: {
@@ -201,7 +201,7 @@ home.sc.Panel = class home_sc_Panel {
                     footerBarElements: [
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Hide',
+                            caption: kijs.getText('Ausblenden'),
                             iconCls: 'icoWizard16',
                             tooltip: { html: '<p>Test</p>', followPointer: false },
                             on: {
@@ -262,11 +262,11 @@ home.sc.Panel = class home_sc_Panel {
                 }
             },{
                 xtype: 'kijs.gui.field.Combo',
-                label: 'CSS-Klasse:',
+                label: kijs.getText('CSS-Klasse:'),
                 value: 'kijs-shadow',
                 inputWidth: 90,
                 data: [
-                    { displayText: 'keine', value: 'none' },
+                    { displayText: kijs.getText('keine'), value: 'none' },
                     { displayText: 'kijs-borderless', value: 'kijs-borderless' },
                     { displayText: 'kijs-shadow', value: 'kijs-shadow' }
                 ],

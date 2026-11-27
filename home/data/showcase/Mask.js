@@ -52,7 +52,7 @@ home.sc.Mask = class home_sc_Mask {
                         {
                             xtype: 'kijs.gui.Element',
                             name: 'elRed',
-                            html: 'rot',
+                            html: kijs.getText('rot'),
                             tooltip: 'maskCount: 0',
                             height: 50,
                             style: {
@@ -63,7 +63,7 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elGreen',
-                            html: 'grün',
+                            html: kijs.getText('grün'),
                             tooltip: 'maskCount: 1',
                             height: 50,
                             displayWaitMask: true,
@@ -75,7 +75,7 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elBlue',
-                            html: 'blau',
+                            html: kijs.getText('blau'),
                             tooltip: 'maskCount: 0',
                             height: 50,
                             style: {
@@ -103,9 +103,9 @@ home.sc.Mask = class home_sc_Mask {
                         margin: '15px'
                     },
                     data: [
-                        { id:'elRed', displayText:'rot', color:'#f00', icon:'kijs.iconMap.Fa.droplet' },
-                        { id:'elGreen', displayText:'grün', color:'#0f0', icon:'kijs.iconMap.Fa.droplet' },
-                        { id:'elBlue', displayText:'blau', color:'#00f', icon:'kijs.iconMap.Fa.droplet' }
+                        { id:'elRed', displayText:kijs.getText('rot'), color:'#f00', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elGreen', displayText:kijs.getText('grün'), color:'#0f0', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elBlue', displayText:kijs.getText('blau'), color:'#00f', icon:'kijs.iconMap.Fa.droplet' }
                     ],
                     value: 'elGreen'
                 },
@@ -146,7 +146,7 @@ home.sc.Mask = class home_sc_Mask {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Masken bei Panels:',
+                    value: kijs.getText('Masken bei Panels:'),
                     style: { margin: '20px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -161,7 +161,7 @@ home.sc.Mask = class home_sc_Mask {
                             width: 200,
                             style: { margin: '10px' },
                             innerStyle: { padding: '10px' },
-                            html: 'Maske auf ganzem Panel'
+                            html: kijs.getText('Maske auf ganzem Panel')
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
@@ -172,7 +172,7 @@ home.sc.Mask = class home_sc_Mask {
                             width: 200,
                             style: { margin: '10px' },
                             innerStyle: { padding: '10px' },
-                            html: 'Maske nur auf innerDom'
+                            html: kijs.getText('Maske nur auf %1', '', 'innerDom')
                         }
                     ]
                 },
@@ -181,7 +181,7 @@ home.sc.Mask = class home_sc_Mask {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Maske mit Text:',
+                    value: kijs.getText('Maske mit Text:'),
                     style: { margin: '20px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -195,12 +195,12 @@ home.sc.Mask = class home_sc_Mask {
                             width: 200,
                             style: { margin: '10px' },
                             innerStyle: { padding: '10px' },
-                            html: 'Maske mit Text',
+                            html: kijs.getText('Maske mit Text'),
                             on: {
                                 afterFirstRenderTo: function(e) {
                                     const waitMaskEl = new kijs.gui.Mask({
                                         displayWaitIcon: true,
-                                        text: 'Bitte warten...',
+                                        text: kijs.getText('Bitte warten...'),
                                         target: e.raiseElement,
                                         targetDomProperty: 'dom'
                                     });
@@ -221,7 +221,7 @@ home.sc.Mask = class home_sc_Mask {
                     elements :[
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Maske auf Viewport für 2s',
+                            caption: kijs.getText('Maske auf Viewport für 2s'),
                             on: {
                                 click: function(e) {
                                     const targetEl = this._app.viewport;
@@ -234,7 +234,7 @@ home.sc.Mask = class home_sc_Mask {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Maske auf BODY für 2s',
+                            caption: kijs.getText('Maske auf BODY für 2s'),
                             on: {
                                 click: function(e) {
                                     const waitMaskEl = new kijs.gui.Mask({
@@ -254,7 +254,7 @@ home.sc.Mask = class home_sc_Mask {
 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Grösse ändern',
+                    caption: kijs.getText('Grösse ändern'),
                     height: 30,
                     style: { margin: '10px' },
                     on: {
@@ -271,10 +271,10 @@ home.sc.Mask = class home_sc_Mask {
                     width: 200,
                     style: { margin: '10px' },
                     innerStyle: { padding: '10px' },
-                    html: 'Bitte Grösse ändern. Die Maske auf dem folgenden Panel sollte sich verschieben.'
+                    html: kijs.getText('Bitte Grösse ändern. Die Maske auf dem folgenden Panel sollte sich verschieben.')
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'inert toggeln',
+                    caption: kijs.getText('%1 umschalten', '', 'inert'),
                     height: 30,
                     style: { margin: '10px' },
                     on: {
@@ -282,10 +282,10 @@ home.sc.Mask = class home_sc_Mask {
                             // upX() vergleicht den xtype exakt, darum über parent suchen
                             const p = this.parent.down('panelMitForm');
                             if (p._waitMaskEl.inert) {
-                                p.caption = 'Panel mit Form - Nicht Inert (=interaktiv)';
+                                p.caption = kijs.getText('Panel mit Form - Nicht Inert (=interaktiv)');
                                 p._waitMaskEl.inert = false;
                             } else {
-                                p.caption = 'Panel mit Form - Inert (=nicht interaktiv)';
+                                p.caption = kijs.getText('Panel mit Form - Inert (=nicht interaktiv)');
                                 p._waitMaskEl.inert = true;
                             }
                         }
@@ -293,17 +293,17 @@ home.sc.Mask = class home_sc_Mask {
                 },{
                     xtype: 'kijs.gui.Panel',
                     name: 'panelMitForm',
-                    caption: 'Panel mit Form - Inert (=nicht interaktiv)',
+                    caption: kijs.getText('Panel mit Form - Inert (=nicht interaktiv)'),
                     displayWaitMask: true,
                     width: 500,
                     style: { margin: '10px' },
                     innerStyle: { padding: '10px' },
                     elements: [{
                         xtype: 'kijs.gui.field.Text',
-                        label: 'Feld 1'
+                        label: kijs.getText('Feld %1', '', 1)
                     },{
                         xtype: 'kijs.gui.field.Text',
-                        label: 'Feld 2'
+                        label: kijs.getText('Feld %1', '', 2)
                     }]
                 }
             ]

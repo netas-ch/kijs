@@ -33,7 +33,7 @@ home.sc.field_Display = class home_sc_field_Display {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.field.Display',
                     value: 'meinText'
@@ -41,9 +41,9 @@ home.sc.field_Display = class home_sc_field_Display {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    label: 'langer Text',
+                    label: kijs.getText('langer Text'),
                     value: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-                    helpText: 'Hilfe',
+                    helpText: kijs.getText('Hilfe'),
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',
@@ -55,32 +55,32 @@ home.sc.field_Display = class home_sc_field_Display {
                 {
                     xtype: 'kijs.gui.field.Display',
                     label: 'html:',
-                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    value: kijs.getText('mein Text mit <b>fettem</b> Wort.'),
                     valueDisplayType: 'html',
                     style: { margin: '10px 0 0 0'}
                 },
                 {
                     xtype: 'kijs.gui.field.Display',
                     label: 'text:',
-                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    value: kijs.getText('mein Text mit <b>fettem</b> Wort.'),
                     valueDisplayType: 'text'
                 },
                 {
                     xtype: 'kijs.gui.field.Display',
                     label: 'code:',
-                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    value: kijs.getText('mein Text mit <b>fettem</b> Wort.'),
                     valueDisplayType: 'code'
                 },
 
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit Label',
+                    value: kijs.getText('mit Label'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Display',
                     label: 'Label',
-                    value: 'mein <b>fetter</b> Text www.netas.ch',
+                    value: kijs.getText('mein <b>fetter</b> Text www.netas.ch'),
                     htmlDisplayType: 'html',
                     clickableLinks: false,
                     on: {
@@ -106,7 +106,7 @@ home.sc.field_Display = class home_sc_field_Display {
                 },{
                     xtype: 'kijs.gui.field.Display',
                     label: 'Hyperlink 2',
-                    value: 'Klicke auf https://www.netas.ch!\n oder auf support@netas.ch',
+                    value: kijs.getText('Klicke auf https://www.netas.ch!\n oder auf support@netas.ch'),
                     valueDisplayType: 'html',
                     clickableLinks: true
                 },{
@@ -120,7 +120,7 @@ home.sc.field_Display = class home_sc_field_Display {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Formatieren mit CSS-Klassen',
+                    value: kijs.getText('Formatieren mit CSS-Klassen'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Display',
@@ -232,7 +232,7 @@ home.sc.field_Display = class home_sc_field_Display {
                     change: function(e) {
                         let value = '';
                         if (e.element.value) {
-                            value = 'Dies ist ein Hilfetext';
+                            value = kijs.getText('Dies ist ein Hilfetext');
                         }
                         this._updateProperty('helpText', value);
                     },
@@ -250,7 +250,7 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'Debug-Buttons',
+                label: kijs.getText('Debug-Buttons'),
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
@@ -258,7 +258,7 @@ home.sc.field_Display = class home_sc_field_Display {
                                 if (e.value) {
                                     el.add(new kijs.gui.Button({
                                         name: 'showValue',
-                                        tooltip: 'value anzeigen',
+                                        tooltip: kijs.getText('%1 anzeigen', '', 'value'),
                                         iconMap: 'kijs.iconMap.Fa.eye',
                                         on: {
                                             click: function(e) {
@@ -269,7 +269,7 @@ home.sc.field_Display = class home_sc_field_Display {
                                     }));
                                     el.add(new kijs.gui.Button({
                                         name: 'setValue',
-                                        tooltip: 'value neu setzen (value=value)',
+                                        tooltip: kijs.getText('%1 neu setzen (%2)', '', ['value', 'value=value']),
                                         iconMap: 'kijs.iconMap.Fa.pen',
                                         on: {
                                             click: function(e) {
@@ -344,7 +344,7 @@ home.sc.field_Display = class home_sc_field_Display {
                 xtype: 'kijs.gui.Button',
                 name: 'isDirtyResetButton',
                 caption: 'isDirty',
-                tooltip: 'isDirty zurücksetzen',
+                tooltip: kijs.getText('%1 zurücksetzen', '', 'isDirty'),
                 style: { borderColor: '#ff8800' },
                 captionStyle: { color: '#ff8800' },
                 on: {

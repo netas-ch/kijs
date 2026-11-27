@@ -33,7 +33,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
+                    value: kijs.getText('Minimalkonfiguration:')
                 },{
                     xtype: 'kijs.gui.MonthPicker'
                 },
@@ -41,7 +41,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit minValue und maxValue:',
+                    value: kijs.getText('mit %1 und %2:', '', ['minValue', 'maxValue']),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
@@ -60,7 +60,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'ohne headerBar:',
+                    value: kijs.getText('ohne %1:', '', 'headerBar'),
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
@@ -73,7 +73,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
                     valueDisplayType: 'html',
-                    value: '<b>Siehe auch:</b><ul>'
+                    value: '<b>' + kijs.getText('Siehe auch:') + '</b><ul>'
                          + '<li><a href="DatePicker.js">kijs.gui.DatePicker</a></li>'
                          + '<li><a href="TimePicker.js">kijs.gui.TimePicker</a></li>'
                          + '<li><a href="field/field_DateTime.js">kijs.gui.field.DateTime</a></li>'

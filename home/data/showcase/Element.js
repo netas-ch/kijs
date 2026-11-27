@@ -33,12 +33,12 @@ home.sc.Element = class home_sc_Element {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Element mit HTML Inhalt:',
+                    value: kijs.getText('Element mit HTML Inhalt:'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',
                     name: 'el',
-                    html: 'Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen',
+                    html: kijs.getText('Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen'),
                     style: { 
                         backgroundColor:'#ddd',
                         padding: '10px',
@@ -76,13 +76,13 @@ home.sc.Element = class home_sc_Element {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Element mit HTML Inhalt von RPC:',
+                    value: kijs.getText('Element mit HTML Inhalt von RPC:'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',
                     rpcLoadFn: 'element.load',
                     autoLoad: true,
-                    html: 'HTML wird dynamisch geladen',
+                    html: kijs.getText('HTML wird dynamisch geladen'),
                     style: {
                         backgroundColor:'#ddd',
                         padding: '10px',

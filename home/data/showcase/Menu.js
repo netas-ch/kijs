@@ -33,21 +33,21 @@ home.sc.Menu = class home_sc_Menu {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Button mit menuElements:',
+                    value: kijs.getText('Button mit %1:', '', 'menuElements'),
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Menue',
+                    caption: kijs.getText('Menü'),
                     iconMap: 'kijs.iconMap.Fa.bars',
                     menuElements: [
                         {
-                            caption: 'Hallo 1'
+                            caption: kijs.getText('Hallo %1', '', 1)
                         },
                         {
                             caption: 'Text'
                         },
                         {
-                            caption: 'Hallo 3',
+                            caption: kijs.getText('Hallo %1', '', 3),
                             iconMap: 'kijs.iconMap.Fa.brain'
                         }, '-', {
                             xtype: 'kijs.gui.Button',
@@ -56,7 +56,7 @@ home.sc.Menu = class home_sc_Menu {
                                 let steps=150, p = [];
                                 for (let i=0; i<steps; i++) {
                                     p.push({
-                                        caption: 'El ' + i + ' von ' + steps
+                                        caption: kijs.getText('El %1 von %2', '', [i, steps])
                                     });
                                 }
                                 return p;
@@ -66,14 +66,14 @@ home.sc.Menu = class home_sc_Menu {
                             caption: 'ENDLESS',
                             menuElements: (function(){
                                 let steps=20, p = [{
-                                        caption: 'ÄTSCH NICHTS DA'
+                                        caption: kijs.getText('ÄTSCH NICHTS DA')
                                     }];
                                 for (let i=0; i<steps; i++) {
                                     p = [{
-                                            caption: 'Stufe ' + i + ' von ' + steps
+                                            caption: kijs.getText('Stufe %1 von %2', '', [i, steps])
                                         },{
                                             xtype: 'kijs.gui.Button',
-                                            caption: 'Nächste Stufe',
+                                            caption: kijs.getText('Nächste Stufe'),
                                             menuElements:p
                                         }];
                                 }
@@ -86,11 +86,11 @@ home.sc.Menu = class home_sc_Menu {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Button mit manuellem Menü bei Rechtsklick:',
+                    value: kijs.getText('Button mit manuellem Menü bei Rechtsklick:'),
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Klicke mit Rechts oder long-touch',
+                    caption: kijs.getText('Klicke mit Rechts oder long-touch'),
                     iconMap: 'kijs.iconMap.Fa.bars',
                     on: {
                         contextMenu: function(e) {
@@ -102,31 +102,31 @@ home.sc.Menu = class home_sc_Menu {
                                     {
                                         caption: 'Windows',
                                         iconMap: 'kijs.iconMap.Fa.windows',
-                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Windows!'); }}
+                                        on: {click:() => { kijs.gui.MsgBox.alert(kijs.getText('Deine Wahl:'), 'Windows!'); }}
                                     },{
                                         caption: 'Apple',
                                         iconMap: 'kijs.iconMap.Fa.apple',
-                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Apple!'); }}
+                                        on: {click:() => { kijs.gui.MsgBox.alert(kijs.getText('Deine Wahl:'), 'Apple!'); }}
                                     },{
-                                        caption: 'Weitere',
+                                        caption: kijs.getText('Weitere'),
                                         iconMap: 'kijs.iconMap.Fa.angles-right',
                                         menuElements: [
                                             {
                                                 caption: 'Linux',
                                                 iconMap: 'kijs.iconMap.Fa.linux',
                                                 on: {click:() => {
-                                                        kijs.gui.MsgBox.alert('You choose:', 'Linux!');
+                                                        kijs.gui.MsgBox.alert(kijs.getText('Deine Wahl:'), 'Linux!');
                                                     }}
                                             },{
                                                 caption: 'Android',
                                                 iconMap: 'kijs.iconMap.Fa.android',
                                                 on: {click:() => {
-                                                        kijs.gui.MsgBox.alert('You choose:', 'Android!');
+                                                        kijs.gui.MsgBox.alert(kijs.getText('Deine Wahl:'), 'Android!');
                                                     }}
                                             },{
                                                 caption: 'iOS',
                                                 iconMap: 'kijs.iconMap.Fa.apple',
-                                                on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'iOS!'); }}
+                                                on: {click:() => { kijs.gui.MsgBox.alert(kijs.getText('Deine Wahl:'), 'iOS!'); }}
                                             }
                                         ]
                                     }

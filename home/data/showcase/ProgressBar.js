@@ -50,7 +50,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                     }
                 },{
                     xtype: 'kijs.gui.ProgressBar',
-                    caption: 'percent: null (unbestimmt)',
+                    caption: 'percent: null (' + kijs.getText('unbestimmt') + ')',
                     percent: null,
                     style: {
                         marginTop:'10px'
@@ -70,7 +70,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                                 this._win = null;
                             } else {
                                 this._win = new kijs.gui.Window({
-                                    caption: 'Progressbar window',
+                                    caption: kijs.getText('%1-Fenster', '', 'ProgressBar'),
                                     iconMap: 'kijs.iconMap.Fa.bars-progress',
                                     collapsible: 'top',
                                     modal: false,

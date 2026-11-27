@@ -39,17 +39,17 @@ home.sc.Separator = class home_sc_Separator {
                 "-",
                 {
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Mit dem kijs.gui.Separator können Trennlinien z.B. in Toolbars eingefügt werden.'
+                    value: kijs.getText('Mit dem kijs.gui.Separator können Trennlinien z.B. in Toolbars eingefügt werden.')
                 },{
                     xtype: 'kijs.gui.Separator'
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Er passt seine Ausrichtung (horizontal/vertical) automatisch der aktuellen flex-direction an.'
+                    value: kijs.getText('Er passt seine Ausrichtung (horizontal/vertical) automatisch der aktuellen flex-direction an.')
                 },
                 "-",
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Beispiel Toolbar und Formlayout',
+                    caption: kijs.getText('Beispiel Toolbar und Formularlayout'),
                     cls: 'kijs-flexfit',
                     width: 600,
                     headerElements:[
@@ -66,15 +66,15 @@ home.sc.Separator = class home_sc_Separator {
                         "-",
                         {
                             xtype: 'kijs.gui.Button',
-                            caption: 'Sonnencreme',
+                            caption: kijs.getText('Sonnencreme'),
                             on: {
-                                click: (e) => { kijs.gui.CornerTipContainer.show('Test', 'Bäh!', 'info'); }
+                                click: (e) => { kijs.gui.CornerTipContainer.show('Test', kijs.getText('Bäh!'), 'info'); }
                             }
                         },
                         "-",
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'Separators in einer Toolbar (vertikale Linien)'
+                            value: kijs.getText('Separators in einer Toolbar (vertikale Linien)')
                         }
                     ],
                     elements: [
@@ -95,7 +95,7 @@ home.sc.Separator = class home_sc_Separator {
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Display',
-                                    value: 'Separators in einem Formular (horizontale Linien)',
+                                    value: kijs.getText('Separators in einem Formular (horizontale Linien)'),
                                     labelHide: true,
                                     cls: 'kijs-title'
                                 },{
@@ -103,20 +103,20 @@ home.sc.Separator = class home_sc_Separator {
                                 },{
                                     xtype: 'kijs.gui.field.Email',
                                     name: 'Email',
-                                    label: 'E-Mail'
+                                    label: kijs.getText('E-Mail')
                                 },{
                                     xtype: 'kijs.gui.Separator'
                                 },{
                                     xtype: 'kijs.gui.field.Color',
-                                    name: 'Lieblingsfarbe',
-                                    label: 'Lieblingsfarbe',
+                                    name: kijs.getText('Lieblingsfarbe'),
+                                    label: kijs.getText('Lieblingsfarbe'),
                                     value: '#fff'
                                 },{
                                     xtype: 'kijs.gui.Separator'
                                 },{
                                     xtype: 'kijs.gui.field.OptionGroup',
                                     name: 'LieblingsBetriebssystem',
-                                    label: 'Lieblings Betriebssystem',
+                                    label: kijs.getText('Lieblingsbetriebssystem'),
                                     displayTextField: 'displayText',
                                     valueField: 'value',
                                     iconMapField: 'iconMap',

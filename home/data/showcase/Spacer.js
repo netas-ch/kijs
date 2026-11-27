@@ -37,42 +37,42 @@ home.sc.Spacer = class home_sc_Spacer {
                     value: 'kijs.gui.Spacer'
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Kurzform: ">"'
+                    value: kijs.getText('Kurzform:') + ' ">"'
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Mit dem kijs.gui.Spacer können Abstände z.B. in Toolbars eingefügt werden. Die Elemente nach einem Spacer sind rechtsbündig ausgerichtet.'
+                    value: kijs.getText('Mit dem kijs.gui.Spacer können Abstände z.B. in Toolbars eingefügt werden. Die Elemente nach einem Spacer sind rechtsbündig ausgerichtet.')
                 },
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Beispiele im header und footer',
+                    caption: kijs.getText('Beispiele im Header und Footer'),
                     cls: 'kijs-flexfit',
                     innerStyle: { minHeight:'50px' },
                     width: 600,
                     headerElements:[
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'linksbündig'
+                            value: kijs.getText('linksbündig')
                         },
                         '>',
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'zentriert'
+                            value: kijs.getText('zentriert')
                         },
                         '>',
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'rechtsbündig'
+                            value: kijs.getText('rechtsbündig')
                         }
                     ],
                     footerElements:[
                         {
                             xtype: 'kijs.gui.field.Display',
-                            value: 'linksbündig'
+                            value: kijs.getText('linksbündig')
                         },{
                             xtype: 'kijs.gui.Spacer'
                         },{
                             xtype: 'kijs.gui.field.Display',
-                            value: 'rechtsbündig'
+                            value: kijs.getText('rechtsbündig')
                         }
                     ]
                 }

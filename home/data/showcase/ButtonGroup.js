@@ -48,46 +48,46 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
                         {
                             xtype: 'kijs.gui.ButtonGroup',
                             rowSizes:[2],
-                            caption: 'Funktionen',
+                            caption: kijs.getText('Funktionen'),
                             width: 250,
                             height: 80,
                             columns: 3,
                             elements: [
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Neu',
+                                    caption: kijs.getText('Neu'),
                                     iconMap: 'kijs.iconMap.Fa.circle-plus'
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Duplizieren',
+                                    caption: kijs.getText('Duplizieren'),
                                     iconMap: 'kijs.iconMap.Fa.copy'
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Aktionen',
+                                    caption: kijs.getText('Aktionen'),
                                     iconMap: 'kijs.iconMap.Fa.bolt'
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Löschen',
+                                    caption: kijs.getText('Löschen'),
                                     iconMap: 'kijs.iconMap.Fa.trash-can'
                                 }
                             ]
                         },{
                             xtype: 'kijs.gui.ButtonGroup',
                             rowSizes:[2],
-                            caption: 'Filter',
+                            caption: kijs.getText('Filter'),
                             width: 350,
                             height: 80,
                             columns: 2,
                             elements: [
                                 {
                                     xtype: 'kijs.gui.field.Text',
-                                    label: 'Name'
+                                    label: kijs.getText('Name')
                                 },{
                                     xtype: 'kijs.gui.field.Text',
-                                    label: 'Vorname'
+                                    label: kijs.getText('Vorname')
                                 },{
                                     xtype: 'kijs.gui.Button',
-                                    caption: 'Sterne',
+                                    caption: kijs.getText('Sterne'),
                                     iconMap: 'kijs.iconMap.Fa.star',
                                     badgeText: '2'
                                 }
@@ -97,7 +97,7 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
 
                     elements: [],
 
-                    footerBarCaption: 'Meine FooterBar',
+                    footerBarCaption: kijs.getText('Meine FooterBar'),
                     footerElements: [
                         '>',
                         {
@@ -107,7 +107,7 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
                             isDefault: true
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption: 'Abbrechen',
+                            caption: kijs.getText('Abbrechen'),
                             iconMap: 'kijs.iconMap.Fa.xmark'
                         }
                     ]

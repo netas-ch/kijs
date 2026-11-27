@@ -33,7 +33,7 @@ home.sc.Resizer = class home_sc_Resizer {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Panel mit Resizer',
+                    caption: kijs.getText('%1 mit %2', '', ['Panel', 'Resizer']),
                     iconMap: 'kijs.iconMap.Fa.up-right-and-down-left-from-center',
                     resizable: true,
                     resizableWidth: true,
@@ -41,7 +41,7 @@ home.sc.Resizer = class home_sc_Resizer {
                     width: 150,
                     height: 100,
                     elements: []/*,
-                    footerBarCaption: 'Meine FooterBar'*/
+                    footerBarCaption: kijs.getText('Meine FooterBar')*/
                 }
                 
                 
@@ -53,7 +53,7 @@ home.sc.Resizer = class home_sc_Resizer {
     
     run() {
         this._win = new kijs.gui.Window({
-            caption: 'Window mit Resizer',
+            caption: kijs.getText('%1 mit %2', '', ['Window', 'Resizer']),
             iconMap: 'kijs.iconMap.Fa.up-right-and-down-left-from-center',
             resizableWidth: false,
             resizableHeight: true,
@@ -61,7 +61,7 @@ home.sc.Resizer = class home_sc_Resizer {
             width: 200,
             height: 100,
             elements: []/*,
-            footerBarCaption: 'Meine FooterBar'*/
+            footerBarCaption: kijs.getText('Meine FooterBar')*/
         });
         this._win.show();
     }
