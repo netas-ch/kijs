@@ -9,6 +9,7 @@ home.sc.Window = class home_sc_Window {
     constructor(config={}) {
         this._app = config.app;
         this._content = null;
+        this._win0 = null;
         this._win1 = null;
         this._wins2 = [];
     }
@@ -22,7 +23,7 @@ home.sc.Window = class home_sc_Window {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Window',
             headerBarElements: [ this._app.createApiButton('kijs.gui.Window') ],
-            cls: 'kijs-borderless',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -34,10 +35,26 @@ home.sc.Window = class home_sc_Window {
             elements:[
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Run',
+                    caption: 'Öffne Beispiel Fenster',
                     iconMap: 'kijs.iconMap.Fa.play',
                     on: {
-                        click: this.run,
+                        click: this._openWindowExample,
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Öffne Fenster mit Maske',
+                    iconMap: 'kijs.iconMap.Fa.play',
+                    on: {
+                        click: this._openWindowWithMask,
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Öffne Fenster Normal/Modal',
+                    iconMap: 'kijs.iconMap.Fa.play',
+                    on: {
+                        click: this._openWindowNormalModal,
                         context: this
                     }
                 }
@@ -48,6 +65,146 @@ home.sc.Window = class home_sc_Window {
     }
     
     run() {
+        
+    }
+
+
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        if (this._win0 && this._win0.dom) {
+                            this._win0.disabled = !!e.element.value;
+                        }
+
+                        if (this._win1 && this._win1.dom) {
+                            this._win1.disabled = !!e.element.value;
+                        }
+
+                        if (!kijs.isEmpty(this._wins2)) {
+                            kijs.Array.each(this._wins2, (win)=>{
+                                if (win.dom) {
+                                    win.disabled = !!e.element.value;
+                                }
+                            }, this);
+                        }
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Separator'
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'Top Win Caption',
+                on: {
+                    click: function(e) {
+                        const lm = new kijs.gui.LayerManager();
+                        const win = lm.getActive(document.body);
+                        if (win) {
+                            kijs.gui.CornerTipContainer.show('Test', win.headerBar.html);
+                        }
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+
+    _openWindowExample() {
+        if (this._win0) {
+            this._win0.destruct();
+        }
+
+        this._win0 = new kijs.gui.Window({
+            caption: 'Hello kijs',
+            iconMap: 'kijs.iconMap.Fa.face-grin-tongue',
+            maximizable: false,
+            resizable: false,
+            innerStyle: { padding: '10px' },
+            elements: [
+                {
+                    xtype: 'kijs.gui.field.Text',
+                    label: 'Name'
+                }
+            ],
+            footerElements: [
+                ">",
+                {
+                    xtype: 'kijs.gui.Button',
+                    iconMap: 'kijs.iconMap.Fa.check',
+                    caption: 'OK'
+                }
+            ]
+        });
+        this._win0.show();
+    }
+
+    _openWindowNormalModal(isModal=false) {
+        let no = this._wins2.length + 1;
+        let win = new kijs.gui.Window({
+            caption: 'Mein ' + no + '. Fenster',
+            modal: !!isModal,
+            width: 400,
+            height: 300,
+            cls: 'kijs-flexform',
+            innerStyle: { 
+                padding: '10px'/*,
+                gap: '10px'*/
+            },
+            headerElements:[
+                {
+                    xtype: 'kijs.gui.field.Switch',
+                    label: 'modal',
+                    value: !!isModal,
+                    on: {
+                        change: function(e) {
+                            this.upX('kijs.gui.Window').modal = !!e.element.value;
+                        }
+                    }
+                }
+            ],
+            elements:[
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Weiteres Fenster normal öffnen',
+                    tooltip: 'Weiteres Fenster normal öffnen',
+                    on: {
+                        click: function(e) {
+                            this._openWindowNormalModal(false);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Weiteres Fenster modal öffnen',
+                    tooltip: 'Weiteres Fenster modal öffnen',
+                    on: {
+                        click: function(e) {
+                            this._openWindowNormalModal(true);
+                        },
+                        context: this
+                    }
+                }
+            ],
+            on: {
+                destruct: function(e) {
+                    kijs.Array.remove(this._wins2, e.raiseElement);
+                },
+                context: this
+            }
+        });
+        this._wins2.push(win);
+        win.show();
+    }
+
+    _openWindowWithMask() {
+        if (this._win1) {
+            this._win1.destruct();
+        }
         this._win1 = new kijs.gui.Window({
             caption: 'Fenster mit Maske',
             iconCls: 'icoWizard16',
@@ -166,7 +323,7 @@ home.sc.Window = class home_sc_Window {
                     height: null,
                     width: 200,
                     displayWaitMask: true,
-                    style: { 
+                    style: {
                         border:'1px solid #000',
                         backgroundColor:'#fdf'
                     },
@@ -193,7 +350,7 @@ home.sc.Window = class home_sc_Window {
                     xtype: 'kijs.gui.Container',
                     height: null,
                     width: 200,
-                    style: { 
+                    style: {
                         border:'1px solid #000',
                         backgroundColor:'#ffd'
                     },
@@ -274,106 +431,6 @@ home.sc.Window = class home_sc_Window {
             ]
         });
         this._win1.show();
-        
-        this._openWindow();
-    }
-
-
-    // PROTECTED
-    _getHeaderElements() {
-        return [
-            {
-                xtype: 'kijs.gui.field.Switch',
-                label: 'disabled',
-                on: {
-                    change: function(e) {
-                        if (this._win1) {
-                            this._win1.disabled = !!e.element.value;
-                        }
-
-                        if (!kijs.isEmpty(this._wins2)) {
-                            kijs.Array.each(this._wins2, (win)=>{
-                                win.disabled = !!e.element.value;
-                            }, this);
-                        }
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Separator'
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'Top Win Caption',
-                on: {
-                    click: function(e) {
-                        const lm = new kijs.gui.LayerManager();
-                        const win = lm.getActive(document.body);
-                        if (win) {
-                            kijs.gui.CornerTipContainer.show('Test', win.headerBar.html);
-                        }
-                    },
-                    context: this
-                }
-            }
-        ];
-    }
-
-    _openWindow(isModal=false) {
-        let no = this._wins2.length + 1;
-        let win = new kijs.gui.Window({
-            caption: 'Mein ' + no + '. Fenster',
-            modal: !!isModal,
-            width: 400,
-            height: 300,
-            cls: 'kijs-flexform',
-            innerStyle: { 
-                padding: '10px'/*,
-                gap: '10px'*/
-            },
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'modal',
-                    value: !!isModal,
-                    on: {
-                        change: function(e) {
-                            this.upX('kijs.gui.Window').modal = !!e.element.value;
-                        }
-                    }
-                }
-            ],
-            elements:[
-                {
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Weiteres Fenster normal öffnen',
-                    tooltip: 'Weiteres Fenster normal öffnen',
-                    on: {
-                        click: function(e) {
-                            this._openWindow(false);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Weiteres Fenster modal öffnen',
-                    tooltip: 'Weiteres Fenster modal öffnen',
-                    on: {
-                        click: function(e) {
-                            this._openWindow(true);
-                        },
-                        context: this
-                    }
-                }
-            ],
-            on: {
-                destruct: function(e) {
-                    kijs.Array.remove(this._wins2, e.raiseElement);
-                },
-                context: this
-            }
-        });
-        this._wins2.push(win);
-        win.show();
     }
 
 
@@ -382,6 +439,10 @@ home.sc.Window = class home_sc_Window {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
+        if (this._win0) {
+            this._win0.destruct();
+        }
+
         if (this._win1) {
             this._win1.destruct();
         }
@@ -393,6 +454,7 @@ home.sc.Window = class home_sc_Window {
             }, this);
         }
         
+        this._win0 = null;
         this._win1 = null;
         this._wins2 = null;
         this._content = null;
