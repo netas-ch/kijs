@@ -607,6 +607,7 @@ home.App = class home_App {
      *   Suche:        'search/Combo'
      *   Quellcode:    'src/js/gui/kijs.gui.Button.js'
      *   Werkzeuge:    'tools'
+     *   Bereich:      'showcase', 'test', 'docu' oder 'api' (nur zum Öffnen, siehe _openLink())
      * @param {kijs.gui.Element} tabEl
      * @returns {String}  '' für die Startseite bzw. ein Tab ohne Link
      */
@@ -810,7 +811,8 @@ home.App = class home_App {
 
     /**
      * Öffnet die Seite zu einem Direktlink (Format siehe _getTabLink()). Ein leerer Link
-     * zeigt die Startseite.
+     * zeigt die Startseite. Die Bereiche 'showcase', 'test', 'docu' und 'api' ohne Pfad
+     * zeigen nur den Bereich in der Navigation an.
      * @param {String} link
      * @returns {Boolean}  false, wenn der Link ungültig ist
      */
@@ -827,6 +829,10 @@ home.App = class home_App {
 
         switch (type) {
             case 'api': {
+                if (!rest) {
+                    this._showNavigationTab(this._tabApi);
+                    return true;
+                }
                 const parts = rest.split('/');
                 if (!/^[\w$.]+$/.test(parts[0])) {
                     break;
@@ -846,7 +852,11 @@ home.App = class home_App {
             case 'docu': {
                 const ext = type === 'docu' ? '.md' : '.js';
                 const tabs = { showcase: this._tabShowcase, test: this._tabTest, docu: this._tabDocu };
-                if (rest && !rest.includes('..') && this.openLinkedFile('data/' + type + '/' + rest + ext)) {
+                if (!rest) {
+                    this._showNavigationTab(tabs[type]);
+                    return true;
+                }
+                if (!rest.includes('..') && this.openLinkedFile('data/' + type + '/' + rest + ext)) {
                     this._showNavigationTab(tabs[type]);
                     return true;
                 }

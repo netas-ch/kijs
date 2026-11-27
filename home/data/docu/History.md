@@ -43,8 +43,9 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
 - Direktlinks: Die Adresszeile zeigt den Link der aktuellen Seite (z.B. 
   ```…/home/#api/kijs.gui.Button/caption```, ```#showcase/field/field_Text```, 
   ```#docu/Leitfäden/Config-System```). Ein solcher Link öffnet die Seite direkt, Zurück und 
-  Vor im Browser funktionieren, und beim Wechsel der Sprache bleibt die Seite offen. Übersicht 
-  in [Erste Schritte](Erste_Schritte.md).  
+  Vor im Browser funktionieren, und beim Wechsel der Sprache bleibt die Seite offen. Ohne 
+  Pfad (```#showcase```, ```#test```, ```#docu```, ```#api```) zeigt der Link nur den Bereich 
+  in der Navigation an. Übersicht in [Erste Schritte](Erste_Schritte.md).  
 - Links zwischen den Seiten: relative Links auf Leitfäden, Showcase- und 
   Test-Seiten sowie Links auf die API (```api:kijs.gui.Button#caption```). Die 
   Leitfäden sind mit der API verlinkt.  
@@ -67,6 +68,8 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
   scharf ist, und Links auf Erste Schritte, Showcase, Dokumentation und API.  
 - Darstellung: einheitliche Navigation ohne Rahmen, Seiten im Dark Mode im 
   gleichen Grau wie die Navigation.  
+- Neues Favicon ```{k}``` (orange) wie auf kijs.ch, zusätzlich als SVG und als Icon für 
+  Smartphones (```apple-touch-icon.png```).  
 
 
 ## Dokumentation
