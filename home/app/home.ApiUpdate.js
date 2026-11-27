@@ -54,7 +54,7 @@ home.ApiUpdate = class home_ApiUpdate {
             for (let i=0; i<files.length; i++) {
                 if (this._cancelled) {
                     await this._rpc('api.updateCancel');
-                    this._infoEl.html = 'Abgebrochen.';
+                    this._infoEl.html = kijs.getText('Abgebrochen.');
                     return this._end(null);
                 }
 
@@ -71,7 +71,7 @@ home.ApiUpdate = class home_ApiUpdate {
             }
 
             // 3. Abschluss
-            this._progressBar.bottomCaption = 'Vererbung und Lückenbericht...';
+            this._progressBar.bottomCaption = kijs.getText('Vererbung und Lückenbericht...');
             const stats = await this._rpc('api.updateFinish');
             if (!stats) {
                 await this._rpc('api.updateCancel');
@@ -85,7 +85,7 @@ home.ApiUpdate = class home_ApiUpdate {
             return this._end(stats);
 
         } catch (ex) {
-            this._infoEl.html = 'Fehler: ' + kijs.String.htmlspecialchars(ex.message);
+            this._infoEl.html = kijs.getText('Fehler: %1', '', kijs.String.htmlspecialchars(ex.message));
             await this._rpc('api.updateCancel');
             return this._end(null);
         }
@@ -98,7 +98,7 @@ home.ApiUpdate = class home_ApiUpdate {
      */
     _createWindow() {
         this._progressBar = new kijs.gui.ProgressBar({
-            caption: 'Dateien parsen',
+            caption: kijs.getText('Dateien parsen'),
             showPercent: true
         });
 
@@ -108,7 +108,7 @@ home.ApiUpdate = class home_ApiUpdate {
         });
 
         this._btnClose = new kijs.gui.Button({
-            caption: 'Abbrechen',
+            caption: kijs.getText('Abbrechen'),
             on: {
                 click: this.#onBtnCloseClick,
                 context: this
@@ -116,7 +116,7 @@ home.ApiUpdate = class home_ApiUpdate {
         });
 
         this._win = new kijs.gui.Window({
-            caption: 'API aktualisieren',
+            caption: kijs.getText('API aktualisieren'),
             iconMap: 'kijs.iconMap.Fa.arrows-rotate',
             modal: true,
             closable: false,
@@ -145,10 +145,10 @@ home.ApiUpdate = class home_ApiUpdate {
      */
     _end(result) {
         this._running = false;
-        this._btnClose.caption = 'Schliessen';
+        this._btnClose.caption = kijs.getText('Schliessen');
         this._btnClose.disabled = false;
         if (result === null && this._infoEl.html === '') {
-            this._infoEl.html = 'Das Update wurde nicht abgeschlossen.';
+            this._infoEl.html = kijs.getText('Das Update wurde nicht abgeschlossen.');
         }
         return result;
     }
@@ -159,11 +159,11 @@ home.ApiUpdate = class home_ApiUpdate {
      * @returns {String}
      */
     _getSummaryHtml(stats) {
-        let html = '<b>Fertig</b> in ' + stats.seconds + ' s<br>';
-        html += stats.files + ' Dateien, ' + stats.classes + ' Klassen<br>';
-        html += stats.issues + ' Lücken in der Doku<br>';
+        let html = kijs.getText('<b>Fertig</b> in %1 s', '', stats.seconds) + '<br>';
+        html += kijs.getText('%1 Dateien, %2 Klassen', '', [stats.files, stats.classes]) + '<br>';
+        html += kijs.getText('%1 Lücken in der Doku', '', stats.issues) + '<br>';
         if (stats.errors) {
-            html += '<br><b>' + stats.errors + ' Fehler:</b><ul>';
+            html += '<br><b>' + kijs.getText('%1 Fehler:', '', stats.errors) + '</b><ul>';
             kijs.Array.each(stats.errorList, function(err) {
                 html += '<li>' + kijs.String.htmlspecialchars(err.file + ': ' + err.message) + '</li>';
             }, this);

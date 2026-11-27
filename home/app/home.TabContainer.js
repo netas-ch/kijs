@@ -23,7 +23,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
         // Buttons
         this._btnRun = new kijs.gui.Button({
             iconMap: 'kijs.iconMap.Fa.circle-play',
-            tooltip: 'Code ausführen',
+            tooltip: kijs.getText('Code ausführen'),
             on: {
                 click: this.#onRunClick,
                 context: this
@@ -32,7 +32,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
         this._btnReset = new kijs.gui.Button({
             iconMap: 'kijs.iconMap.Fa.rotate-right',
-            tooltip: 'Code zurücksetzen',
+            tooltip: kijs.getText('Code zurücksetzen'),
             on: {
                 click: this.#onResetClick,
                 context: this

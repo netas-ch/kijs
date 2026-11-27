@@ -10,6 +10,46 @@ $translations = [
   ]
  ], 
 
+ "%1 Dateien, %2 Klassen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [163]
+   ]
+  ]
+ ], 
+
+ "%1 Fehler:" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [166]
+   ]
+  ]
+ ], 
+
+ "%1 Klassen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [971]
+   ]
+  ]
+ ], 
+
+ "%1 Lücken in der Doku" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [164]
+   ]
+  ]
+ ], 
+
+ "%1 Treffer" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [143]
+   ]
+  ]
+ ], 
+
  "%1 Webseite:" => [
   "" => [
    "usagesJs" => [
@@ -364,6 +404,14 @@ $translations = [
   ]
  ], 
 
+ "<b>Fertig</b> in %1 s" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [162]
+   ]
+  ]
+ ], 
+
  "AHV + Soz.vers.-Nr." => [
   "" => [
    "usagesJs" => [
@@ -372,14 +420,64 @@ $translations = [
   ]
  ], 
 
+ "API aktualisieren" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [119]
+   ]
+  ]
+ ], 
+
+ "API-Dokumentation" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [94, 323], 
+    "../../home/app/home.ToolsPage.js" => [83]
+   ]
+  ]
+ ], 
+
+ "API-Dokumentation fehlt noch." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [979]
+   ]
+  ]
+ ], 
+
+ "API-Dokumentation vom %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [968]
+   ]
+  ]
+ ], 
+
+ "API-Dokumentation von %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [89]
+   ]
+  ]
+ ], 
+
  "Abbrechen" => [
   "" => [
    "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [111], 
     "../../home/data/showcase/ApertureMask.js" => [72], 
     "../../home/data/showcase/ButtonGroup.js" => [110], 
     "../../home/data/showcase/MsgBox.js" => [167], 
     "../../home/data/showcase/Panel.js" => [189], 
     "../../home/data/showcase/Window.js" => [399]
+   ]
+  ]
+ ], 
+
+ "Abgebrochen." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [57]
    ]
   ]
  ], 
@@ -413,6 +511,38 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Tab.js" => [117]
+   ]
+  ]
+ ], 
+
+ "Aktualisieren" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [88]
+   ]
+  ]
+ ], 
+
+ "Akzentfarben" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [1114]
+   ]
+  ]
+ ], 
+
+ "Alle Klassen mit Configs, Funktionen und Events" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [323]
+   ]
+  ]
+ ], 
+
+ "Alle Komponenten mit Beispielen zum Ausprobieren" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [319]
    ]
   ]
  ], 
@@ -472,9 +602,16 @@ $translations = [
   ]
  ], 
 
+ "Ausführen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [98, 106]
+   ]
+  ]
+ ], 
+
  "Auto" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1011]
    ]
@@ -532,7 +669,6 @@ $translations = [
 
  "Beruf" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [565]
    ]
@@ -572,6 +708,14 @@ $translations = [
   ]
  ], 
 
+ "Bitte mindestens %1 Zeichen eingeben." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [216]
+   ]
+  ]
+ ], 
+
  "Bitte warten..." => [
   "" => [
    "usagesJs" => [
@@ -582,7 +726,6 @@ $translations = [
 
  "Brief" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1009]
    ]
@@ -649,7 +792,6 @@ $translations = [
 
  "Button vom Server" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [169]
    ]
@@ -676,6 +818,30 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Panel.js" => [265]
+   ]
+  ]
+ ], 
+
+ "Code ausführen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.TabContainer.js" => [26]
+   ]
+  ]
+ ], 
+
+ "Code zurücksetzen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.TabContainer.js" => [35]
+   ]
+  ]
+ ], 
+
+ "Config/Eigenschaft" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [109]
    ]
   ]
  ], 
@@ -720,6 +886,14 @@ $translations = [
   ]
  ], 
 
+ "Das Update wurde nicht abgeschlossen." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [151]
+   ]
+  ]
+ ], 
+
  "Dateien auswählen" => [
   "" => [
    "usagesJs" => [
@@ -736,9 +910,16 @@ $translations = [
   ]
  ], 
 
+ "Dateien parsen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [101]
+   ]
+  ]
+ ], 
+
  "Datensatz %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [721, 722, 723, 1026]
    ]
@@ -850,10 +1031,34 @@ $translations = [
   ]
  ], 
 
+ "Design" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [428, 1070]
+   ]
+  ]
+ ], 
+
  "Die %1-Eigenschaft haben %2 und %3 und alle davon vererbten Klassen:" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Tooltip.js" => [36]
+   ]
+  ]
+ ], 
+
+ "Die API-Datenbank fehlt noch." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [994]
+   ]
+  ]
+ ], 
+
+ "Die CSS-Dateien werden aus den LESS-Dateien im Ordner <code>css</code> kompiliert. NetBeans macht das beim Speichern, sonst z.B. <code>lessc css/kijs.gui.less css/kijs.gui.css</code>." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [120]
    ]
   ]
  ], 
@@ -866,6 +1071,22 @@ $translations = [
   ]
  ], 
 
+ "Die Dateien wurden erzeugt." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [279]
+   ]
+  ]
+ ], 
+
+ "Die Datenbank fehlt noch." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [105]
+   ]
+  ]
+ ], 
+
  "Die Registerkarten können per Drag&Drop verschoben werden." => [
   "" => [
    "usagesJs" => [
@@ -874,9 +1095,19 @@ $translations = [
   ]
  ], 
 
+ "Die Werkzeuge können nur lokal (localhost) ausgeführt werden." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [163]
+   ], 
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [53]
+   ]
+  ]
+ ], 
+
  "Dies ist ein <b>Info</b>-Text." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [260]
    ]
@@ -920,6 +1151,22 @@ $translations = [
   ]
  ], 
 
+ "Dokumentation" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [321, 506]
+   ]
+  ]
+ ], 
+
+ "Dunkler Modus" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [1099]
+   ]
+  ]
+ ], 
+
  "Duplizieren" => [
   "" => [
    "usagesJs" => [
@@ -953,6 +1200,14 @@ $translations = [
   ]
  ], 
 
+ "Einstieg und Reihenfolge der Leitfäden" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [317]
+   ]
+  ]
+ ], 
+
  "El %1 von %2" => [
   "" => [
    "usagesJs" => [
@@ -963,7 +1218,6 @@ $translations = [
 
  "Element %1 (verschieben)" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [275, 291, 307, 323]
    ]
@@ -980,7 +1234,6 @@ $translations = [
 
  "Element (kopieren)" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [345]
    ]
@@ -1021,7 +1274,6 @@ $translations = [
 
  "Elemente %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [264, 334]
    ]
@@ -1046,9 +1298,32 @@ $translations = [
 
  "Erledigt" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [985]
+   ]
+  ]
+ ], 
+
+ "Erste Schritte" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [317]
+   ]
+  ]
+ ], 
+
+ "Erstellt den Inhalt der IconMap von Font Awesome (benötigt Internet). Im Skript <code>tools/getFontAwesomeIcons.php</code> die Version eintragen, das Skript öffnen und die Ausgabe in die Datei kopieren." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [111]
+   ]
+  ]
+ ], 
+
+ "Erstellt mit kijs %1." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [107]
    ]
   ]
  ], 
@@ -1058,6 +1333,46 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/DataView.js" => [59, 224], 
     "../../home/data/showcase/ListView.js" => [58]
+   ]
+  ]
+ ], 
+
+ "Es gibt mehr als %1 Treffer. Bitte den Suchbegriff verfeinern." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [124]
+   ]
+  ]
+ ], 
+
+ "Es gibt neuere JS-Dateien." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [109, 262]
+   ]
+  ]
+ ], 
+
+ "Es gibt neuere PHP-Sprachdateien." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [238]
+   ]
+  ]
+ ], 
+
+ "Es gibt noch keine JS-Sprachdateien." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [236]
+   ]
+  ]
+ ], 
+
+ "Es läuft gerade ein Update." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [983]
    ]
   ]
  ], 
@@ -1072,9 +1387,16 @@ $translations = [
 
  "Es wurden noch nicht alle Felder richtig ausgefüllt" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [623]
+   ]
+  ]
+ ], 
+
+ "Event" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [109]
    ]
   ]
  ], 
@@ -1097,7 +1419,6 @@ $translations = [
 
  "Falsche Anrede." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [618]
    ]
@@ -1113,6 +1434,14 @@ $translations = [
   ]
  ], 
 
+ "Farbe %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [1121, 1133, 1145]
+   ]
+  ]
+ ], 
+
  "Farben" => [
   "" => [
    "usagesJs" => [
@@ -1123,7 +1452,6 @@ $translations = [
 
  "Fehler" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [988]
    ]
@@ -1132,7 +1460,6 @@ $translations = [
 
  "Fehler! Schrecklich!!!" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [885]
    ]
@@ -1141,9 +1468,16 @@ $translations = [
 
  "Fehler, aber nicht tragisch." => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [874]
+   ]
+  ]
+ ], 
+
+ "Fehler: %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [88]
    ]
   ]
  ], 
@@ -1196,6 +1530,14 @@ $translations = [
   ]
  ], 
 
+ "Font-Awesome-Icons" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [109]
+   ]
+  ]
+ ], 
+
  "Formatieren mit CSS-Klassen" => [
   "" => [
    "usagesJs" => [
@@ -1233,7 +1575,6 @@ $translations = [
 
  "Franz fährt im komplett verwahrlosten Taxi quer durch Bayern" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [715]
    ]
@@ -1248,6 +1589,14 @@ $translations = [
    ], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [598]
+   ]
+  ]
+ ], 
+
+ "Funktion" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [109]
    ]
   ]
  ], 
@@ -1278,7 +1627,6 @@ $translations = [
 
  "Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [238, 393, 421, 514]
    ]
@@ -1287,7 +1635,6 @@ $translations = [
 
  "Glocke" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1013]
    ]
@@ -1355,7 +1702,6 @@ $translations = [
 
  "Haus" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1007]
    ]
@@ -1384,7 +1730,6 @@ $translations = [
 
  "Herz" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1012]
    ]
@@ -1451,7 +1796,6 @@ $translations = [
 
  "Ich bin ein Tooltip vom Server" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [529]
    ]
@@ -1460,7 +1804,6 @@ $translations = [
 
  "Ich bin eine %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [844, 850, 866]
    ]
@@ -1469,7 +1812,6 @@ $translations = [
 
  "Ich bin eine Bemerkung!" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [407]
    ]
@@ -1478,7 +1820,6 @@ $translations = [
 
  "Ich bin eine Nachricht vom Server" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [834]
    ]
@@ -1503,7 +1844,6 @@ $translations = [
 
  "Ich wurde geladen :)" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [528]
    ]
@@ -1552,7 +1892,6 @@ $translations = [
 
  "In Arbeit" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [986]
    ]
@@ -1572,6 +1911,30 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/CornerTipContainer.js" => [72]
+   ]
+  ]
+ ], 
+
+ "Keine Suche möglich." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [94]
+   ]
+  ]
+ ], 
+
+ "Keine Treffer." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [169]
+   ]
+  ]
+ ], 
+
+ "Klasse" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [109]
    ]
   ]
  ], 
@@ -1683,6 +2046,22 @@ $translations = [
   ]
  ], 
 
+ "Leitfäden und Doku" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.SearchPage.js" => [161]
+   ]
+  ]
+ ], 
+
+ "Leitfäden und Konzepte" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [321]
+   ]
+  ]
+ ], 
+
  "Lieblingsbetriebssystem" => [
   "" => [
    "usagesJs" => [
@@ -1701,6 +2080,14 @@ $translations = [
   ]
  ], 
 
+ "Liest die Kommentare aus dem Quellcode von kijs und speichert sie für den Tab API. Erstellt auch den <a href=\"#\" data-home-action=\"apiIssues\">Lückenbericht</a>. Siehe Leitfaden <a href=\"#\" data-home-file=\"data/docu/Leitfäden/Kommentare.md\">Kommentare</a>." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [85]
+   ]
+  ]
+ ], 
+
  "Links" => [
   "" => [
    "usagesJs" => [
@@ -1713,6 +2100,14 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/ButtonGroup.js" => [70]
+   ]
+  ]
+ ], 
+
+ "Lückenbericht" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [136]
    ]
   ]
  ], 
@@ -2068,6 +2463,14 @@ $translations = [
   ]
  ], 
 
+ "Nicht geschrieben (fehlende Schreibrechte für den Webserver?): %1" => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [83]
+   ]
+  ]
+ ], 
+
  "Nächste Stufe" => [
   "" => [
    "usagesJs" => [
@@ -2151,7 +2554,6 @@ $translations = [
 
  "Pausiert" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [987]
    ]
@@ -2160,7 +2562,6 @@ $translations = [
 
  "Person" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1008]
    ]
@@ -2247,6 +2648,14 @@ $translations = [
   ]
  ], 
 
+ "Schliessen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [148]
+   ]
+  ]
+ ], 
+
  "Seite %1" => [
   "" => [
    "usagesJs" => [
@@ -2290,6 +2699,22 @@ $translations = [
   ]
  ], 
 
+ "Sie kann nur lokal (localhost) erstellt werden." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [996]
+   ]
+  ]
+ ], 
+
+ "Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [995]
+   ]
+  ]
+ ], 
+
  "Siehe auch:" => [
   "" => [
    "usagesJs" => [
@@ -2304,9 +2729,24 @@ $translations = [
 
  "Sind Sie sicher?" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [860]
+   ]
+  ]
+ ], 
+
+ "Skript öffnen" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [115]
+   ]
+  ]
+ ], 
+
+ "Skripte, die Dateien von kijs und der Home-App erzeugen. Ein Werkzeug gilt als veraltet, wenn seine Quelldateien neuer sind als die erzeugten Dateien." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [41]
    ]
   ]
  ], 
@@ -2338,7 +2778,6 @@ $translations = [
 
  "Spalte %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [758]
    ]
@@ -2361,10 +2800,34 @@ $translations = [
   ]
  ], 
 
+ "Sprachdateien" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [101]
+   ]
+  ]
+ ], 
+
+ "Sprache" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [419, 1029]
+   ]
+  ]
+ ], 
+
  "Stadt" => [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_Combo.js" => [429]
+   ]
+  ]
+ ], 
+
+ "Standard" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [1076]
    ]
   ]
  ], 
@@ -2394,6 +2857,39 @@ $translations = [
   ]
  ], 
 
+ "Suche" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [216]
+   ]
+  ]
+ ], 
+
+ "Suche: %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [221], 
+    "../../home/app/home.SearchPage.js" => [166]
+   ]
+  ]
+ ], 
+
+ "Suchen (Enter)" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [404]
+   ]
+  ]
+ ], 
+
+ "Sucht im Quellcode alle Texte von <code>kijs.getText()</code> und schreibt sie in die Dateien, die mit der Translate-App von Netas übersetzt werden (<code>usages.php</code> für kijs, <code>home_usages.php</code> für die Home-App). Skript: <code>tools/kilang/generateUsages.php</code>. Siehe Leitfaden <a href=\"#\" data-home-file=\"data/docu/Leitfäden/Mehrsprachigkeit.md\">Mehrsprachigkeit</a>." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [93]
+   ]
+  ]
+ ], 
+
  "Tab hinzufügen" => [
   "" => [
    "usagesJs" => [
@@ -2404,7 +2900,6 @@ $translations = [
 
  "Telefon" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1010]
    ]
@@ -2431,6 +2926,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/MsgBox.js" => [138]
+   ]
+  ]
+ ], 
+
+ "Tests" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [474], 
+    "../../home/app/home.SearchPage.js" => [163]
    ]
   ]
  ], 
@@ -2465,6 +2969,14 @@ $translations = [
   ]
  ], 
 
+ "Texte für die Übersetzung" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [91]
+   ]
+  ]
+ ], 
+
  "Titel des obersten Fensters" => [
   "" => [
    "usagesJs" => [
@@ -2489,6 +3001,22 @@ $translations = [
   ]
  ], 
 
+ "Unbekanntes Werkzeug: %1" => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [72]
+   ]
+  ]
+ ], 
+
+ "Ungültiger Link: %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [151, 934]
+   ]
+  ]
+ ], 
+
  "Unten" => [
   "" => [
    "usagesJs" => [
@@ -2501,6 +3029,46 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Form.js" => [256, 362]
+   ]
+  ]
+ ], 
+
+ "Veraltet: %1." => [
+  "" => [
+   "usagesPhp" => [
+    "../../home/app/tools/HomeTools.php" => [139]
+   ]
+  ]
+ ], 
+
+ "Vererbung und Lückenbericht..." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ApiUpdate.js" => [74]
+   ]
+  ]
+ ], 
+
+ "Version stimmt nicht mit kijs %1 überein." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [974]
+   ]
+  ]
+ ], 
+
+ "Version und Datum der API-Dokumentation" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [1004]
+   ]
+  ]
+ ], 
+
+ "Version: %1" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [196]
    ]
   ]
  ], 
@@ -2523,6 +3091,14 @@ $translations = [
    ], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [561, 645]
+   ]
+  ]
+ ], 
+
+ "Wandelt die übersetzten PHP-Sprachdateien (<code>tools/kilang/data/kijs_*.php</code> und <code>home_*.php</code>) in die JavaScript-Sprachdateien von kijs und der Home-App um. Skript: <code>tools/kilang/convertPhpLanguageFilesToJs.php</code>." => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [103]
    ]
   ]
  ], 
@@ -2583,6 +3159,15 @@ $translations = [
   ]
  ], 
 
+ "Werkzeuge" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.App.js" => [250, 385, 966], 
+    "../../home/app/home.ToolsPage.js" => [40]
+   ]
+  ]
+ ], 
+
  "Wert" => [
   "" => [
    "usagesJs" => [
@@ -2609,7 +3194,6 @@ $translations = [
 
  "Wichtig" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [989]
    ]
@@ -2634,7 +3218,6 @@ $translations = [
 
  "Zahl" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [653]
    ]
@@ -2643,7 +3226,6 @@ $translations = [
 
  "Zahl %1" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [730, 740]
    ]
@@ -2652,7 +3234,6 @@ $translations = [
 
  "Zahnrad" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [1014]
    ]
@@ -2687,6 +3268,14 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/grid/grid_Grid.js" => [77]
+   ]
+  ]
+ ], 
+
+ "aktuell" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [192]
    ]
   ]
  ], 
@@ -2730,7 +3319,6 @@ $translations = [
 
  "dunkelgrau" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [275], 
     "../../home/data/showcase/field/field_ListView.js" => [147]
@@ -2746,9 +3334,16 @@ $translations = [
   ]
  ], 
 
+ "fehlt" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [206]
+   ]
+  ]
+ ], 
+
  "gelb" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [29, 124, 820]
    ]
@@ -2757,7 +3352,6 @@ $translations = [
 
  "grau" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [276], 
     "../../home/data/showcase/field/field_ListView.js" => [148]
@@ -2780,7 +3374,6 @@ $translations = [
 
  "hellblau" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [31, 126, 822]
    ]
@@ -2789,7 +3382,6 @@ $translations = [
 
  "hellgrau" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [277], 
     "../../home/data/showcase/field/field_ListView.js" => [149]
@@ -3047,7 +3639,6 @@ $translations = [
 
  "orange" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [273], 
     "../../home/data/showcase/field/field_ListView.js" => [145]
@@ -3057,7 +3648,6 @@ $translations = [
 
  "pink" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [271], 
     "../../home/data/showcase/field/field_ListView.js" => [143]
@@ -3086,7 +3676,6 @@ $translations = [
 
  "schwarz" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [279], 
     "../../home/data/showcase/field/field_ListView.js" => [151]
@@ -3096,7 +3685,6 @@ $translations = [
 
  "türkis" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [272], 
     "../../home/data/showcase/field/field_ListView.js" => [144]
@@ -3112,9 +3700,16 @@ $translations = [
   ]
  ], 
 
+ "veraltet" => [
+  "" => [
+   "usagesJs" => [
+    "../../home/app/home.ToolsPage.js" => [190]
+   ]
+  ]
+ ], 
+
  "violett" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [274], 
     "../../home/data/showcase/field/field_ListView.js" => [146]
@@ -3135,7 +3730,6 @@ $translations = [
 
  "weiss" => [
   "" => [
-   "fuzzy" => [true], 
    "usagesJs" => [
     "../../home/data/showcase/ListView.js" => [278], 
     "../../home/data/showcase/field/field_ListView.js" => [150]

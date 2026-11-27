@@ -91,7 +91,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
             waitMaskTarget: this
         });
         if (!kijs.isEmpty(rpcData.response.errorType)) {
-            this._resultEl.html = '<p class="home-api-nodoc">Keine Suche möglich.</p>';
+            this._resultEl.html = '<p class="home-api-nodoc">' + kijs.getText('Keine Suche möglich.') + '</p>';
             return;
         }
         this._resultEl.html = this._getResultHtml(rpcData.response.data);
@@ -106,7 +106,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
      */
     _getApiHtml(hits) {
         const esc = kijs.String.htmlspecialchars;
-        const kinds = { 'class': 'Klasse', property: 'Config/Eigenschaft', 'function': 'Funktion', event: 'Event' };
+        const kinds = { 'class': kijs.getText('Klasse'), property: kijs.getText('Config/Eigenschaft'), 'function': kijs.getText('Funktion'), event: kijs.getText('Event') };
         let html = '<ul class="home-search-list">';
         kijs.Array.each(hits.slice(0, 100), function(h) {
             const title = h.member ? h.className + '.' + h.member : h.className;
@@ -121,7 +121,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
         }, this);
         html += '</ul>';
         if (hits.length > 100) {
-            html += '<p class="home-api-nodoc">Es gibt mehr als 100 Treffer. Bitte den Suchbegriff verfeinern.</p>';
+            html += '<p class="home-api-nodoc">' + kijs.getText('Es gibt mehr als %1 Treffer. Bitte den Suchbegriff verfeinern.', '', 100) + '</p>';
         }
         return html;
     }
@@ -140,7 +140,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
                 html += ' <span class="home-search-kind">' + esc(h.folder.replace(/_/g, ' ')) + '</span>';
             }
             if (h.count) {
-                html += ' <span class="home-search-kind">' + h.count + ' Treffer</span>';
+                html += ' <span class="home-search-kind">' + kijs.getText('%1 Treffer', '', h.count) + '</span>';
             }
             if (h.snippet) {
                 html += '<div class="home-search-snippet">' + this._mark(h.snippet) + '</div>';
@@ -158,15 +158,15 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
     _getResultHtml(data) {
         const groups = [
             { caption: 'API', hits: data.api, fn: this._getApiHtml },
-            { caption: 'Leitfäden und Doku', hits: data.docu, fn: this._getFilesHtml },
+            { caption: kijs.getText('Leitfäden und Doku'), hits: data.docu, fn: this._getFilesHtml },
             { caption: 'Showcase', hits: data.showcase, fn: this._getFilesHtml },
-            { caption: 'Tests', hits: data.test, fn: this._getFilesHtml }
+            { caption: kijs.getText('Tests'), hits: data.test, fn: this._getFilesHtml }
         ];
 
-        let html = '<h1>Suche: ' + kijs.String.htmlspecialchars(data.query) + '</h1>';
+        let html = '<h1>' + kijs.getText('Suche: %1', '', kijs.String.htmlspecialchars(data.query)) + '</h1>';
         const total = groups.reduce((sum, g) => sum + g.hits.length, 0);
         if (!total) {
-            return html + '<p class="home-api-nodoc">Keine Treffer.</p>';
+            return html + '<p class="home-api-nodoc">' + kijs.getText('Keine Treffer.') + '</p>';
         }
 
         // Sprungmarken

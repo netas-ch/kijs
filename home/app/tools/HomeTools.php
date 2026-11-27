@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../api/ApiUpdate.php';
+require_once __DIR__ . '/../HomeLang.php';
 
 /**
  * Werkzeuge der Home-App: Stand der generierten Dateien (aktuell/veraltet) und
@@ -49,7 +50,7 @@ class HomeTools {
      */
     public function run(string $id): stdClass {
         if (!ApiUpdate::isLocal()) {
-            throw new Exception('Die Werkzeuge können nur lokal (localhost) ausgeführt werden.');
+            throw new Exception(HomeLang::getText('Die Werkzeuge können nur lokal (localhost) ausgeführt werden.'));
         }
 
         $start = time();
@@ -68,7 +69,7 @@ class HomeTools {
                 break;
 
             default:
-                throw new Exception('Unbekanntes Werkzeug: ' . $id);
+                throw new Exception(HomeLang::getText('Unbekanntes Werkzeug: %1', '', $id));
         }
 
         // Prüfen, ob die Dateien wirklich geschrieben wurden (die Skripte melden keine Fehler)
@@ -79,8 +80,8 @@ class HomeTools {
             }
         }
         if ($notWritten) {
-            throw new Exception('Nicht geschrieben (fehlende Schreibrechte für den Webserver?): '
-                    . implode(', ', $notWritten));
+            throw new Exception(HomeLang::getText('Nicht geschrieben (fehlende Schreibrechte für den Webserver?): %1', '',
+                    implode(', ', $notWritten)));
         }
 
         return (object)['id' => $id, 'files' => $files];
@@ -101,11 +102,11 @@ class HomeTools {
 
         $info = '';
         if (!$status->exists) {
-            $info = 'Die Datenbank fehlt noch.';
+            $info = HomeLang::getText('Die Datenbank fehlt noch.');
         } elseif ($status->kijsVersion !== $this->_getKijsVersion()) {
-            $info = 'Erstellt mit kijs ' . $status->kijsVersion . '.';
+            $info = HomeLang::getText('Erstellt mit kijs %1.', '', $status->kijsVersion);
         } elseif ($updated < $jsTime) {
-            $info = 'Es gibt neuere JS-Dateien.';
+            $info = HomeLang::getText('Es gibt neuere JS-Dateien.');
         }
 
         return (object)[
@@ -135,7 +136,7 @@ class HomeTools {
         return (object)[
             'id' => 'css',
             'outdated' => count($outdated) > 0,
-            'info' => $outdated ? 'Veraltet: ' . implode(', ', $outdated) . '.' : '',
+            'info' => $outdated ? HomeLang::getText('Veraltet: %1.', '', implode(', ', $outdated)) : '',
             'version' => '',
             'files' => $this->_getFileInfos($files)
         ];
@@ -232,9 +233,9 @@ class HomeTools {
         $info = '';
         $jsTimes = array_map(fn(string $f): int => (int)filemtime($this->_path($f)), $jsFiles);
         if (!$jsFiles) {
-            $info = 'Es gibt noch keine JS-Sprachdateien.';
+            $info = HomeLang::getText('Es gibt noch keine JS-Sprachdateien.');
         } elseif ($this->_getNewestTime($phpFiles) > min($jsTimes)) {
-            $info = 'Es gibt neuere PHP-Sprachdateien.';
+            $info = HomeLang::getText('Es gibt neuere PHP-Sprachdateien.');
         }
 
         return (object)[
@@ -258,7 +259,7 @@ class HomeTools {
         return (object)[
             'id' => 'usages',
             'outdated' => $time < $jsTime,
-            'info' => $time < $jsTime ? 'Es gibt neuere JS-Dateien.' : '',
+            'info' => $time < $jsTime ? HomeLang::getText('Es gibt neuere JS-Dateien.') : '',
             'version' => '',
             'files' => $this->_getFileInfos([$file])
         ];

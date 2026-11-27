@@ -34,14 +34,17 @@ home.App = class home_App {
         kijs.language = config.language ? config.language : 'de-CH';
 
         // RPC-Instanz für das App
-        let appRpcConfig = {};
+        // Die Sprache geht bei beiden RPC-Instanzen als GET-Parameter mit,
+        // damit der Server seine Texte übersetzen kann
+        let appRpcConfig = {
+            parameters: { lang: kijs.language }
+        };
         if (config.appAjaxUrl) {
             appRpcConfig.url = config.appAjaxUrl;
         }
         kijs.setRpc('app', new kijs.gui.Rpc(appRpcConfig));
 
         // RPC-Instanz für den Inhalt (data)
-        // Die Sprache geht als GET-Parameter mit, damit der Server seine Texte übersetzen kann
         let dataRpcConfig = {
             parameters: { lang: kijs.language }
         };
@@ -83,12 +86,12 @@ home.App = class home_App {
         };
 
         if (classNames.length === 1) {
-            config.tooltip = 'API-Dokumentation von ' + classNames[0];
+            config.tooltip = kijs.getText('API-Dokumentation von %1', '', classNames[0]);
             config.on = {
                 click: () => { this.openApiClass(classNames[0]); }
             };
         } else {
-            config.tooltip = 'API-Dokumentation';
+            config.tooltip = kijs.getText('API-Dokumentation');
             config.menu = {
                 closeOnClick: true,
                 elements: classNames.map(className => ({
@@ -130,7 +133,7 @@ home.App = class home_App {
             nodeId: 'apiissues',
             treeName: 'treeApi',
             path: 'apiissues',
-            displayText: 'Lückenbericht',
+            displayText: kijs.getText('Lückenbericht'),
             filetype: 'apiissues',
             iconMap: 'kijs.iconMap.Fa.list-check'
         });
@@ -145,7 +148,7 @@ home.App = class home_App {
     openApiLink(href) {
         const match = /^api:([\w$.]+)(?:#([\w$]+))?$/i.exec((href || '').trim());
         if (!match) {
-            kijs.gui.CornerTipContainer.show('API', 'Ungültiger Link: ' + kijs.String.htmlspecialchars(href), 'alert');
+            kijs.gui.CornerTipContainer.show('API', kijs.getText('Ungültiger Link: %1', '', kijs.String.htmlspecialchars(href)), 'alert');
             return false;
         }
         this.openApiClass(match[1], match[2] || null);
@@ -210,12 +213,12 @@ home.App = class home_App {
     openSearch(query) {
         query = (query || '').trim();
         if (query.length < 2) {
-            kijs.gui.CornerTipContainer.show('Suche', 'Bitte mindestens 2 Zeichen eingeben.', 'info');
+            kijs.gui.CornerTipContainer.show(kijs.getText('Suche'), kijs.getText('Bitte mindestens %1 Zeichen eingeben.', '', 2), 'info');
             return;
         }
         this._openFile({
             path: 'search:' + query.toLowerCase(),
-            displayText: 'Suche: ' + query,
+            displayText: kijs.getText('Suche: %1', '', query),
             filetype: 'search',
             iconMap: 'kijs.iconMap.Fa.magnifying-glass',
             query: query
@@ -244,7 +247,7 @@ home.App = class home_App {
     openTools() {
         this._openFile({
             path: 'tools',
-            displayText: 'Werkzeuge',
+            displayText: kijs.getText('Werkzeuge'),
             filetype: 'tools',
             iconMap: 'kijs.iconMap.Fa.gear'
         });
@@ -310,14 +313,14 @@ home.App = class home_App {
         // Kacheln: href ist der Direktlink (für "In neuem Tab öffnen"), ein normaler Klick
         // wird von #onHomeClick() über data-home-action ausgeführt
         const cards = [
-            { action: 'firstSteps', href: '#docu/Erste_Schritte', icon: 0xf54b, caption: 'Erste Schritte',
-                text: 'Einstieg und Reihenfolge der Leitfäden' },
+            { action: 'firstSteps', href: '#docu/Erste_Schritte', icon: 0xf54b, caption: kijs.getText('Erste Schritte'),
+                text: kijs.getText('Einstieg und Reihenfolge der Leitfäden') },
             { action: 'showcase',   href: '#showcase',            icon: 0xf06e, caption: 'Showcase',
-                text: 'Alle Komponenten mit Beispielen zum Ausprobieren' },
-            { action: 'docu',       href: '#docu',                icon: 0xf02d, caption: 'Dokumentation',
-                text: 'Leitfäden und Konzepte' },
-            { action: 'api',        href: '#api',                 icon: 0xf1b2, caption: 'API-Dokumentation',
-                text: 'Alle Klassen mit Configs, Funktionen und Events' }
+                text: kijs.getText('Alle Komponenten mit Beispielen zum Ausprobieren') },
+            { action: 'docu',       href: '#docu',                icon: 0xf02d, caption: kijs.getText('Dokumentation'),
+                text: kijs.getText('Leitfäden und Konzepte') },
+            { action: 'api',        href: '#api',                 icon: 0xf1b2, caption: kijs.getText('API-Dokumentation'),
+                text: kijs.getText('Alle Klassen mit Configs, Funktionen und Events') }
         ];
 
         let html = '';
@@ -378,7 +381,7 @@ home.App = class home_App {
         this._btnTools = new kijs.gui.Button({
             name: 'btnTools',
             iconMap: 'kijs.iconMap.Fa.gear',
-            tooltip: 'Werkzeuge',
+            tooltip: kijs.getText('Werkzeuge'),
             visible: false,
             on: {
                 click: this.#onBtnToolsClick,
@@ -397,7 +400,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.field.Text',
                     name: 'searchField',
-                    placeholder: 'Suchen (Enter)',
+                    placeholder: kijs.getText('Suchen (Enter)'),
                     cls: 'home-search-field',
                     style: {
                         width: '200px'
@@ -412,7 +415,7 @@ home.App = class home_App {
                     xtype: 'kijs.gui.Button',
                     name: 'btnLanguage',
                     iconMap: 'kijs.iconMap.Fa.earth-americas',
-                    tooltip: 'Sprache',
+                    tooltip: kijs.getText('Sprache'),
                     on: {
                         click: this.#onBtnLanguageClick,
                         context: this
@@ -421,7 +424,7 @@ home.App = class home_App {
                     xtype: 'kijs.gui.Button',
                     name: 'btnTheme',
                     iconMap: 'kijs.iconMap.Fa.palette',
-                    tooltip: 'Design',
+                    tooltip: kijs.getText('Design'),
                     on: {
                         click: this.#onBtnThemeClick,
                         context: this
@@ -467,7 +470,7 @@ home.App = class home_App {
         this._tabTest = new kijs.gui.container.tab.Container({
             //tabCaption: 'Tests',
             tabIconMap: 'kijs.iconMap.Fa.code',
-            tabTooltip: 'Tests',
+            tabTooltip: kijs.getText('Tests'),
             cls: 'kijs-flexcolumn',
             elements: [
                 {
@@ -499,7 +502,7 @@ home.App = class home_App {
         this._tabDocu = new kijs.gui.container.tab.Container({
             //tabCaption: 'Doku',
             tabIconMap: 'kijs.iconMap.Fa.book',
-            tabTooltip: 'Dokumentation',
+            tabTooltip: kijs.getText('Dokumentation'),
             cls: 'kijs-flexcolumn',
             elements: [
                 {
@@ -928,7 +931,7 @@ home.App = class home_App {
                 return true;
         }
 
-        kijs.gui.CornerTipContainer.show('Link', 'Ungültiger Link: ' + kijs.String.htmlspecialchars(link), 'alert');
+        kijs.gui.CornerTipContainer.show('Link', kijs.getText('Ungültiger Link: %1', '', kijs.String.htmlspecialchars(link)), 'alert');
         return false;
     }
 
@@ -959,24 +962,24 @@ home.App = class home_App {
         const status = rpcData.response.data;
 
         // Tooltip mit dem Stand der API, Badge bei einem Problem
-        let html = '<b>Werkzeuge</b><br>API-Dokumentation ';
+        let html = '<b>' + kijs.getText('Werkzeuge') + '</b><br>';
         let problem = false;
         if (status.exists) {
-            html += 'vom ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i') + '<br>';
+            html += kijs.getText('API-Dokumentation vom %1', '', kijs.Date.formatLocal(new Date(status.updated), true)) + '<br>';
             html += 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?');
             if (status.stats) {
-                html += ', ' + status.stats.classes + ' Klassen';
+                html += ', ' + kijs.getText('%1 Klassen', '', status.stats.classes);
             }
             if (status.kijsVersion !== kijs.version) {
-                html += '<br><b>Version stimmt nicht mit kijs ' + kijs.version + ' überein.</b>';
+                html += '<br><b>' + kijs.getText('Version stimmt nicht mit kijs %1 überein.', '', kijs.version) + '</b>';
                 problem = true;
             }
         } else {
-            html += 'fehlt noch.';
+            html += kijs.getText('API-Dokumentation fehlt noch.');
             problem = true;
         }
         if (status.isRunning) {
-            html += '<br>Es läuft gerade ein Update.';
+            html += '<br>' + kijs.getText('Es läuft gerade ein Update.');
         }
         this._btnTools.tooltip = html;
         this._btnTools.badgeText = problem ? '!' : '';
@@ -987,18 +990,18 @@ home.App = class home_App {
 
         // Hinweis im Tab API, wenn die Datenbank fehlt
         if (!status.exists) {
-            this._apiHintEl.html = 'Die API-Datenbank fehlt noch. '
+            this._apiHintEl.html = kijs.getText('Die API-Datenbank fehlt noch.') + ' '
                     + (status.isLocal
-                        ? 'Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden.'
-                        : 'Sie kann nur lokal (localhost) erstellt werden.');
+                        ? kijs.getText('Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden.')
+                        : kijs.getText('Sie kann nur lokal (localhost) erstellt werden.'));
         }
         this._apiHintEl.visible = !status.exists;
 
         // Fusszeile mit Version und Datum
         if (status.exists) {
             this._apiFooterEl.html = 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?')
-                    + ' · ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i');
-            this._apiFooterEl.tooltip = 'Version und Datum der API-Dokumentation';
+                    + ' · ' + kijs.Date.formatLocal(new Date(status.updated), true);
+            this._apiFooterEl.tooltip = kijs.getText('Version und Datum der API-Dokumentation');
         }
         this._apiFooterEl.visible = !!status.exists;
     }
@@ -1022,7 +1025,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.field.OptionGroup',
                     name: 'cssFile',
-                    label: 'Design',
+                    label: kijs.getText('Sprache'),
                     labelHide: true,
                     valueField: 'id',
                     displayTextField: 'Bezeichnung',
@@ -1063,13 +1066,13 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.field.OptionGroup',
                     name: 'cssFile',
-                    label: 'Design',
+                    label: kijs.getText('Design'),
                     labelWidth: 74,
                     valueField: 'id',
                     displayTextField: 'Bezeichnung',
                     required: true,
                     data: [
-                        { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
+                        { id:'kijs.theme.default.css', Bezeichnung:kijs.getText('Standard') },
                         {id:'kijs.theme.retro.css', Bezeichnung:'Retro' },
                         { id:'kijs.theme.black.css', Bezeichnung:'Black' }
                     ],
@@ -1092,7 +1095,7 @@ home.App = class home_App {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     name: 'darkMode',
-                    label: 'Dark mode',
+                    label: kijs.getText('Dunkler Modus'),
                     labelWidth: 74,
                     value: kijs.Dom.themeGet() === 'dark',
                     on: {
@@ -1107,14 +1110,14 @@ home.App = class home_App {
                     }
                 },{
                     xtype: 'kijs.gui.container.Fieldset',
-                    caption: 'Akzentfarben',
+                    caption: kijs.getText('Akzentfarben'),
                     collapsible: true,
                     collapsed: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.field.Color',
                             name: 'color1',
-                            label: 'Farbe 1',
+                            label: kijs.getText('Farbe %1', '', 1),
                             labelWidth: 74,
                             value: getComputedStyle(document.body).getPropertyValue('--accentColor'),
                             on: {
@@ -1126,7 +1129,7 @@ home.App = class home_App {
                         },{
                             xtype: 'kijs.gui.field.Color',
                             name: 'color2',
-                            label: 'Farbe 2',
+                            label: kijs.getText('Farbe %1', '', 2),
                             labelWidth: 74,
                             value: getComputedStyle(document.body).getPropertyValue('--accentColor2'),
                             on: {
@@ -1138,7 +1141,7 @@ home.App = class home_App {
                         },{
                             xtype: 'kijs.gui.field.Color',
                             name: 'color3',
-                            label: 'Farbe 3',
+                            label: kijs.getText('Farbe %1', '', 3),
                             labelWidth: 74,
                             value: getComputedStyle(document.body).getPropertyValue('--accentColor3'),
                             on: {

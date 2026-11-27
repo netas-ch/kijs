@@ -37,9 +37,9 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
                 {
                     xtype: 'kijs.gui.Element',
                     cls: ['markdown', 'home-api-header'],
-                    html: '<h1>Werkzeuge</h1>'
-                        + '<p>Skripte, die Dateien von kijs und der Home-App erzeugen. Ein Werkzeug gilt als '
-                        + 'veraltet, wenn seine Quelldateien neuer sind als die erzeugten Dateien.</p>'
+                    html: '<h1>' + kijs.getText('Werkzeuge') + '</h1>'
+                        + '<p>' + kijs.getText('Skripte, die Dateien von kijs und der Home-App erzeugen. Ein Werkzeug gilt als '
+                        + 'veraltet, wenn seine Quelldateien neuer sind als die erzeugten Dateien.') + '</p>'
                 },
                 this._listEl
             ]
@@ -76,49 +76,52 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
     // STATICS
     // --------------------------------------------------------------
     // Beschreibung der Werkzeuge in der angezeigten Reihenfolge (id wie in HomeTools.php)
-    static tools = {
-        api: {
-            caption: 'API-Dokumentation',
-            iconMap: 'kijs.iconMap.Fa.cubes',
-            html: 'Liest die Kommentare aus dem Quellcode von kijs und speichert sie für den Tab API. '
-                + 'Erstellt auch den <a href="#" data-home-action="apiIssues">Lückenbericht</a>. '
-                + 'Siehe Leitfaden <a href="#" data-home-file="data/docu/Leitfäden/Kommentare.md">Kommentare</a>.',
-            runCaption: 'Aktualisieren'
-        },
-        usages: {
-            caption: 'Texte für die Übersetzung',
-            iconMap: 'kijs.iconMap.Fa.language',
-            html: 'Sucht im Quellcode alle Texte von <code>kijs.getText()</code> und schreibt sie in die Dateien, '
-                + 'die mit der Translate-App von Netas übersetzt werden (<code>usages.php</code> für kijs, '
-                + '<code>home_usages.php</code> für die Home-App). Skript: '
-                + '<code>tools/kilang/generateUsages.php</code>. Siehe Leitfaden '
-                + '<a href="#" data-home-file="data/docu/Leitfäden/Mehrsprachigkeit.md">Mehrsprachigkeit</a>.',
-            runCaption: 'Ausführen'
-        },
-        translations: {
-            caption: 'Sprachdateien',
-            iconMap: 'kijs.iconMap.Fa.earth-americas',
-            html: 'Wandelt die übersetzten PHP-Sprachdateien (<code>tools/kilang/data/kijs_*.php</code> und '
-                + '<code>home_*.php</code>) in die JavaScript-Sprachdateien von kijs und der Home-App um. Skript: '
-                + '<code>tools/kilang/convertPhpLanguageFilesToJs.php</code>.',
-            runCaption: 'Ausführen'
-        },
-        fontawesome: {
-            caption: 'Font-Awesome-Icons',
-            iconMap: 'kijs.iconMap.Fa.font-awesome',
-            html: 'Erstellt den Inhalt der IconMap von Font Awesome (benötigt Internet). Im Skript '
-                + '<code>tools/getFontAwesomeIcons.php</code> die Version eintragen, das Skript öffnen und die '
-                + 'Ausgabe in die Datei kopieren.',
-            url: '../tools/getFontAwesomeIcons.php',
-            urlCaption: 'Skript öffnen'
-        },
-        css: {
-            caption: 'CSS',
-            iconMap: 'kijs.iconMap.Fa.palette',
-            html: 'Die CSS-Dateien werden aus den LESS-Dateien im Ordner <code>css</code> kompiliert. NetBeans '
-                + 'macht das beim Speichern, sonst z.B. <code>lessc css/kijs.gui.less css/kijs.gui.css</code>.'
-        }
-    };
+    // Als Getter, damit die Texte erst nach dem Setzen der Sprache übersetzt werden
+    static get tools() {
+        return {
+            api: {
+                caption: kijs.getText('API-Dokumentation'),
+                iconMap: 'kijs.iconMap.Fa.cubes',
+                html: kijs.getText('Liest die Kommentare aus dem Quellcode von kijs und speichert sie für den Tab API. '
+                    + 'Erstellt auch den <a href="#" data-home-action="apiIssues">Lückenbericht</a>. '
+                    + 'Siehe Leitfaden <a href="#" data-home-file="data/docu/Leitfäden/Kommentare.md">Kommentare</a>.'),
+                runCaption: kijs.getText('Aktualisieren')
+            },
+            usages: {
+                caption: kijs.getText('Texte für die Übersetzung'),
+                iconMap: 'kijs.iconMap.Fa.language',
+                html: kijs.getText('Sucht im Quellcode alle Texte von <code>kijs.getText()</code> und schreibt sie in die Dateien, '
+                    + 'die mit der Translate-App von Netas übersetzt werden (<code>usages.php</code> für kijs, '
+                    + '<code>home_usages.php</code> für die Home-App). Skript: '
+                    + '<code>tools/kilang/generateUsages.php</code>. Siehe Leitfaden '
+                    + '<a href="#" data-home-file="data/docu/Leitfäden/Mehrsprachigkeit.md">Mehrsprachigkeit</a>.'),
+                runCaption: kijs.getText('Ausführen')
+            },
+            translations: {
+                caption: kijs.getText('Sprachdateien'),
+                iconMap: 'kijs.iconMap.Fa.earth-americas',
+                html: kijs.getText('Wandelt die übersetzten PHP-Sprachdateien (<code>tools/kilang/data/kijs_*.php</code> und '
+                    + '<code>home_*.php</code>) in die JavaScript-Sprachdateien von kijs und der Home-App um. Skript: '
+                    + '<code>tools/kilang/convertPhpLanguageFilesToJs.php</code>.'),
+                runCaption: kijs.getText('Ausführen')
+            },
+            fontawesome: {
+                caption: kijs.getText('Font-Awesome-Icons'),
+                iconMap: 'kijs.iconMap.Fa.font-awesome',
+                html: kijs.getText('Erstellt den Inhalt der IconMap von Font Awesome (benötigt Internet). Im Skript '
+                    + '<code>tools/getFontAwesomeIcons.php</code> die Version eintragen, das Skript öffnen und die '
+                    + 'Ausgabe in die Datei kopieren.'),
+                url: '../tools/getFontAwesomeIcons.php',
+                urlCaption: kijs.getText('Skript öffnen')
+            },
+            css: {
+                caption: 'CSS',
+                iconMap: 'kijs.iconMap.Fa.palette',
+                html: kijs.getText('Die CSS-Dateien werden aus den LESS-Dateien im Ordner <code>css</code> kompiliert. NetBeans '
+                    + 'macht das beim Speichern, sonst z.B. <code>lessc css/kijs.gui.less css/kijs.gui.css</code>.')
+            }
+        };
+    }
 
 
 
@@ -157,7 +160,7 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
             elements.push({
                 xtype: 'kijs.gui.Element',
                 cls: 'home-api-hint',
-                html: 'Die Werkzeuge können nur lokal (localhost) ausgeführt werden.'
+                html: kijs.getText('Die Werkzeuge können nur lokal (localhost) ausgeführt werden.')
             });
         }
         kijs.Array.each(status.tools, function(tool) {
@@ -184,13 +187,13 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
         // Stand
         let html = '<h2>' + esc(def.caption) + ' ';
         if (tool.outdated) {
-            html += '<span class="home-tools-state home-tools-outdated">veraltet</span>';
+            html += '<span class="home-tools-state home-tools-outdated">' + kijs.getText('veraltet') + '</span>';
         } else if (tool.id !== 'fontawesome') {
-            html += '<span class="home-tools-state home-tools-ok">aktuell</span>';
+            html += '<span class="home-tools-state home-tools-ok">' + kijs.getText('aktuell') + '</span>';
         }
         html += '</h2><p>' + def.html + '</p>';
         if (tool.version) {
-            html += '<p class="home-tools-version">Version: ' + esc(tool.version) + '</p>';
+            html += '<p class="home-tools-version">' + kijs.getText('Version: %1', '', esc(tool.version)) + '</p>';
         }
         if (tool.info) {
             html += '<p class="home-tools-info">' + esc(tool.info) + '</p>';
@@ -199,7 +202,7 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
             html += '<ul class="home-tools-files">';
             kijs.Array.each(tool.files, function(f) {
                 html += '<li><code>' + esc(f.file) + '</code> '
-                        + (f.time ? kijs.Date.format(new Date(f.time * 1000), 'd.m.Y H:i') : 'fehlt')
+                        + (f.time ? kijs.Date.formatLocal(new Date(f.time * 1000), true) : kijs.getText('fehlt'))
                         + '</li>';
             }, this);
             html += '</ul>';
@@ -273,7 +276,7 @@ home.ToolsPage = class home_ToolsPage extends kijs.gui.container.tab.Container {
             });
             if (kijs.isEmpty(rpcData.response.errorType)) {
                 kijs.gui.CornerTipContainer.show(home_ToolsPage.tools[id].caption,
-                        'Die Dateien wurden erzeugt.', 'info');
+                        kijs.getText('Die Dateien wurden erzeugt.'), 'info');
             }
         }
         this.load();
