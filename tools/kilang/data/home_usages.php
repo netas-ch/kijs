@@ -41,10 +41,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [975]
+    "../../home/app/home.App.js" => [1027]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [970]
+    "../../home/app/home.App.js" => [975]
    ]
   ]
  ], 
@@ -455,11 +455,11 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [98, 327], 
+    "../../home/app/home.App.js" => [150, 379], 
     "../../home/app/home.ToolsPage.js" => [83]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [94, 323]
+    "../../home/app/home.App.js" => [98, 327]
    ]
   ]
  ], 
@@ -468,10 +468,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [982]
+    "../../home/app/home.App.js" => [1034]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [978]
+    "../../home/app/home.App.js" => [982]
    ]
   ]
  ], 
@@ -480,10 +480,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [971]
+    "../../home/app/home.App.js" => [1023]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [967]
+    "../../home/app/home.App.js" => [971]
    ]
   ]
  ], 
@@ -492,10 +492,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [93]
+    "../../home/app/home.App.js" => [145]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [89]
+    "../../home/app/home.App.js" => [93]
    ]
   ]
  ], 
@@ -566,10 +566,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [1117]
+    "../../home/app/home.App.js" => [1174]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1113]
+    "../../home/app/home.App.js" => [1117]
    ]
   ]
  ], 
@@ -578,10 +578,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [327]
+    "../../home/app/home.App.js" => [379]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [323]
+    "../../home/app/home.App.js" => [327]
    ]
   ]
  ], 
@@ -590,10 +590,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [323]
+    "../../home/app/home.App.js" => [375]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [319]
+    "../../home/app/home.App.js" => [323]
    ]
   ]
  ], 
@@ -763,10 +763,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [220]
+    "../../home/app/home.App.js" => [272]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [216]
+    "../../home/app/home.App.js" => [220]
    ]
   ]
  ], 
@@ -1107,10 +1107,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [431, 1073]
+    "../../home/app/home.App.js" => [484, 1130]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [427, 1069]
+    "../../home/app/home.App.js" => [431, 1073]
    ]
   ]
  ], 
@@ -1127,10 +1127,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [997]
+    "../../home/app/home.App.js" => [1049]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [993]
+    "../../home/app/home.App.js" => [997]
    ], 
    "usagesPhp" => [
     "../../home/app/api/ApiReader.php" => [211]
@@ -1252,10 +1252,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [325, 509]
+    "../../home/app/home.App.js" => [377, 561]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [321, 505]
+    "../../home/app/home.App.js" => [325, 509]
    ]
   ]
  ], 
@@ -1264,10 +1264,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [1102]
+    "../../home/app/home.App.js" => [1159]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1098]
+    "../../home/app/home.App.js" => [1102]
    ]
   ]
  ], 
@@ -1309,10 +1309,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [321]
+    "../../home/app/home.App.js" => [373]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [317]
+    "../../home/app/home.App.js" => [321]
    ]
   ]
  ], 
@@ -1417,10 +1417,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [321]
+    "../../home/app/home.App.js" => [373]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [317]
+    "../../home/app/home.App.js" => [321]
    ]
   ]
  ], 
@@ -1494,10 +1494,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [987]
+    "../../home/app/home.App.js" => [1039]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [982]
+    "../../home/app/home.App.js" => [987]
    ]
   ]
  ], 
@@ -1572,10 +1572,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [1124, 1136, 1148]
+    "../../home/app/home.App.js" => [1180, 1192, 1204]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1120, 1132, 1144]
+    "../../home/app/home.App.js" => [1124, 1136, 1148]
    ]
   ]
  ], 
@@ -2215,10 +2215,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [325]
+    "../../home/app/home.App.js" => [378]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [321]
+    "../../home/app/home.App.js" => [325]
    ]
   ]
  ], 
@@ -2269,10 +2269,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [140]
+    "../../home/app/home.App.js" => [192]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [136]
+    "../../home/app/home.App.js" => [140]
    ]
   ]
  ], 
@@ -2861,10 +2861,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [999]
+    "../../home/app/home.App.js" => [1052]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [995]
+    "../../home/app/home.App.js" => [999]
    ], 
    "usagesPhp" => [
     "../../home/app/api/ApiReader.php" => [213]
@@ -2876,10 +2876,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [998]
+    "../../home/app/home.App.js" => [1050]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [994]
+    "../../home/app/home.App.js" => [998]
    ], 
    "usagesPhp" => [
     "../../home/app/api/ApiReader.php" => [212]
@@ -2984,10 +2984,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [422, 1032]
+    "../../home/app/home.App.js" => [475, 1085]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [418, 1028]
+    "../../home/app/home.App.js" => [422, 1032]
    ]
   ]
  ], 
@@ -3004,10 +3004,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [1079]
+    "../../home/app/home.App.js" => [1135]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1075]
+    "../../home/app/home.App.js" => [1079]
    ]
   ]
  ], 
@@ -3041,10 +3041,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [220]
+    "../../home/app/home.App.js" => [272]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [216]
+    "../../home/app/home.App.js" => [220]
    ]
   ]
  ], 
@@ -3053,11 +3053,11 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [225], 
+    "../../home/app/home.App.js" => [277], 
     "../../home/app/home.SearchPage.js" => [166]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [221]
+    "../../home/app/home.App.js" => [225]
    ]
   ]
  ], 
@@ -3066,10 +3066,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [407]
+    "../../home/app/home.App.js" => [459]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [403]
+    "../../home/app/home.App.js" => [407]
    ]
   ]
  ], 
@@ -3158,11 +3158,11 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [477], 
+    "../../home/app/home.App.js" => [529], 
     "../../home/app/home.SearchPage.js" => [163]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [473]
+    "../../home/app/home.App.js" => [477]
    ]
   ]
  ], 
@@ -3249,10 +3249,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [155, 937]
+    "../../home/app/home.App.js" => [207, 989]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [151, 933]
+    "../../home/app/home.App.js" => [155, 937]
    ]
   ]
  ], 
@@ -3293,10 +3293,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [977]
+    "../../home/app/home.App.js" => [1029]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [973]
+    "../../home/app/home.App.js" => [977]
    ]
   ]
  ], 
@@ -3305,10 +3305,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [1008]
+    "../../home/app/home.App.js" => [1061]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [1003]
+    "../../home/app/home.App.js" => [1008]
    ]
   ]
  ], 
@@ -3411,11 +3411,11 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [255, 388, 969], 
+    "../../home/app/home.App.js" => [307, 440, 1021], 
     "../../home/app/home.ToolsPage.js" => [40]
    ], 
    "usagesJsOld" => [
-    "../../home/app/home.App.js" => [250, 384, 965]
+    "../../home/app/home.App.js" => [255, 388, 969]
    ]
   ]
  ], 
