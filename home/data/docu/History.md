@@ -64,8 +64,10 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
   Font-Awesome-Icons und CSS. Sie zeigt, ob die erzeugten Dateien aktuell sind, und 
   führt die Generatoren aus.  
 - Syntax-Highlighting in den Code-Blöcken der Dokumentation.  
-- Startseite: Schriftzug als Text (Schrift Jost), damit er auf allen Bildschirmen 
-  scharf ist, und Links auf Erste Schritte, Showcase, Dokumentation und API.  
+- Startseite im Design von kijs.ch: Logo ```{kijs}``` und Slogan «Configure your UI.» 
+  neben dem Löwenzahn, Kacheln für Erste Schritte, Showcase, Dokumentation und API sowie 
+  Links auf GitHub und kijs.ch. Logo und Slogan sind Vektor bzw. Text und auf allen 
+  Bildschirmen scharf. Bei schmalem Fenster entfällt der Löwenzahn.  
 - Darstellung: einheitliche Navigation ohne Rahmen, Seiten im Dark Mode im 
   gleichen Grau wie die Navigation.  
 - Neues Favicon ```{k}``` (orange) wie auf kijs.ch, zusätzlich als SVG und als Icon für 

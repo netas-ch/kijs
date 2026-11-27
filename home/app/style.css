@@ -28,70 +28,156 @@
     /* LIGHT Farbeschema*/
     /* ---------------- */
     :root {
-        --tabHomeBackground: #fff url(background.jpg?v=2) scroll no-repeat 0% 0%;
+        --tabHomeBkgrndColor: #fff;
+        --tabHomeBkgrndImage: url(background.jpg?v=2);
         /* Hintergrund der Seiten (Doku, API, Suche, Quellcode): wie die Navigation */
         --homePageBkgrndColor: var(--field-bkgrndColor);
-        --tabHomeTitleColor: #858585;
-        --tabHomeSubtitleColor: #2f2f2f;
+        --tabHomeBrandColor: #ff9900;
+        --tabHomeTextColor: #2f2f2f;
+        --tabHomeMutedColor: #6f6f6f;
+        --tabHomeLineColor: #ddd;
     }
 
     /* DARK Farbeschema*/
     /* --------------- */
     :root[data-theme='dark'] {
-        --tabHomeBackground: #262626 url(background_dark.jpg?v=2) scroll no-repeat 0% 0%;
-        --tabHomeTitleColor: #ffa60a;
-        --tabHomeSubtitleColor: #eee;
+        --tabHomeBkgrndColor: #262626;
+        --tabHomeBkgrndImage: url(background_dark.jpg?v=2);
+        --tabHomeTextColor: #eee;
+        --tabHomeMutedColor: #a8a8a8;
+        --tabHomeLineColor: #444;
     }
 
     /* Home Panel */
     .tabHome {
-        background: var(--tabHomeBackground);
-    }
-    .tabHome a {
-        color: var(--grey09);
+        background-color: var(--tabHomeBkgrndColor);
+        /* Für die Anpassung an schmale Breiten (siehe @container unten) */
+        container-type: inline-size;
     }
 
-    /* Schriftzug und Links auf der Startseite. Die Position passt zum Hintergrundbild. */
+    /* Startseite: Logo, Slogan und Kacheln rechts vom Löwenzahn. Der Löwenzahn wird auf
+       55% verkleinert (Bild 1006px breit), die Abstände passen zu dieser Grösse (wie kijs.ch). */
     .home-start {
-        position: absolute;
-        left: 367px;
-        top: 286px;
+        min-height: 100%;
+        padding: 160px 24px 40px 240px;
+        box-sizing: border-box;
+        background: var(--tabHomeBkgrndImage) scroll no-repeat 0% 0% / 553px auto;
+        color: var(--tabHomeTextColor);
+    }
+    .home-start-content {
+        max-width: 560px;
+    }
+
+    .home-start-logo {
+        display: block;
+        width: 200px;
+        height: auto;
+        margin-left: -6px;
+    }
+    .home-start-logo-brace {
+        stroke: var(--tabHomeBrandColor);
+    }
+    .home-start-logo-text {
+        stroke: var(--tabHomeTextColor);
+    }
+    .home-start-logo-dot {
+        fill: var(--tabHomeTextColor);
+    }
+
+    .home-start-slogan {
+        margin-top: 18px;
         font-family: 'Jost', sans-serif;
         font-weight: 300;
-    }
-    .home-start-title {
-        font-size: 70px;
-        line-height: 70px;
-        color: var(--tabHomeTitleColor);
+        font-size: 40px;
+        line-height: 46px;
     }
     .home-start-subtitle {
-        margin: -6px 0 0 4px;
-        font-size: 36px;
-        line-height: 36px;
-        color: var(--tabHomeSubtitleColor);
-        white-space: nowrap;
+        margin-top: 4px;
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--tabHomeMutedColor);
     }
-    .home-start-links {
-        list-style: none;
-        margin: 50px 0 0 4px;
-        padding: 0;
-        font-size: 20px;
-        line-height: 32px;
+
+    /* Kacheln */
+    .home-start-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 32px;
     }
-    .home-start-links-more {
-        margin-top: 24px;
-        font-size: 14px;
-        line-height: 24px;
-    }
-    .tabHome .home-start-links a {
-        color: var(--tabHomeSubtitleColor);
+    .tabHome a.home-start-card {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        align-content: start;
+        column-gap: 10px;
+        padding: 14px 16px;
+        border: 1px solid var(--tabHomeLineColor);
+        border-radius: 8px;
+        background-color: var(--tabHomeBkgrndColor);
+        color: var(--tabHomeTextColor);
         text-decoration: none;
+        transition: border-color .15s;
     }
-    .tabHome .home-start-links a:hover {
-        text-decoration: underline;
+    .tabHome a.home-start-card:hover,
+    .tabHome a.home-start-card:focus-visible {
+        border-color: var(--accentColor);
     }
-    .tabHome .home-start-links-more a {
-        color: var(--grey08);
+    .home-start-card-icon {
+        grid-row: span 2;
+        font-size: 20px;
+        line-height: 22px;
+        color: var(--tabHomeBrandColor);
+    }
+    .home-start-card-caption {
+        font-size: 15px;
+        line-height: 22px;
+        font-weight: 500;
+    }
+    .tabHome a.home-start-card:hover .home-start-card-caption {
+        color: var(--accentColor);
+    }
+    .home-start-card-text {
+        font-size: 13px;
+        line-height: 18px;
+        color: var(--tabHomeMutedColor);
+    }
+
+    /* Weitere Links */
+    .home-start-more {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 20px;
+        margin-top: 24px;
+        font-size: 13px;
+    }
+    .tabHome .home-start-more a {
+        color: var(--tabHomeMutedColor);
+    }
+    .tabHome .home-start-more a:hover {
+        color: var(--accentColor);
+    }
+
+    /* Schmale Breiten: Ohne Löwenzahn, Inhalt mit normalem Rand, Kacheln untereinander */
+    @container (max-width: 820px) {
+        .home-start {
+            padding: 32px 20px;
+            background-image: none;
+        }
+        .home-start-slogan {
+            font-size: 32px;
+            line-height: 38px;
+        }
+    }
+    @container (max-width: 480px) {
+        .home-start-cards {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .tabHome a.home-start-card {
+            transition: none;
+        }
     }
 
     /* Icons */

@@ -284,22 +284,56 @@ home.App = class home_App {
 
     // PROTECTED
     _createContent() {
-        // Schriftzug als Text (nicht im Hintergrundbild), damit er auf allen
-        // Bildschirmen scharf ist
+        // Logo als Inline-SVG (wie logo.svg auf kijs.ch), damit es die Farben des Themes
+        // übernimmt und auf allen Bildschirmen scharf ist
+        let logo = '';
+        logo += '<svg class="home-start-logo" viewBox="-6 -8 168 96" role="img" aria-label="kijs">';
+        logo += ' <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">';
+        logo += '  <path class="home-start-logo-brace" d="M16,-2 C9,-2 8,3 8,10 L8,29 C8,35 5,38 0,38 C5,38 8,41 8,47 L8,66 C8,73 9,78 16,78"/>';
+        logo += '  <path class="home-start-logo-text" d="M30,0 V60 M53,20 L30,44 M38,36 L55,60 M70,20 V60 M86,20 V68 Q86,79 75,79 '
+                + 'M123,25 C120,21 116,19 111,19 C104,19 100,23 100,29 C100,35 106,37 112,39 C119,41 125,43 125,51 '
+                + 'C125,57 120,61 112,61 C106,61 101,58 99,54"/>';
+        logo += '  <path class="home-start-logo-brace" d="M140,-2 C147,-2 148,3 148,10 L148,29 C148,35 151,38 156,38 C151,38 148,41 148,47 L148,66 C148,73 147,78 140,78"/>';
+        logo += ' </g>';
+        logo += ' <circle class="home-start-logo-dot" cx="70" cy="7" r="3.6"/>';
+        logo += ' <circle class="home-start-logo-dot" cx="86" cy="7" r="3.6"/>';
+        logo += '</svg>';
+
+        // Kacheln: href ist der Direktlink (für "In neuem Tab öffnen"), ein normaler Klick
+        // wird von #onHomeClick() über data-home-action ausgeführt
+        const cards = [
+            { action: 'firstSteps', href: '#docu/Erste_Schritte', icon: 0xf54b, caption: 'Erste Schritte',
+                text: 'Einstieg und Reihenfolge der Leitfäden' },
+            { action: 'showcase',   href: '#showcase',            icon: 0xf06e, caption: 'Showcase',
+                text: 'Alle Komponenten mit Beispielen zum Ausprobieren' },
+            { action: 'docu',       href: '#docu',                icon: 0xf02d, caption: 'Dokumentation',
+                text: 'Leitfäden und Konzepte' },
+            { action: 'api',        href: '#api',                 icon: 0xf1b2, caption: 'API-Dokumentation',
+                text: 'Alle Klassen mit Configs, Funktionen und Events' }
+        ];
+
         let html = '';
         html += '<div class="home-start">';
-        html += ' <div class="home-start-title">kijs</div>';
-        html += ' <div class="home-start-subtitle">the new aera of multidevice apps</div>';
-        html += ' <ul class="home-start-links">';
-        html += '  <li><a href="#" data-home-action="firstSteps">Erste Schritte mit kijs</a></li>';
-        html += '  <li><a href="#" data-home-action="showcase">Showcase</a></li>';
-        html += '  <li><a href="#" data-home-action="docu">Dokumentation</a></li>';
-        html += '  <li><a href="#" data-home-action="api">API-Dokumentation</a></li>';
-        html += ' </ul>';
-        html += ' <ul class="home-start-links home-start-links-more">';
-        html += '  <li><a href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a></li>';
-        html += '  <li><a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a></li>';
-        html += ' </ul>';
+        html += ' <div class="home-start-content">';
+        html += logo;
+        html += '  <div class="home-start-slogan">Configure your UI.</div>';
+        html += '  <div class="home-start-subtitle">Lightweight open source JavaScript framework for web applications</div>';
+        html += '  <div class="home-start-cards">';
+        cards.forEach((card) => {
+            html += '   <a class="home-start-card" href="' + card.href + '" data-home-action="' + card.action + '">';
+            html += '    <span class="home-start-card-icon fa-solid" aria-hidden="true">&#x' + card.icon.toString(16) + ';</span>';
+            html += '    <span class="home-start-card-caption">' + card.caption + '</span>';
+            html += '    <span class="home-start-card-text">' + card.text + '</span>';
+            html += '   </a>';
+        });
+        html += '  </div>';
+        html += '  <div class="home-start-more">';
+        html += '   <a href="https://github.com/netas-ch/kijs" target="_blank">GitHub</a>';
+        html += '   <a href="https://www.kijs.ch" target="_blank">kijs.ch</a>';
+        html += '   <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="_blank">Kanboard (public, read only)</a>';
+        html += '   <a href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a>';
+        html += '  </div>';
+        html += ' </div>';
         html += '</div>';
 
         return new kijs.gui.container.Tab({
