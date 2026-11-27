@@ -69,7 +69,7 @@ KiLang::writeUsagesFile('data/usages.php', 'translations', $usages);
 // Texte der Home-App (Showcase) kommen in eine eigene Datei (home_usages.php),
 // damit sie nicht in die Sprachdateien von kijs gelangen.
 $homeUsages = [];
-$homeDirs = [$dir . 'home/app', $dir . 'home/data/showcase'];
+$homeDirs = [$dir . 'home/app', $dir . 'home/data/showcase', $dir . 'home/data/test'];
 foreach ($homeDirs as $homeDir) {
     $homeFiles = [];
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($homeDir, FilesystemIterator::SKIP_DOTS));

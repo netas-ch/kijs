@@ -18,6 +18,18 @@ $translations = [
   ]
  ], 
 
+ "%1 Drag&Drop mit %2-Layout" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/DataView_DD/DataView_DD_Col.js" => [20], 
+    "../../home/data/test/DataView_DD/DataView_DD_Col_Reverse.js" => [20], 
+    "../../home/data/test/DataView_DD/DataView_DD_Row.js" => [21], 
+    "../../home/data/test/DataView_DD/DataView_DD_Row_Reverse.js" => [21]
+   ]
+  ]
+ ], 
+
  "%1 Fehler:" => [
   "" => [
    "usagesJs" => [
@@ -28,7 +40,11 @@ $translations = [
 
  "%1 Klassen" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [970]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [971]
    ]
   ]
@@ -404,6 +420,15 @@ $translations = [
   ]
  ], 
 
+ "2x %1 lokal mit Drag&Drop von links nach rechts" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/TreeDD.js" => [108]
+   ]
+  ]
+ ], 
+
  "<b>Fertig</b> in %1 s" => [
   "" => [
    "usagesJs" => [
@@ -439,7 +464,11 @@ $translations = [
 
  "API-Dokumentation fehlt noch." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [978]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [979]
    ]
   ]
@@ -447,7 +476,11 @@ $translations = [
 
  "API-Dokumentation vom %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [967]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [968]
    ]
   ]
@@ -525,7 +558,11 @@ $translations = [
 
  "Akzentfarben" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1113]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1114]
    ]
   ]
@@ -814,6 +851,16 @@ $translations = [
   ]
  ], 
 
+ "CSS-Klasse für Panel:" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ElementAlignment.js" => [235], 
+    "../../home/data/test/Layout.js" => [88]
+   ]
+  ]
+ ], 
+
  "CSS-Klasse:" => [
   "" => [
    "usagesJs" => [
@@ -914,6 +961,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/app/home.ApiUpdate.js" => [101]
+   ]
+  ]
+ ], 
+
+ "Daten wurden verschickt!" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/FormWizard.js" => [194]
    ]
   ]
  ], 
@@ -1033,7 +1089,11 @@ $translations = [
 
  "Design" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [427, 1069]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [428, 1070]
    ]
   ]
@@ -1049,7 +1109,11 @@ $translations = [
 
  "Die API-Datenbank fehlt noch." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [993]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [994]
    ]
   ]
@@ -1153,15 +1217,23 @@ $translations = [
 
  "Dokumentation" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [321, 506]
+    "../../home/app/home.App.js" => [321, 505]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [506]
    ]
   ]
  ], 
 
  "Dunkler Modus" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1098]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1099]
    ]
   ]
@@ -1371,7 +1443,11 @@ $translations = [
 
  "Es läuft gerade ein Update." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [982]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [983]
    ]
   ]
@@ -1389,6 +1465,15 @@ $translations = [
   "" => [
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [623]
+   ]
+  ]
+ ], 
+
+ "Es wurden noch nicht alle Felder richtig ausgefüllt!" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/FormWizard.js" => [217]
    ]
   ]
  ], 
@@ -1429,14 +1514,19 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [60], 
-    "../../home/data/showcase/container/container_Form.js" => [81, 448]
+    "../../home/data/showcase/container/container_Form.js" => [81, 448], 
+    "../../home/data/test/ElementAlignment.js" => [77]
    ]
   ]
  ], 
 
  "Farbe %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1120, 1132, 1144]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1121, 1133, 1145]
    ]
   ]
@@ -1585,7 +1675,8 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [59], 
-    "../../home/data/showcase/container/container_Form.js" => [80, 447]
+    "../../home/data/showcase/container/container_Form.js" => [80, 447], 
+    "../../home/data/test/ElementAlignment.js" => [76]
    ], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [598]
@@ -1720,7 +1811,8 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Fieldset.js" => [58], 
-    "../../home/data/showcase/container/container_Form.js" => [79, 446]
+    "../../home/data/showcase/container/container_Form.js" => [79, 446], 
+    "../../home/data/test/ElementAlignment.js" => [75]
    ], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [597]
@@ -1790,6 +1882,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/Tooltip.js" => [47, 69, 94]
+   ]
+  ]
+ ], 
+
+ "Ich bin ein Mehr-\nzeiliger Text" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ElementAlignment.js" => [146]
    ]
   ]
  ], 
@@ -1902,7 +2003,8 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_Checkbox.js" => [91, 104], 
-    "../../home/data/showcase/field/field_Switch.js" => [75, 90, 99]
+    "../../home/data/showcase/field/field_Switch.js" => [75, 90, 99], 
+    "../../home/data/test/ElementAlignment.js" => [64, 87, 92, 113, 148, 166, 171]
    ]
   ]
  ], 
@@ -2042,6 +2144,15 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Form.js" => [247, 353], 
     "../../home/data/showcase/grid/grid_Grid.js" => [95]
+   ]
+  ]
+ ], 
+
+ "Leerraum" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ScrollIntoView.js" => [288]
    ]
   ]
  ], 
@@ -2659,7 +2770,8 @@ $translations = [
  "Seite %1" => [
   "" => [
    "usagesJs" => [
-    "../../home/data/showcase/container/container_Stack.js" => [54, 55, 56, 57, 58]
+    "../../home/data/showcase/container/container_Stack.js" => [54, 55, 56, 57, 58], 
+    "../../home/data/test/FormWizard.js" => [41, 56, 71]
    ], 
    "usagesPhp" => [
     "../../home/dataResources/php/ajax.php" => [197, 198, 199, 200, 201]
@@ -2701,7 +2813,11 @@ $translations = [
 
  "Sie kann nur lokal (localhost) erstellt werden." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [995]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [996]
    ]
   ]
@@ -2709,7 +2825,11 @@ $translations = [
 
  "Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [994]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [995]
    ]
   ]
@@ -2810,7 +2930,11 @@ $translations = [
 
  "Sprache" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [418, 1028]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [419, 1029]
    ]
   ]
@@ -2826,7 +2950,11 @@ $translations = [
 
  "Standard" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1075]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1076]
    ]
   ]
@@ -2876,7 +3004,11 @@ $translations = [
 
  "Suchen (Enter)" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [403]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [404]
    ]
   ]
@@ -2922,6 +3054,42 @@ $translations = [
   ]
  ], 
 
+ "Test für %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ScrollIntoView.js" => [23]
+   ]
+  ]
+ ], 
+
+ "Test für die verschiedenen Layouts" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/Layout.js" => [23]
+   ]
+  ]
+ ], 
+
+ "Test zur Ausrichtung von Elementen" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ElementAlignment.js" => [23]
+   ]
+  ]
+ ], 
+
+ "Test-Panel" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/Layout.js" => [37]
+   ]
+  ]
+ ], 
+
  "Testmeldung" => [
   "" => [
    "usagesJs" => [
@@ -2932,9 +3100,22 @@ $translations = [
 
  "Tests" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [474], 
+    "../../home/app/home.App.js" => [473], 
     "../../home/app/home.SearchPage.js" => [163]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [474]
+   ]
+  ]
+ ], 
+
+ "Testseite für die Methoden" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ScrollIntoView.js" => [36]
    ]
   ]
  ], 
@@ -2977,6 +3158,15 @@ $translations = [
   ]
  ], 
 
+ "Titel" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/FormWizard.js" => [194, 217]
+   ]
+  ]
+ ], 
+
  "Titel des obersten Fensters" => [
   "" => [
    "usagesJs" => [
@@ -3011,8 +3201,12 @@ $translations = [
 
  "Ungültiger Link: %1" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [151, 934]
+    "../../home/app/home.App.js" => [151, 933]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [934]
    ]
   ]
  ], 
@@ -3051,7 +3245,11 @@ $translations = [
 
  "Version stimmt nicht mit kijs %1 überein." => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [973]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [974]
    ]
   ]
@@ -3059,7 +3257,11 @@ $translations = [
 
  "Version und Datum der API-Dokumentation" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
+    "../../home/app/home.App.js" => [1003]
+   ], 
+   "usagesJsOld" => [
     "../../home/app/home.App.js" => [1004]
    ]
   ]
@@ -3161,9 +3363,13 @@ $translations = [
 
  "Werkzeuge" => [
   "" => [
+   "fuzzy" => [true], 
    "usagesJs" => [
-    "../../home/app/home.App.js" => [250, 385, 966], 
+    "../../home/app/home.App.js" => [250, 384, 965], 
     "../../home/app/home.ToolsPage.js" => [40]
+   ], 
+   "usagesJsOld" => [
+    "../../home/app/home.App.js" => [385, 966]
    ]
   ]
  ], 
@@ -3248,6 +3454,15 @@ $translations = [
   ]
  ], 
 
+ "Zu Element scrollen:" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/ScrollIntoView.js" => [323]
+   ]
+  ]
+ ], 
+
  "Zum Fokus scrollen" => [
   "" => [
    "usagesJs" => [
@@ -3268,6 +3483,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/grid/grid_Grid.js" => [77]
+   ]
+  ]
+ ], 
+
+ "abschliessen" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/FormWizard.js" => [247]
    ]
   ]
  ], 
@@ -3411,7 +3635,9 @@ $translations = [
    "usagesJs" => [
     "../../home/data/showcase/DataView.js" => [110, 275], 
     "../../home/data/showcase/ListView.js" => [109], 
-    "../../home/data/showcase/Panel.js" => [269]
+    "../../home/data/showcase/Panel.js" => [269], 
+    "../../home/data/test/ElementAlignment.js" => [239], 
+    "../../home/data/test/Layout.js" => [92]
    ]
   ]
  ], 
@@ -3444,6 +3670,15 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/field/field_Display.js" => [83]
+   ]
+  ]
+ ], 
+
+ "mein Feld %1" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../home/data/test/FormWizard.js" => [49, 64, 79]
    ]
   ]
  ], 
@@ -3741,7 +3976,8 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Stack.js" => [96, 389], 
-    "../../home/data/showcase/container/container_Tab.js" => [144]
+    "../../home/data/showcase/container/container_Tab.js" => [144], 
+    "../../home/data/test/FormWizard.js" => [100, 247]
    ]
   ]
  ], 
@@ -3767,7 +4003,8 @@ $translations = [
   "" => [
    "usagesJs" => [
     "../../home/data/showcase/container/container_Stack.js" => [79, 372], 
-    "../../home/data/showcase/container/container_Tab.js" => [128]
+    "../../home/data/showcase/container/container_Tab.js" => [128], 
+    "../../home/data/test/FormWizard.js" => [89]
    ]
   ]
  ], 

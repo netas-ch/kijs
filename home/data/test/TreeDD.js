@@ -105,7 +105,7 @@ home.test.TreeDD = class home_test_TreeDD {
 
         // PANEL
         this._content = new kijs.gui.Panel({
-            caption: '2x kijs.gui.Tree local mit Drag&Drop von links nach rechts',
+            caption: kijs.getText('2x %1 lokal mit Drag&Drop von links nach rechts', '', 'kijs.gui.Tree'),
             scrollableY: 'auto',
             cls: ['kijs-borderless', 'kijs-flexrowwrap'],
             style: {

@@ -20,7 +20,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'Test zur Ausrichtung von Elementen',
+            caption: kijs.getText('Test zur Ausrichtung von Elementen'),
             scrollableY: 'auto',
             cls: ['kijs-borderless', 'kijs-flexform'],
             innerCls: 'paperBkgrnd',
@@ -61,7 +61,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     xtype: 'kijs.gui.field.Text',
                     label: 'field.Text',
                     value: 'Test',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Button'
@@ -72,9 +72,9 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     displayTextField: 'displayText',
                     value: 'm',
                     data: [
-                        {displayText: 'Herr', value: 'm' },
-                        {displayText: 'Frau', value: 'w'},
-                        {displayText: 'Familie', value: 'f'}
+                        {displayText: kijs.getText('Herr'), value: 'm' },
+                        {displayText: kijs.getText('Frau'), value: 'w'},
+                        {displayText: kijs.getText('Familie'), value: 'f'}
                     ]
                 },{
                     xtype: 'kijs.gui.field.Phone',
@@ -84,12 +84,12 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     xtype: 'kijs.gui.field.Checkbox',
                     label: 'field.Checkbox',
                     caption: 'caption',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     label: 'field.Switch',
                     caption: 'caption',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.Url',
                     label: 'field.Url',
@@ -110,7 +110,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     xtype: 'kijs.gui.field.Color',
                     label: 'field.Color',
                     value: '#fff',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
                     label: 'field.OptionGroup',
@@ -143,9 +143,9 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 },{
                     xtype: 'kijs.gui.field.Memo',
                     label: 'field.Memo',
-                    value: 'Ich bin ein Mehr-\nzeiliger Text',
+                    value: kijs.getText('Ich bin ein Mehr-\nzeiliger Text'),
                     inputHeight: 50,
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     label: 'field.ListView',
@@ -163,12 +163,12 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 },{
                     xtype: 'kijs.gui.field.Range',
                     label: 'field.Range',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 },{
                     xtype: 'kijs.gui.field.AceEditor',
                     label: 'field.Editor',
                     value: 'Text',
-                    helpText: 'Info'
+                    helpText: kijs.getText('Info')
                 }
             ]
         });
@@ -232,11 +232,11 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 }
             },{
                 xtype: 'kijs.gui.field.Combo',
-                label: 'CSS-Klasse für Panel:',
+                label: kijs.getText('CSS-Klasse für Panel:'),
                 value: 'kijs-flexform',
                 inputWidth: 90,
                 data: [
-                    { displayText: 'keine', value: 'none' },
+                    { displayText: kijs.getText('keine'), value: 'none' },
                     { displayText: 'kijs-flexrow', value: 'kijs-flexrow' },
                     { displayText: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
                     { displayText: 'kijs-flexform', value: 'kijs-flexform' },

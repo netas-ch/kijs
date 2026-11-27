@@ -20,7 +20,7 @@ home.test.Layout = class home_test_Layout {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'Test für die verschiedenen Layouts',
+            caption: kijs.getText('Test für die verschiedenen Layouts'),
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
@@ -34,7 +34,7 @@ home.test.Layout = class home_test_Layout {
                 {
                     xtype: 'kijs.gui.Panel',
                     name: 'myPanel',
-                    caption: 'Test-Panel',
+                    caption: kijs.getText('Test-Panel'),
                     resizable: true,
                     height: 400,
                     width: 400,
@@ -85,11 +85,11 @@ home.test.Layout = class home_test_Layout {
                 }
             },{
                 xtype: 'kijs.gui.field.Combo',
-                label: 'CSS-Klasse für Panel:',
+                label: kijs.getText('CSS-Klasse für Panel:'),
                 value: 'kijs-flexform',
                 width: 230,
                 data: [
-                    { displayText: 'keine', value: 'none' },
+                    { displayText: kijs.getText('keine'), value: 'none' },
                     { displayText: 'kijs-flexrow', value: 'kijs-flexrow' },
                     { displayText: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
                     { displayText: 'kijs-flexform', value: 'kijs-flexform' },

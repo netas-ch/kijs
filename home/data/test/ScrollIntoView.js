@@ -20,7 +20,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'Test für kijs.gui.Dom.scrollIntoView()',
+            caption: kijs.getText('Test für %1', '', 'kijs.gui.Dom.scrollIntoView()'),
             scrollableY: 'auto',
             cls: ['kijs-borderless', 'kijs-flexform'],
             style: {
@@ -33,7 +33,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Testseite für die Methoden'
+                    value: kijs.getText('Testseite für die Methoden')
                 },{
                     xtype: 'kijs.gui.field.Display',
                     value: ' - kijs.Dom.ScrollIntoView(node, options)'
@@ -285,7 +285,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                     }
                 },{
                     xtype: 'kijs.gui.Element',
-                    html: 'whitespace',
+                    html: kijs.getText('Leerraum'),
                     height: 500,
                     style: {
                         color: 'var(--grey3)'
@@ -320,7 +320,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
             },{
                 xtype: 'kijs.gui.field.Combo',
                 name: 'elName',
-                label: 'Scroll to Element:',
+                label: kijs.getText('Zu Element scrollen:'),
                 value: 'button3.20',
                 inputWidth: 80,
                 data: [

@@ -38,7 +38,7 @@ home.test.FormWizard = class home_test_FormWizard {
                 { 
                     xtype: 'kijs.gui.Panel',
                     name:'s1', 
-                    caption: 'Seite 1',
+                    caption: kijs.getText('Seite %1', '', 1),
                     cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
@@ -46,14 +46,14 @@ home.test.FormWizard = class home_test_FormWizard {
                         {
                             xtype: 'kijs.gui.field.Text',
                             name: 'field1',
-                            label: 'mein Feld 1',
+                            label: kijs.getText('mein Feld %1', '', 1),
                             required: true
                         }
                     ]
                 },{ 
                     xtype: 'kijs.gui.Panel',
                     name:'s2', 
-                    caption: 'Seite 2',
+                    caption: kijs.getText('Seite %1', '', 2),
                     cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
@@ -61,14 +61,14 @@ home.test.FormWizard = class home_test_FormWizard {
                         {
                             xtype: 'kijs.gui.field.Text',
                             name: 'field2',
-                            label: 'mein Feld 2',
+                            label: kijs.getText('mein Feld %1', '', 2),
                             required: true
                         }
                     ]
                 },{ 
                     xtype: 'kijs.gui.Panel',
                     name:'s3', 
-                    caption: 'Seite 3',
+                    caption: kijs.getText('Seite %1', '', 3),
                     cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
@@ -76,7 +76,7 @@ home.test.FormWizard = class home_test_FormWizard {
                         {
                             xtype: 'kijs.gui.field.Text',
                             name: 'field3',
-                            label: 'mein Feld 3',
+                            label: kijs.getText('mein Feld %1', '', 3),
                             required: true
                         }
                     ]
@@ -86,7 +86,7 @@ home.test.FormWizard = class home_test_FormWizard {
         
         // Schaltfläche zurück
         this._btnPrevious = new kijs.gui.Button({
-            caption: 'zurück',
+            caption: kijs.getText('zurück'),
             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
             disabled: true,
             on: {
@@ -97,7 +97,7 @@ home.test.FormWizard = class home_test_FormWizard {
 
         // Schaltfläche weiter
         this._btnNext = new kijs.gui.Button({
-            caption: 'weiter',
+            caption: kijs.getText('weiter'),
             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
             on: {
                 click: this.#onBtnNextClick,
@@ -191,7 +191,7 @@ home.test.FormWizard = class home_test_FormWizard {
                 this._panel.downX('kijs.gui.container.Form').save().then((e) => {
                     // alles ok
                     if (kijs.isEmpty(e.response.errorType)) {
-                        kijs.gui.CornerTipContainer.show('Titel', 'Daten wurden verschickt!');
+                        kijs.gui.CornerTipContainer.show(kijs.getText('Titel'), kijs.getText('Daten wurden verschickt!'));
                         
                     // nicht alles ok
                     } else {
@@ -214,7 +214,7 @@ home.test.FormWizard = class home_test_FormWizard {
         // Validierung fehlerhaft
         } else {
             // MsgBox anzeigen
-            kijs.gui.MsgBox.errorNotice('Titel', 'Es wurden noch nicht alle Felder richtig ausgefüllt!');
+            kijs.gui.MsgBox.errorNotice(kijs.getText('Titel'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt!'));
             // oder CornerTipContainer
             //kijs.gui.CornerTipContainer.show('Titel', 'Es wurden noch nicht alle Felder richtig ausgefüllt!', 'errorNotice');
             
@@ -244,7 +244,7 @@ home.test.FormWizard = class home_test_FormWizard {
 
         this._btnPrevious.disabled = isFirstEl;
         
-        this._btnNext.caption = isLastEl ? 'abschliessen' : 'weiter';
+        this._btnNext.caption = isLastEl ? kijs.getText('abschliessen') : kijs.getText('weiter');
     }
 
     

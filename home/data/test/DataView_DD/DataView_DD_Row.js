@@ -18,7 +18,7 @@ home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.DataView Drag&Drop mit row layout',
+            caption: kijs.getText('%1 Drag&Drop mit %2-Layout', '', ['kijs.gui.DataView', 'row']),
             cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1

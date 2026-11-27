@@ -18,7 +18,7 @@ home.test.DataView_DD_Row_Reverse = class home_test_Dataview_DD_Row_Reverse {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.DataView Drag&Drop mit row-reverse layout',
+            caption: kijs.getText('%1 Drag&Drop mit %2-Layout', '', ['kijs.gui.DataView', 'row-reverse']),
             cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1
