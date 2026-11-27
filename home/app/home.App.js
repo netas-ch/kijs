@@ -341,7 +341,6 @@ home.App = class home_App {
         html += '  <div class="home-start-more">';
         html += '   <a href="https://github.com/netas-ch/kijs" target="_blank">GitHub</a>';
         html += '   <a href="https://www.kijs.ch" target="_blank">kijs.ch</a>';
-        html += '   <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="_blank">Kanboard (public, read only)</a>';
         html += '   <a class="home-start-localOnly" href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a>';
         html += '  </div>';
         html += ' </div>';
