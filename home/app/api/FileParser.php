@@ -158,7 +158,7 @@ class FileParser {
      * @return Exception
      */
     protected function _error(string $msg, int $p): Exception {
-        return new Exception('Syntax Fehler: ' . $msg . ' (' . $this->_file . ' ' . $this->_lineNo . ':' . ($p - $this->_curLinePos + 1) . ')');
+        return new Exception('Syntax error: ' . $msg . ' (' . $this->_file . ' ' . $this->_lineNo . ':' . ($p - $this->_curLinePos + 1) . ')');
     }
 
     /**
@@ -227,7 +227,7 @@ class FileParser {
                 if ($curEl->type === 'regexp' || $curEl->type === 'string' || $curEl->type === 'comment') {
                     $this->_appendText($curEl, $chars);
                 } else {
-                    throw $this->_error('Escape-Zeichen \\ ausserhalb eines Kommentars, Strings oder regulären Ausdrucks', $p);
+                    throw $this->_error('Escape character \\ outside of a comment, string or regular expression', $p);
                 }
                 if (substr($chars, 1) === "\n") {
                     $this->_lineNo++;
@@ -320,7 +320,7 @@ class FileParser {
                     $curEl = $this->_close($p);
                     $curEl = $this->_open($curEl, $this->_createEl('command', $p + 1, ['elements' => []]));
                 } else {
-                    throw $this->_error('; am falschen Ort', $p);
+                    throw $this->_error('; in the wrong place', $p);
                 }
                 $p++;
                 continue;
@@ -404,7 +404,7 @@ class FileParser {
             // Klammern schliessend
             if ($cc === '}') {
                 if ($curEl->type !== 'command' || $this->_pointerStack[count($this->_pointerStack)-2]->type !== 'commandGroup') {
-                    throw $this->_error('Falsches Klammerpaar zu }', $p);
+                    throw $this->_error('Mismatched bracket pair for }', $p);
                 }
                 // letztes command schliessen bzw. löschen, falls leer
                 if (count($curEl->elements) > 0) {
@@ -425,7 +425,7 @@ class FileParser {
             }
             if ($cc === ')') {
                 if ($curEl->type !== 'group') {
-                    throw $this->_error('Falsches Klammerpaar zu )', $p);
+                    throw $this->_error('Mismatched bracket pair for )', $p);
                 }
                 $curEl = $this->_close($p + 1);
                 $p++;
@@ -433,14 +433,14 @@ class FileParser {
             }
             if ($cc === ']') {
                 if ($curEl->type !== 'array') {
-                    throw $this->_error('Falsches Klammerpaar zu ]', $p);
+                    throw $this->_error('Mismatched bracket pair for ]', $p);
                 }
                 $curEl = $this->_close($p + 1);
                 $p++;
                 continue;
             }
 
-            throw $this->_error('ungültiges Zeichen ' . $cc, $p);
+            throw $this->_error('Invalid character ' . $cc, $p);
         }
 
         // offenes abschliessen
@@ -448,16 +448,16 @@ class FileParser {
             $curEl = $this->_close($p);
         }
         switch ($curEl->type) {
-            case 'comment':      throw $this->_error('Fehlendes */', $p);
-            case 'string':       throw $this->_error('Fehlendes ' . $curEl->stringType, $p);
-            case 'regexp':       throw $this->_error('Fehlendes /', $p);
-            case 'group':        throw $this->_error('Fehlende schliessende Klammer zu (', $p);
-            case 'array':        throw $this->_error('Fehlende schliessende Klammer zu [', $p);
+            case 'comment':      throw $this->_error('Missing */', $p);
+            case 'string':       throw $this->_error('Missing ' . $curEl->stringType, $p);
+            case 'regexp':       throw $this->_error('Missing /', $p);
+            case 'group':        throw $this->_error('Missing closing bracket for (', $p);
+            case 'array':        throw $this->_error('Missing closing bracket for [', $p);
         }
 
         // letztes command abschliessen bzw. löschen, falls leer
         if ($curEl->type !== 'command' || count($this->_pointerStack) !== 2) {
-            throw $this->_error('Fehlende schliessende Klammer zu {', $p);
+            throw $this->_error('Missing closing bracket for {', $p);
         }
         if (count($curEl->elements) > 0) {
             $curEl = $this->_close($p);
